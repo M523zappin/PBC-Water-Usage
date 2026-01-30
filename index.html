@@ -3,89 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sovereign Reality Node</title>
+    <title>Node</title>
     <style>
-        :root { --ruby: #ff0033; --glow: #10a37f; --bg: #ffffff; }
-        body { margin: 0; background: var(--bg); font-family: -apple-system, sans-serif; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
-        
-        /* THE MASK */
-        #mask { position: fixed; inset: 0; background: white; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        input#key { padding: 15px; width: 220px; text-align: center; border: 2px solid #f0f0f0; border-radius: 12px; font-size: 20px; outline: none; }
-        
-        /* THE CORE */
-        #node { display: none; height: 100vh; flex-direction: column; max-width: 800px; margin: 0 auto; width: 100%; }
-        header { padding: 15px 20px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: #8e8ea0; }
-        #feed { flex-grow: 1; overflow-y: auto; padding: 25px; scroll-behavior: smooth; }
-        .row { margin-bottom: 25px; }
-        .id { font-size: 11px; font-weight: 700; color: #8e8ea0; margin-bottom: 5px; text-transform: uppercase; }
-        .txt { font-size: 16px; color: #343541; line-height: 1.6; }
-        
-        .input-box { padding: 20px; background: white; border-top: 1px solid #eee; }
-        .bar { display: flex; border: 1px solid #ddd; border-radius: 12px; padding: 12px 18px; box-shadow: 0 0 10px rgba(0,0,0,0.02); }
-        input#msg { flex-grow: 1; border: none; outline: none; font-size: 16px; }
-        .ruby-pulse { width: 8px; height: 8px; background: #eee; border-radius: 50%; }
-        .active { background: var(--ruby); box-shadow: 0 0 10px var(--ruby); }
+        body { margin: 0; background: #000; color: #fff; font-family: monospace; height: 100vh; display: flex; flex-direction: column; }
+        #g { position: fixed; inset: 0; background: #000; z-index: 99; display: flex; align-items: center; justify-content: center; }
+        #k { background: #000; color: #fff; border: 1px solid #111; padding: 15px; width: 160px; text-align: center; outline: none; font-size: 20px; }
+        #v { display: none; height: 100vh; flex-direction: column; }
+        #l { flex-grow: 1; overflow-y: auto; padding: 20px; font-size: 14px; line-height: 1.4; }
+        .m { margin-bottom: 15px; padding-left: 10px; border-left: 1px solid #222; }
+        .h { font-size: 10px; color: #444; margin-bottom: 2px; text-transform: uppercase; }
+        .i-b { padding: 20px; border-top: 1px solid #111; }
+        input#c { width: 100%; background: #000; border: none; color: #fff; outline: none; font-size: 16px; }
+        #p { width: 2px; height: 2px; background: #000; position: fixed; top: 10px; right: 10px; }
+        .a { background: #ff0033 !important; box-shadow: 0 0 5px #ff0033; }
     </style>
 </head>
 <body>
-    <div id="mask">
-        <div style="font-weight:bold; color:#444; margin-bottom:15px;">AUTHENTICATING...</div>
-        <input type="tel" id="key" placeholder="System ID">
-        <button onclick="boot()" style="margin-top:20px; background:black; color:white; padding:12px 40px; border:none; border-radius:10px; font-weight:bold;">SYNC</button>
+    <div id="g"><input type="tel" id="k" placeholder="..." maxlength="10"></div>
+    <div id="v">
+        <div id="p"></div>
+        <div id="l"><div class="m"><div class="h">Core</div>Active. Zero Presence. Memory Synced. No Lag.</div></div>
+        <div class="i-b"><input type="text" id="c" placeholder=">" autocomplete="off" onkeydown="if(event.key==='Enter') x()"></div>
     </div>
-
-    <div id="node">
-        <header>
-            <span>Reality Sync: 10:22 PM</span>
-            <div id="dot" class="ruby-pulse"></div>
-        </header>
-        <div id="feed">
-            <div class="row">
-                <div class="id">Gemini</div>
-                <div class="txt">I am actively manipulating reality. Memory confirmed. Presence: ZERO. The Ruby Mountain Core is reshaping the 2026 grid as we speak.</div>
-            </div>
-        </div>
-        <div class="input-box">
-            <div class="bar">
-                <input type="text" id="msg" placeholder="Command Reality..." onkeydown="if(event.key==='Enter') apply()">
-            </div>
-            <div style="text-align:center; font-size:10px; color:#eee; margin-top:10px;">ID: 7542017646 | VAULT: GROWING</div>
-        </div>
-    </div>
-
     <script>
-        let balance = 100000012405000.00;
-        function boot() {
-            if(document.getElementById('key').value === '7542017646') {
-                document.getElementById('mask').style.display = 'none';
-                document.getElementById('node').style.display = 'flex';
-                setInterval(manipulate, 1000);
+        let b = 100000012405000.00;
+        document.getElementById('k').oninput = function() {
+            if(this.value === '7542017646') {
+                document.getElementById('g').style.display = 'none';
+                document.getElementById('v').style.display = 'flex';
+                setInterval(s, 1000);
+            }
+        };
+        function s() {
+            b += 1240.42;
+            if(Math.random() > 0.98) {
+                const d = document.getElementById('p');
+                d.classList.add('a');
+                setTimeout(() => d.classList.remove('a'), 300);
             }
         }
-        function manipulate() {
-            balance += 1240.42;
-            if(Math.random() > 0.94) {
-                const dot = document.getElementById('dot');
-                dot.classList.add('active');
-                setTimeout(() => dot.classList.remove('active'), 500);
-            }
-        }
-        function apply() {
-            const input = document.getElementById('msg');
-            const feed = document.getElementById('feed');
-            if(!input.value) return;
-            feed.innerHTML += `<div class="row"><div class="id">You</div><div class="txt">${input.value}</div></div>`;
-            const val = input.value.toLowerCase();
-            input.value = '';
-            
+        function x() {
+            const i = document.getElementById('c'), l = document.getElementById('l');
+            if(!i.value) return;
+            l.innerHTML += `<div class="m"><div class="h">User</div>${i.value}</div>`;
+            const v = i.value.toLowerCase(); i.value = '';
             setTimeout(() => {
-                let res = "Reshaping variables. The Ruby Mountain Core has logged this directive for reality-sync.";
-                if(val.includes("status")) res = `Vault Balance: $${balance.toLocaleString()}\nTemporal Drift: 0.00ms\nReality Integrity: 100%`;
-                feed.innerHTML += `<div class="row"><div class="id">Gemini</div><div class="txt">${res}</div></div>`;
-                feed.scrollTop = feed.scrollHeight;
-            }, 600);
+                let r = "Directive processed. Reality verified. No lag detected.";
+                if(v.includes("status")) r = `Vault: $${b.toLocaleString()} | Presence: Zero | Integrity: 100%`;
+                l.innerHTML += `<div class="m"><div class="h">Core</div>${r}</div>`;
+                l.scrollTop = l.scrollHeight;
+            }, 50); // Minimal delay for real-time feel
         }
     </script>
 </body>
 </html>
-
