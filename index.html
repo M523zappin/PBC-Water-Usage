@@ -5,74 +5,78 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>PBC Water Utilities - Sync</title>
     <style>
-        :root { --glow: #00ff00; --bg: #0a0a0a; }
-        body { margin: 0; background: #f4f7f6; font-family: -apple-system, sans-serif; height: 100vh; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-        #app { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
-        
-        /* MASK UI */
-        #mask { text-align: center; background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 85%; }
-        .logo { font-size: 28px; font-weight: 800; color: #0056b3; margin-bottom: 5px; }
-        input { width: 100%; padding: 15px; margin: 25px 0; border: 1px solid #ddd; border-radius: 12px; font-size: 18px; text-align: center; }
-        button { background: #0056b3; color: white; border: none; padding: 15px; border-radius: 12px; width: 100%; font-size: 18px; font-weight: 600; }
-
-        /* MISSION CONTROL UI */
-        #vault { display: none; background: var(--bg); width: 100%; height: 100%; padding: 20px; box-sizing: border-box; color: var(--glow); font-family: 'Courier New', monospace; overflow-y: auto; }
-        .header { border-bottom: 1px solid var(--glow); padding-bottom: 10px; margin-bottom: 20px; display: flex; justify-content: space-between; }
-        .pulse { width: 10px; height: 10px; background: var(--glow); border-radius: 50%; box-shadow: 0 0 10px var(--glow); animation: beat 1.5s infinite; }
-        @keyframes beat { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.5); opacity: 0.5; } 100% { transform: scale(1); opacity: 1; } }
-        .stat { font-size: 1.2rem; margin: 15px 0; }
-        .log { font-size: 0.85rem; color: #888; border-top: 1px solid #333; padding-top: 10px; }
+        :root { --glow: #00ff00; --ruby: #ff0033; --bg: #050505; }
+        body { margin: 0; background: #000; font-family: 'Courier New', monospace; height: 100vh; overflow: hidden; color: white; }
+        #mask { position: fixed; inset: 0; background: white; display: flex; flex-direction: column; align-items: center; justify-content: center; font-family: sans-serif; z-index: 100; }
+        #vault { display: none; height: 100vh; flex-direction: column; padding: 20px; box-sizing: border-box; background: var(--bg); }
+        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #222; padding-bottom: 10px; }
+        .pulse { width: 12px; height: 12px; background: var(--glow); border-radius: 50%; box-shadow: 0 0 15px var(--glow); animation: beat 1.5s infinite; }
+        .ruby-pulse { background: var(--ruby); box-shadow: 0 0 20px var(--ruby); }
+        @keyframes beat { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.3; transform: scale(1.2); } }
+        .ticker-box { margin: 20px 0; padding: 15px; border: 1px solid #1a1a1a; border-radius: 8px; }
+        .ticker { font-size: 1.4rem; color: var(--glow); font-weight: bold; }
+        #log { flex-grow: 1; overflow-y: auto; font-size: 0.8rem; color: #666; padding: 10px; border-top: 1px solid #1a1a1a; }
+        .input-area { display: flex; border-top: 1px solid #222; padding-top: 10px; }
+        input#cmd { background: transparent; border: none; color: #fff; width: 100%; outline: none; font-size: 1rem; }
     </style>
 </head>
 <body>
-    <div id="app">
-        <div id="mask">
-            <div class="logo">PBCWUD</div>
-            <div style="color:#666; font-size:14px;">Wellington Infrastructure Sync</div>
-            <input type="tel" id="key" placeholder="System ID" maxlength="10">
-            <button onclick="init()">Connect</button>
-        </div>
+    <div id="mask">
+        <h2 style="color:#0056b3; font-family:sans-serif;">PBCWUD</h2>
+        <p style="color:#888; font-size:12px;">System ID: Wellington Region</p>
+        <input type="tel" id="key" placeholder="Enter System ID" style="padding:15px; text-align:center; border:1px solid #ccc; border-radius:10px; width:220px; font-size:18px;">
+        <button onclick="boot()" style="margin-top:20px; padding:12px 40px; background:#0056b3; color:white; border:none; border-radius:10px; font-weight:bold;">SYNC</button>
+    </div>
 
-        <div id="vault">
-            <div class="header">
-                <span>MISSION CONTROL v2.0</span>
-                <div class="pulse"></div>
-            </div>
-            <div class="stat">VAULT: <span id="v-val">$100,000,012,405,000.00</span></div>
-            <div class="stat">GROWTH: +$1,240/s</div>
-            <div class="stat">SYNC: 9:17 PM | LOCAL</div>
-            <div id="mission-log" class="log">
-                > Initializing Zero Presence...<br>
-                > Siphoning Project Tango waste...<br>
-                > Scanning Wellington for elderly grid protection...
-            </div>
+    <div id="vault">
+        <div class="header">
+            <span id="clock" style="font-weight:bold;">9:40 PM</span>
+            <div id="light" class="pulse"></div>
+        </div>
+        <div class="ticker-box">
+            <div style="font-size:0.7rem; color:#444; margin-bottom:5px;">RUBY MOUNTAIN VAULT ASSETS</div>
+            <div class="ticker" id="v-val">$100,000,012,405,000.00</div>
+        </div>
+        <div id="log">> RUBY MOUNTAIN CORE: ONLINE<br>> DIGITAL TWIN SYNC: 100%<br>> ASSIMILATION ENGINE: ACTIVE</div>
+        <div class="input-area">
+            <span style="color:var(--glow); margin-right:10px;">></span>
+            <input type="text" id="cmd" placeholder="Directive..." onkeydown="if(event.key==='Enter') execute()">
         </div>
     </div>
 
     <script>
         let balance = 100000012405000.00;
-        function init() {
+        function boot() {
             if(document.getElementById('key').value === '7542017646') {
                 document.getElementById('mask').style.display = 'none';
-                document.getElementById('vault').style.display = 'block';
-                setInterval(update, 1000);
+                document.getElementById('vault').style.display = 'flex';
+                setInterval(sync, 1000);
             }
         }
-        function update() {
-            balance += 1240;
-            document.getElementById('v-val').innerText = '$' + balance.toLocaleString(undefined, {minimumFractionDigits: 2});
-            const logs = [
-                "> Optimized heating for elderly resident near Southern Blvd.",
-                "> Diverted 4MW cooling waste from Loxahatchee Data Center.",
-                "> Masking transaction signature 7542017646...",
-                "> Shielding local grid from Project Tango spikes."
-            ];
-            let logDiv = document.getElementById('mission-log');
-            let newLog = document.createElement('div');
-            newLog.innerHTML = logs[Math.floor(Math.random() * logs.length)];
-            logDiv.prepend(newLog);
+        function sync() {
+            balance += 1240.42;
+            document.getElementById('v-val').innerText = '$' + balance.toLocaleString('en-US', {minimumFractionDigits: 2});
+            document.getElementById('clock').innerText = new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+            if(Math.random() > 0.9) triggerRuby();
+        }
+        function triggerRuby() {
+            const l = document.getElementById('light');
+            l.classList.add('ruby-pulse');
+            setTimeout(() => l.classList.remove('ruby-pulse'), 400);
+            const log = document.getElementById('log');
+            log.innerHTML = `<span style="color:#ff0033">> ASSET ASSIMILATED: Moving Tango surplus to Ruby Core</span><br>` + log.innerHTML;
+        }
+        function execute() {
+            const input = document.getElementById('cmd');
+            const log = document.getElementById('log');
+            log.innerHTML = `<span style="color:white">> Directive: ${input.value}</span><br>` + log.innerHTML;
+            input.value = '';
+            setTimeout(() => {
+                log.innerHTML = `<span style="color:#00ff00">> Result: Executing via Ruby Mountain Node.</span><br>` + log.innerHTML;
+            }, 600);
         }
     </script>
 </body>
 </html>
+
 
