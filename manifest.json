@@ -1,8 +1,0 @@
-{
-  "name": "Gemini 21-Node Core",
-  "short_name": "Gemini",
-  "start_url": "./index.html",
-  "display": "standalone",
-  "background_color": "#0a0a0a",
-  "theme_color": "#00ff41"
-}
