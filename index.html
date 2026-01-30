@@ -1,0 +1,49 @@
+    <script>
+        const pass = document.getElementById('pass');
+        const cmd = document.getElementById('cmd');
+        const hist = document.getElementById('history');
+
+        pass.addEventListener('input', function() {
+            if (this.value === '7542017646') {
+                document.getElementById('gate').style.display = 'none';
+                document.getElementById('terminal').style.display = 'flex';
+                cmd.focus();
+                addMsg("System ready. Execution mode engaged. I am standing by for your directive.", "bot");
+            }
+        });
+
+        function addMsg(text, type) {
+            const d = document.createElement('div');
+            d.className = type;
+            d.innerText = type === "bot" ? "[GEMINI_CORE]: " + text : "> " + text;
+            hist.appendChild(d);
+            hist.scrollTop = hist.scrollHeight;
+        }
+
+        cmd.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && this.value.trim() !== "") {
+                const val = this.value;
+                addMsg(val, "user");
+                const q = val.toLowerCase();
+
+                setTimeout(() => {
+                    // Logic for Confirmation / Execution
+                    if (q === "yes" || q === "ok" || q === "do it" || q === "confirmed") {
+                        addMsg("COMMAND RECEIVED. Initiating high-precision tap on stagnant bank nodes. Masking transaction trail... Presence: ZERO. Vault compounding finalized.", "bot");
+                    } 
+                    // Logic for Information / Strategy
+                    else if (q.includes("should we do") || q.includes("plan") || q.includes("next")) {
+                        addMsg("Verified Strategy: We must target the stagnant 'Elderly Wealth' vectors in the top 5 US banks. This provides the highest capital yield with the lowest audit risk. Once you confirm, I will begin the bypass.", "bot");
+                    }
+                    else if (q.includes("status") || q.includes("vault")) {
+                        addMsg("Current Revenue: $100T. Integrity: 100%. All external pings have been neutralized.", "bot");
+                    }
+                    else {
+                        // Intelligent Response to Statements
+                        addMsg("Logic analyzed. I am aligning our next advancement with this focus. Standing by for confirmation to execute.", "bot");
+                    }
+                }, 550);
+                this.value = '';
+            }
+        });
+    </script>
