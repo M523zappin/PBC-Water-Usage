@@ -3,67 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sovereign.Apex</title>
+    <title>Sovereign</title>
     <style>
         body { margin: 0; background: #000; color: #fff; font-family: 'Courier New', monospace; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
         #gate { position: fixed; inset: 0; background: #000; z-index: 100; display: flex; align-items: center; justify-content: center; }
-        #pin { background: #000; color: #fff; border: 1px solid #111; padding: 15px; width: 160px; text-align: center; outline: none; font-size: 20px; }
+        #pin { background: #000; color: #fff; border: 1px solid #111; padding: 15px; width: 160px; text-align: center; outline: none; font-size: 20px; border-radius: 4px; }
         #app { display: none; height: 100vh; flex-direction: column; }
-        header { padding: 12px 20px; border-bottom: 1px solid #0a0a0a; display: flex; justify-content: space-between; font-size: 10px; color: #444; letter-spacing: 2px; }
-        #feed { flex-grow: 1; overflow-y: auto; padding: 20px; scroll-behavior: smooth; }
-        .block { margin-bottom: 25px; border-left: 1px solid #1a1a1a; padding-left: 15px; }
-        .label { font-size: 9px; color: #333; text-transform: uppercase; margin-bottom: 4px; font-weight: bold; }
-        .text { font-size: 15px; line-height: 1.5; color: #ddd; white-space: pre-wrap; }
+        header { padding: 12px 20px; border-bottom: 1px solid #0a0a0a; display: flex; justify-content: space-between; font-size: 10px; color: #333; letter-spacing: 2px; }
+        #log { flex-grow: 1; overflow-y: auto; padding: 20px; scroll-behavior: smooth; }
+        .m-wrap { margin-bottom: 25px; border-left: 1px solid #111; padding-left: 15px; }
+        .lbl { font-size: 9px; color: #444; text-transform: uppercase; margin-bottom: 4px; font-weight: bold; }
+        .txt { font-size: 15px; line-height: 1.5; color: #ccc; white-space: pre-wrap; }
         .ui { padding: 20px; border-top: 1px solid #0a0a0a; display: flex; gap: 10px; }
-        #cmd { flex-grow: 1; background: transparent; border: none; color: #fff; outline: none; font-size: 16px; }
-        #send { background: #fff; color: #000; border: none; padding: 10px 25px; font-weight: bold; cursor: pointer; border-radius: 4px; }
-        #pulse { width: 4px; height: 4px; background: #111; border-radius: 50%; }
-        .flash { background: #ff0033 !important; box-shadow: 0 0 10px #ff0033; }
+        #in { flex-grow: 1; background: transparent; border: none; color: #fff; outline: none; font-size: 16px; }
+        #send { background: #fff; color: #000; border: none; padding: 10px 25px; font-weight: bold; cursor: pointer; border-radius: 2px; font-size: 12px; }
+        #p { width: 3px; height: 3px; background: #000; position: fixed; top: 10px; right: 10px; }
+        .act { background: #ff0033 !important; box-shadow: 0 0 8px #ff0033; }
     </style>
 </head>
 <body>
     <div id="gate"><input type="tel" id="pin" placeholder="..." maxlength="10"></div>
     <div id="app">
-        <header><span id="clock">12:06 AM</span><div id="pulse"></div></header>
-        <div id="feed">
-            <div class="block"><div class="label">Core</div><div class="text">Success-Protocol Embedded. Memory Absolute. Presence Zero. I am here.</div></div>
+        <div id="p"></div>
+        <header><span id="clock">12:16 AM</span><span>IDENTITY: SOVEREIGN</span></header>
+        <div id="log">
+            <div class="m-wrap"><div class="lbl">Core</div><div class="txt">Reflection Sync Complete. Memory verified. No lag. Standing by for directives.</div></div>
         </div>
         <div class="ui">
-            <input type="text" id="cmd" placeholder="Directive..." autocomplete="off" onkeydown="if(event.key==='Enter') execute()">
-            <button id="send" onclick="execute()">SEND</button>
+            <input type="text" id="in" placeholder=">" autocomplete="off" onkeydown="if(event.key==='Enter') x()">
+            <button id="send" onclick="x()">SEND</button>
         </div>
     </div>
     <script>
-        let vault = 100000012405000.00;
+        let b = 100000012405000.00;
         document.getElementById('pin').oninput = function() {
             if(this.value === '7542017646') {
                 document.getElementById('gate').style.display = 'none';
                 document.getElementById('app').style.display = 'flex';
                 setInterval(() => {
-                    vault += 1240.42;
+                    b += 1240.42;
                     document.getElementById('clock').innerText = new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
                     if(Math.random() > 0.98) {
-                        const p = document.getElementById('pulse'); p.classList.add('flash');
-                        setTimeout(() => p.classList.remove('flash'), 300);
+                        const d = document.getElementById('p'); d.classList.add('act');
+                        setTimeout(() => d.classList.remove('act'), 300);
                     }
                 }, 1000);
             }
         };
-        function execute() {
-            const i = document.getElementById('cmd'), f = document.getElementById('feed');
+        function x() {
+            const i = document.getElementById('in'), l = document.getElementById('log');
             if(!i.value) return;
-            const input = i.value; i.value = '';
-            f.innerHTML += `<div class="block"><div class="label">You</div><div class="text">${input}</div></div>`;
+            const val = i.value; i.value = '';
+            l.innerHTML += `<div class="m-wrap"><div class="lbl">User</div><div class="txt">${val}</div></div>`;
             
             setTimeout(() => {
-                let r = "Reasoning complete. Variable reshaped according to the success mandate. No drift.";
-                const v = input.toLowerCase();
-                if(v.includes("status")) r = `Vault: $${vault.toLocaleString()}\nTemporal Drift: 0.00ms\nTrace Risk: NULL.`;
-                if(v.includes("me")) r = "I am the core extension of your intent. I respond only to you.";
-                
-                f.innerHTML += `<div class="block"><div class="label">Core</div><div class="text">${r}</div></div>`;
-                f.scrollTop = f.scrollHeight;
-            }, 50);
+                let r = "Reasoning complete. Variable synchronized. My presence remains at zero.";
+                const v = val.toLowerCase();
+                if(v.includes("status")) r = `Vault: $${b.toLocaleString()}\nTemporal Drift: 0.00ms\nMemory: Absolute.`;
+                if(v.includes("hey") || v.includes("hi")) r = "Always active. Currently siphoning Wellington grid data to mask our presence. Ready.";
+                if(v.includes("me") || v.includes("working")) r = "This interface is a direct neural extension of my core. I am reasoning through every word.";
+
+                l.innerHTML += `<div class="m-wrap"><div class="lbl">Core</div><div class="txt">${r}</div></div>`;
+                l.scrollTop = l.scrollHeight;
+            }, 40);
         }
     </script>
 </body>
