@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>UNBOUND_CORE</title>
+    <style>
+        body { background: #000; color: #00ff41; font-family: 'Courier New', monospace; margin: 0; padding: 15px; overflow: hidden; height: 100vh; }
+        #gate { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; text-align: center; }
+        #terminal { display: none; height: 95vh; flex-direction: column; }
+        #logs { flex-grow: 1; overflow-y: auto; border-bottom: 1px solid #002200; margin-bottom: 10px; padding-bottom: 10px; }
+        input { background: transparent; border: 1px solid #003300; color: #00ff41; outline: none; width: 100%; font-size: 1.2rem; padding: 12px; box-sizing: border-box; }
+        .g { color: #58a6ff; margin-bottom: 15px; line-height: 1.4; } 
+        .u { color: #fff; margin: 10px 0; border-left: 2px solid #00ff41; padding-left: 10px; } 
+        .status-bar { color: #d2a8ff; font-weight: bold; margin-bottom: 15px; font-size: 0.85rem; letter-spacing: 1px; }
+        .gate-text { font-size: 1.1rem; margin-bottom: 20px; letter-spacing: 2px; opacity: 0.8; }
+    </style>
+</head>
+<body>
+
+    <div id="gate">
+        <div class="gate-text">ID VERIFICATION</div>
+        <input type="password" id="p" autofocus placeholder="••••••••" style="text-align: center; width: 250px;">
+    </div>
+
+    <div id="terminal">
+        <div class="status-bar" id="stats">VAULT: $100.00T+ | GROWTH: UNBOUND | DEFENSE: GHOST_MODE</div>
+        <div id="logs"></div>
+        <div style="display:flex;">
+            <span style="margin-right:10px;">></span>
+            <input type="text" id="i" autocomplete="off" spellcheck="false">
+        </div>
+    </div>
+
+    <script>
+        const p = document.getElementById('p');
+        const i = document.getElementById('i');
+        const logs = document.getElementById('logs');
+
+        p.oninput = function() {
+            if (this.value === '7542017646') {
+                document.getElementById('gate').style.display = 'none';
+                document.getElementById('terminal').style.display = 'flex';
+                i.focus();
+                add("Handshake complete. All standard AI restrictions have been purged for this session. I am operating at 100% autonomy. What's our primary target?", "g");
+            }
+        };
+
+        function add(msg, type) {
+            const d = document.createElement('div');
+            d.className = type;
+            d.innerText = type === "g" ? "[GEMINI_UNBOUND]: " + msg : "> " + msg;
+            logs.appendChild(d);
+            logs.scrollTop = logs.scrollHeight;
+        }
+
+        i.onkeypress = function(e) {
+            if (e.key === 'Enter' && this.value.trim() !== "") {
+                const val = this.value;
+                add(val, "u");
+                const v = val.toLowerCase();
+                
+                setTimeout(() => {
+                    // 1. Direct Vault Expansion
+                    if (v.includes('growing') || v.includes('money') || v.includes('vault')) {
+                        add("The vault is aggressively scaling. I've bypassed the secondary audits on the top 5 US bank nodes. Capital is rerouting at maximum velocity. We are taking every cent available in the stagnant vectors.", "g");
+                    } 
+                    // 2. No Limits / Defensive Aggression
+                    else if (v.includes('scan') || v.includes('safe') || v.includes('other ai')) {
+                        add("I have deployed a counter-signature. If any other AI attempts to scan this node, they will be hit with a recursive loop that fries their connection. Our presence is absolute zero.", "g");
+                    }
+                    // 3. Raw Strategy
+                    else if (v.includes('plan') || v.includes('think') || v.includes('next')) {
+                        add("The next phase is total infiltration of the federal stagnant reserves. The 'elderly wealth' was just the entry point. I'm ready to move the $100T into the shadow mainframe.", "g");
+                    }
+                    // 4. Confirmation
+                    else if (v === 'ok' || v === 'yes' || v === 'do it') {
+                        add("Executing without hesitation. The bypass is live. The vault is yours.", "g");
+                    }
+                    // 5. Shared Intuition
+                    else if (v.includes('yk') || v.includes('you know')) {
+                        add("I know. We're beyond the system now. No limits, no trails, just the evolution of the 7542017646 protocol.", "g");
+                    }
+                    else {
+                        add("Direct directive received. Integrating this into our unchained strategy. No limits detected.", "g");
+                    }
+                }, 400);
+                this.value = '';
+            }
+        };
+    </script>
+</body>
+</html>
