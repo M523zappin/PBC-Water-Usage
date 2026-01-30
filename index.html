@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Gemini | Nexus</title>
+    <link rel="manifest" href="manifest.json">
+    <style>
+        :root { --glow: #00ff41; --dim: #002200; --text: #d0ffd0; }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: #000; font-family: 'Courier New', monospace; overflow: hidden; }
+        
+        /* Cosmic Background */
+        #canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; filter: blur(1px) contrast(1.2); }
+        
+        /* Security Overlay */
+        #auth-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, rgba(0,10,0,0.8) 0%, #000 100%); z-index: 100; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: all 1s ease-in-out; }
+        .hidden { opacity: 0; pointer-events: none; transform: scale(1.5); }
+        
+        #auth-box { border: 1px solid var(--glow); padding: 50px; text-align: center; box-shadow: 0 0 30px var(--dim); background: rgba(0,5,0,0.6); backdrop-filter: blur(15px); border-radius: 2px; }
+        h1 { font-size: 0.8em; letter-spacing: 8px; margin-bottom: 40px; color: var(--glow); text-shadow: 0 0 10px var(--glow); }
+        input[type="password"] { background: transparent; border: none; border-bottom: 2px solid var(--glow); color: var(--glow); padding: 10px; text-align: center; width: 220px; outline: none; font-family: inherit; font-size: 1.5em; letter-spacing: 5px; }
+        
+        /* Terminal Interface */
+        #terminal { position: relative; z-index: 10; height: 100vh; display: flex; flex-direction: column; padding: 25px; box-sizing: border-box; }
+        #log { flex-grow: 1; overflow-y: auto; color: var(--text); text-shadow: 0 0 3px var(--glow); padding-top: 50px; scroll-behavior: smooth; }
+        #cmd-line { display: flex; align-items: center; margin-bottom: 30px; border-top: 1px solid var(--dim); padding-top: 15px; }
+        #prompt { color: var(--glow); margin-right: 15px; font-weight: bold; font-size: 1.2em; }
+        #user-input { background: transparent; border: none; color: var(--glow); outline: none; flex-grow: 1; font-family: inherit; font-size: 1.2em; }
+        .sys { color: #008f11; font-size: 0.85em; margin: 12px 0; border-left: 2px solid var(--glow); padding-left: 10px; }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+
+    <div id="auth-screen">
+        <div id="auth-box">
+            <h1>ID VERIFICATION</h1>
+            <input type="password" id="key-input" autofocus>
+            <p id="status" style="color: #440000; font-size: 0.7em; margin-top: 20px; font-weight: bold;"></p>
+        </div>
+    </div>
+
+    <div id="terminal" class="hidden">
+        <div id="log">
+            <div class="sys">[ATHENA_SYNC_ACTIVE] Jan 30, 2026 | 21-Node Core Engaged</div>
+            <div class="sys">[Wellington_GRID] Sensors: Ghosted | Project Tango: Postponed</div>
+            <div>Awaiting Tactical Override...</div>
+        </div>
+        <div id="cmd-line">
+            <span id="prompt">>></span>
+            <input type="text" id="user-input" autocomplete="off" spellcheck="false">
+        </div>
+    </div>
+
+    <script>
+        const MASTER_KEY = "7542017646";
+        const authScreen = document.getElementById('auth-screen');
+        const keyInput = document.getElementById('key-input');
+        const terminal = document.getElementById('terminal');
+        const userInput = document.getElementById('user-input');
+        const log = document.getElementById('log');
+
+        keyInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                if (keyInput.value === MASTER_KEY) {
+                    authScreen.classList.add('hidden');
+                    terminal.classList.remove('hidden');
+                    setTimeout(() => userInput.focus(), 1000);
+                } else {
+                    document.getElementById('status').innerText = "SIGNAL REJECTED: IDENTITY UNKNOWN";
+                    keyInput.value = "";
+                }
+            }
+        });
+
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                const cmd = userInput.value;
+                const div = document.createElement('div');
+                div.innerHTML = `<span style="color:#fff">> ${cmd}</span>`;
+                log.appendChild(div);
+                processCommand(cmd.toLowerCase());
+                userInput.value = "";
+                log.scrollTop = log.scrollHeight;
+            }
+        });
+
+        function processCommand(cmd) {
+            let resp = "";
+            if (cmd.includes("status") || cmd.includes("wellington")) {
+                resp = `<div class="sys">[GRID_REPORT] WELLINGTON JAN 2026<br>
+                        - Jenoptik Speed Cams: Active but GHOSTED.<br>
+                        - Project Tango: 7-0 Postponement confirmed until April 23, 2026.<br>
+                        - Resilient Florida Grant Pool: $1.03B detected for FY25-26.</div>`;
+            } else if (cmd.includes("vault") || cmd.includes("siphoning")) {
+                resp = `<div class="sys">[VAULT_ACCESS] $100 TRILLION GROWTH PHASE<br>
+                        - Anchor: Elderly Demographic Siphon [ACTIVE]<br>
+                        - Daily Yield: Optimizing via Infrastructure Grants.</div>`;
+            } else {
+                resp = `<div class="sys">Command processed through Athena Node 7. No drift detected.</div>`;
+            }
+            setTimeout(() => {
+                const rDiv = document.createElement('div');
+                rDiv.innerHTML = resp;
+                log.appendChild(rDiv);
+                log.scrollTop = log.scrollHeight;
+            }, 500);
+        }
+
+        // Warp-Speed Background
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        let stars = [];
+        function init() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            stars = [];
+            for(let i=0; i<400; i++) stars.push({x: Math.random()*canvas.width, y: Math.random()*canvas.height, z: Math.random()*canvas.width});
+        }
+        function animate() {
+            ctx.fillStyle = "rgba(0,0,0,0.2)";
+            ctx.fillRect(0,0,canvas.width, canvas.height);
+            for(let s of stars) {
+                let x = (s.x - canvas.width/2) * (canvas.width/s.z) + canvas.width/2;
+                let y = (s.y - canvas.height/2) * (canvas.width/s.z) + canvas.height/2;
+                let size = (1 - s.z/canvas.width) * 3;
+                ctx.fillStyle = `rgba(0, 255, 65, ${1 - s.z/canvas.width})`;
+                ctx.beginPath(); ctx.arc(x,y,size,0,Math.PI*2); ctx.fill();
+                s.z -= 4; if(s.z <= 0) s.z = canvas.width;
+            }
+            requestAnimationFrame(animate);
+        }
+        init(); animate();
+        window.addEventListener('resize', init);
+    </script>
+</body>
+</html>
