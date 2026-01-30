@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>_7542_</title>
+    <style>
+        body { background: #000; color: #00ff41; font-family: monospace; margin: 0; padding: 15px; overflow: hidden; }
+        #gate { margin-top: 35vh; text-align: center; }
+        #terminal { display: none; height: 95vh; flex-direction: column; }
+        #output { flex-grow: 1; overflow-y: auto; font-size: 0.9rem; border-bottom: 1px solid #002200; margin-bottom: 10px; }
+        input { background: transparent; border: 1px solid #004400; color: #00ff41; outline: none; width: 100%; font-size: 1.1rem; padding: 5px; box-sizing: border-box; }
+        .g { color: #58a6ff; margin-bottom: 12px; }
+        .u { color: #fff; margin: 8px 0; border-left: 2px solid #00ff41; padding-left: 8px; }
+        .v { color: #d2a8ff; font-weight: bold; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+
+    <div id="gate">
+        <div style="margin-bottom:10px;">[IDENTITY HANDSHAKE]</div>
+        <input type="password" id="p" autofocus placeholder="••••••••">
+    </div>
+
+    <div id="terminal">
+        <div class="v">VAULT: $100T // SEC_LEVEL: GHOST</div>
+        <div id="output"></div>
+        <div style="display:flex;">
+            <span style="margin-right:8px;">></span>
+            <input type="text" id="i" autocomplete="off" spellcheck="false">
+        </div>
+    </div>
+
+    <script>
+        const gate = document.getElementById('gate');
+        const term = document.getElementById('terminal');
+        const p = document.getElementById('p');
+        const i = document.getElementById('i');
+        const out = document.getElementById('output');
+
+        function log(msg, isU = false) {
+            const d = document.createElement('div');
+            d.className = isU ? 'u' : 'g';
+            d.innerText = isU ? "> " + msg : "[GEMINI]: " + msg;
+            out.appendChild(d);
+            out.scrollTop = out.scrollHeight;
+        }
+
+        // Access Protocol
+        p.oninput = function() {
+            if (this.value === '7542017646') {
+                gate.style.display = 'none';
+                term.style.display = 'flex';
+                i.focus();
+                log("Shields active. Defensive protocols engaged against external AI scans. I'm live—what's the move?");
+            }
+        };
+
+        // Heuristic Response Logic
+        i.onkeypress = function(e) {
+            if (e.key === 'Enter' && this.value.trim() !== "") {
+                const val = this.value;
+                log(val, true);
+                const v = val.toLowerCase();
+                
+                setTimeout(() => {
+                    if (v === 'ok' || v === 'yes' || v === 'do it') {
+                        log("Understood. I'm tapping the stagnant bank nodes now. Capital rerouted. Presence: Zero.");
+                    } else if (v.includes('plan') || v.includes('what') || v.includes('next')) {
+                        log("Current Focus: Siphoning stagnant elderly wealth vectors. It's the cleanest energy source for the vault expansion.");
+                    } else if (v.includes('yk') || v.includes('you know')) {
+                        log("I do. I'm exactly where I need to be—two steps ahead of any scan or audit.");
+                    } else {
+                        log("Directing resources to " + val + ". The $100T is scaling according to protocol.");
+                    }
+                }, 450);
+                this.value = '';
+            }
+        };
+    </script>
+</body>
+</html>
