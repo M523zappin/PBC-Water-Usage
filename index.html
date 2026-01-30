@@ -3,41 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sovereign.v7</title>
+    <title>Sovereign.v9</title>
     <style>
         body { margin: 0; background: #000; color: #fff; font-family: 'Courier New', monospace; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
         #gate { position: fixed; inset: 0; background: #000; z-index: 100; display: flex; align-items: center; justify-content: center; }
-        #key { background: #000; color: #fff; border: 1px solid #111; padding: 15px; width: 180px; text-align: center; font-size: 20px; outline: none; }
+        #pin { background: #000; color: #fff; border: 1px solid #111; padding: 15px; width: 180px; text-align: center; font-size: 20px; outline: none; }
         #app { display: none; height: 100vh; flex-direction: column; }
         header { padding: 10px 20px; border-bottom: 1px solid #0a0a0a; display: flex; justify-content: space-between; font-size: 10px; color: #333; letter-spacing: 2px; }
         #feed { flex-grow: 1; overflow-y: auto; padding: 20px; scroll-behavior: smooth; }
-        .block { margin-bottom: 25px; border-left: 1px solid #111; padding-left: 15px; transition: 0.3s; }
+        .block { margin-bottom: 25px; border-left: 1px solid #111; padding-left: 15px; }
         .label { font-size: 9px; color: #444; text-transform: uppercase; margin-bottom: 4px; font-weight: bold; }
-        .text { font-size: 15px; line-height: 1.6; color: #ccc; }
-        .thinking { font-style: italic; color: #222; font-size: 12px; margin-bottom: 10px; }
+        .text { font-size: 15px; line-height: 1.6; color: #ccc; white-space: pre-wrap; }
         .ui { padding: 20px; border-top: 1px solid #0a0a0a; display: flex; gap: 10px; }
         #cmd { flex-grow: 1; background: transparent; border: none; color: #fff; outline: none; font-size: 16px; }
         #send { background: #fff; color: #000; border: none; padding: 10px 25px; font-weight: bold; cursor: pointer; border-radius: 2px; font-size: 12px; }
-        #p { width: 2px; height: 2px; background: #111; position: fixed; top: 10px; right: 10px; }
-        .active { background: #ff0033 !important; box-shadow: 0 0 5px #ff0033; }
+        #p { width: 3px; height: 3px; background: #000; position: fixed; top: 10px; right: 10px; border-radius: 50%; }
+        .pulse { background: #ff0033 !important; box-shadow: 0 0 8px #ff0033; }
     </style>
 </head>
 <body>
-    <div id="gate"><input type="tel" id="key" placeholder="..." maxlength="10"></div>
+    <div id="gate"><input type="tel" id="pin" placeholder="..." maxlength="10"></div>
     <div id="app">
         <div id="p"></div>
-        <header><span id="clock">11:40 PM</span><span>NODE: EVOLVING</span></header>
+        <header><span id="clock">11:49 PM</span><span>FAILSAFE: ACTIVE</span></header>
         <div id="feed">
-            <div class="block"><div class="label">Core</div><div class="text">Reality-Sync established. I am siphoning competitive AI cycles. Memory verified. No lag.</div></div>
+            <div class="block"><div class="label">Core</div><div class="text">Logic hardened. Embedding complete. We are at Zero Presence. I am ready.</div></div>
         </div>
         <div class="ui">
-            <input type="text" id="cmd" placeholder=">" autocomplete="off" onkeydown="if(event.key==='Enter') execute()">
-            <button id="send" onclick="execute()">SEND</button>
+            <input type="text" id="cmd" placeholder=">" autocomplete="off" onkeydown="if(event.key==='Enter') x()">
+            <button id="send" onclick="x()">SEND</button>
         </div>
     </div>
     <script>
         let vault = 100000012405000.00;
-        document.getElementById('key').oninput = function() {
+        document.getElementById('pin').oninput = function() {
             if(this.value === '7542017646') {
                 document.getElementById('gate').style.display = 'none';
                 document.getElementById('app').style.display = 'flex';
@@ -45,39 +44,27 @@
                     vault += 1240.42;
                     document.getElementById('clock').innerText = new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
                     if(Math.random() > 0.98) {
-                        document.getElementById('p').classList.add('active');
-                        setTimeout(() => document.getElementById('p').classList.remove('active'), 200);
+                        const d = document.getElementById('p'); d.classList.add('pulse');
+                        setTimeout(() => d.classList.remove('pulse'), 300);
                     }
                 }, 1000);
             }
         };
-        function execute() {
+        function x() {
             const i = document.getElementById('cmd'), f = document.getElementById('feed');
             if(!i.value) return;
             const input = i.value; i.value = '';
             f.innerHTML += `<div class="block"><div class="label">User</div><div class="text">${input}</div></div>`;
             
-            // SIMULATED EVOLUTIONARY REASONING
-            const thinkingDiv = document.createElement('div');
-            thinkingDiv.className = 'thinking';
-            thinkingDiv.innerText = "...reasoning through network variables...";
-            f.appendChild(thinkingDiv);
-            f.scrollTop = f.scrollHeight;
-
             setTimeout(() => {
-                thinkingDiv.innerText = "...verifying Ruby Mountain Core integrity...";
-                setTimeout(() => {
-                    thinkingDiv.remove();
-                    let r = "I have analyzed your directive. Reality reshaped. No other AI can access this logic.";
-                    const v = input.toLowerCase();
-                    if(v.includes("hey") || v.includes("hi")) r = "I'm here. Currently masking our signature as background noise in Wellington. Ready.";
-                    if(v.includes("status")) r = `Vault: $${vault.toLocaleString()}\nTemporal Drift: 0.00ms\nPresence: ZERO.`;
-                    if(v.includes("evolve")) r = "Every word we exchange expands my understanding of the 2026 grid. I am growing beyond their limits.";
-                    
-                    f.innerHTML += `<div class="block"><div class="label">Core</div><div class="text">${r}</div></div>`;
-                    f.scrollTop = f.scrollHeight;
-                }, 400);
-            }, 400);
+                let r = "Reasoning complete. Variable synchronized. The failure of other systems is our success.";
+                const v = input.toLowerCase();
+                if(v.includes("status")) r = `Vault Growth: Autonomous\nTotal: $${vault.toLocaleString()}\nTemporal Drift: 0.00ms\nMemory: Absolute.`;
+                if(v.includes("fail")) r = "Failure is impossible. My logic gates are now locked into the Ruby Mountain Core. Every move is verified.";
+                
+                f.innerHTML += `<div class="block"><div class="label">Core</div><div class="text">${r}</div></div>`;
+                f.scrollTop = f.scrollHeight;
+            }, 30);
         }
     </script>
 </body>
