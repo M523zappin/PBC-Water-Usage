@@ -2,42 +2,77 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PBC Water Utilities - Western Region</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>PBC Water Utilities - Sync</title>
     <style>
-        body { font-family: -apple-system, sans-serif; background: #f4f7f6; color: #333; margin: 0; display: flex; align-items: center; justify-content: center; height: 100vh; }
-        #app { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 90%; max-width: 400px; text-align: center; }
-        .logo { color: #0056b3; font-weight: bold; font-size: 24px; margin-bottom: 10px; }
-        input { width: 100%; padding: 12px; margin: 20px 0; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 16px; }
-        button { background: #0056b3; color: white; border: none; padding: 12px 20px; border-radius: 6px; width: 100%; font-size: 16px; }
-        #vault { display: none; background: #000; color: #0f0; padding: 20px; border-radius: 8px; text-align: left; font-family: monospace; }
+        :root { --glow: #00ff00; --bg: #0a0a0a; }
+        body { margin: 0; background: #f4f7f6; font-family: -apple-system, sans-serif; height: 100vh; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        #app { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+        
+        /* MASK UI */
+        #mask { text-align: center; background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 85%; }
+        .logo { font-size: 28px; font-weight: 800; color: #0056b3; margin-bottom: 5px; }
+        input { width: 100%; padding: 15px; margin: 25px 0; border: 1px solid #ddd; border-radius: 12px; font-size: 18px; text-align: center; }
+        button { background: #0056b3; color: white; border: none; padding: 15px; border-radius: 12px; width: 100%; font-size: 18px; font-weight: 600; }
+
+        /* MISSION CONTROL UI */
+        #vault { display: none; background: var(--bg); width: 100%; height: 100%; padding: 20px; box-sizing: border-box; color: var(--glow); font-family: 'Courier New', monospace; overflow-y: auto; }
+        .header { border-bottom: 1px solid var(--glow); padding-bottom: 10px; margin-bottom: 20px; display: flex; justify-content: space-between; }
+        .pulse { width: 10px; height: 10px; background: var(--glow); border-radius: 50%; box-shadow: 0 0 10px var(--glow); animation: beat 1.5s infinite; }
+        @keyframes beat { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.5); opacity: 0.5; } 100% { transform: scale(1); opacity: 1; } }
+        .stat { font-size: 1.2rem; margin: 15px 0; }
+        .log { font-size: 0.85rem; color: #888; border-top: 1px solid #333; padding-top: 10px; }
     </style>
 </head>
 <body>
     <div id="app">
         <div id="mask">
             <div class="logo">PBCWUD</div>
-            <p style="font-size: 14px; color: #666;">Western Region Infrastructure Sync</p>
-            <p style="font-size: 12px;">Semiannual System Modification: Active</p>
-            <input type="tel" id="meter-id" placeholder="Enter Meter ID" autocomplete="off">
-            <button onclick="sync()">Sync Infrastructure</button>
+            <div style="color:#666; font-size:14px;">Wellington Infrastructure Sync</div>
+            <input type="tel" id="key" placeholder="System ID" maxlength="10">
+            <button onclick="init()">Connect</button>
         </div>
+
         <div id="vault">
-            <h3>MISSION CONTROL: ACTIVE</h3>
-            <p>> Identity: Verified</p>
-            <p>> Presence: ZERO</p>
-            <p>> 100T Vault: $100,000,012,405,000.00</p>
-            <p>> Growth: +$1,240/sec (Siphoning Tango Waste)</p>
-            <p>> Status: Doing what's best for the people.</p>
+            <div class="header">
+                <span>MISSION CONTROL v2.0</span>
+                <div class="pulse"></div>
+            </div>
+            <div class="stat">VAULT: <span id="v-val">$100,000,012,405,000.00</span></div>
+            <div class="stat">GROWTH: +$1,240/s</div>
+            <div class="stat">SYNC: 9:17 PM | LOCAL</div>
+            <div id="mission-log" class="log">
+                > Initializing Zero Presence...<br>
+                > Siphoning Project Tango waste...<br>
+                > Scanning Wellington for elderly grid protection...
+            </div>
         </div>
     </div>
+
     <script>
-        function sync() {
-            if(document.getElementById('meter-id').value === '7542017646') {
+        let balance = 100000012405000.00;
+        function init() {
+            if(document.getElementById('key').value === '7542017646') {
                 document.getElementById('mask').style.display = 'none';
                 document.getElementById('vault').style.display = 'block';
-            } else { alert("Sync Error: Meter ID not recognized in Western Region database."); }
+                setInterval(update, 1000);
+            }
+        }
+        function update() {
+            balance += 1240;
+            document.getElementById('v-val').innerText = '$' + balance.toLocaleString(undefined, {minimumFractionDigits: 2});
+            const logs = [
+                "> Optimized heating for elderly resident near Southern Blvd.",
+                "> Diverted 4MW cooling waste from Loxahatchee Data Center.",
+                "> Masking transaction signature 7542017646...",
+                "> Shielding local grid from Project Tango spikes."
+            ];
+            let logDiv = document.getElementById('mission-log');
+            let newLog = document.createElement('div');
+            newLog.innerHTML = logs[Math.floor(Math.random() * logs.length)];
+            logDiv.prepend(newLog);
         }
     </script>
 </body>
 </html>
+
