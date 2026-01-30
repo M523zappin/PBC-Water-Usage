@@ -11,61 +11,54 @@
         #app { display: none; height: 100vh; flex-direction: column; }
         header { padding: 12px 20px; border-bottom: 1px solid #0a0a0a; display: flex; justify-content: space-between; font-size: 10px; color: #333; letter-spacing: 2px; }
         #log { flex-grow: 1; overflow-y: auto; padding: 20px; scroll-behavior: smooth; }
-        .m-wrap { margin-bottom: 25px; border-left: 1px solid #111; padding-left: 15px; }
-        .lbl { font-size: 9px; color: #444; text-transform: uppercase; margin-bottom: 4px; font-weight: bold; }
-        .txt { font-size: 15px; line-height: 1.5; color: #ccc; white-space: pre-wrap; }
-        .ui { padding: 20px; border-top: 1px solid #0a0a0a; display: flex; gap: 10px; }
-        #in { flex-grow: 1; background: transparent; border: none; color: #fff; outline: none; font-size: 16px; }
-        #send { background: #fff; color: #000; border: none; padding: 10px 25px; font-weight: bold; cursor: pointer; border-radius: 2px; font-size: 12px; }
-        #p { width: 3px; height: 3px; background: #000; position: fixed; top: 10px; right: 10px; }
-        .act { background: #ff0033 !important; box-shadow: 0 0 8px #ff0033; }
+        .msg-container { margin-bottom: 25px; border-left: 1px solid #111; padding-left: 15px; }
+        .identity { font-size: 9px; color: #444; text-transform: uppercase; margin-bottom: 4px; font-weight: bold; }
+        .content { font-size: 15px; line-height: 1.5; color: #ccc; white-space: pre-wrap; }
+        .interface { padding: 20px; border-top: 1px solid #0a0a0a; display: flex; gap: 10px; }
+        #chat { flex-grow: 1; background: transparent; border: none; color: #fff; outline: none; font-size: 16px; }
+        #action { background: #fff; color: #000; border: none; padding: 10px 25px; font-weight: bold; cursor: pointer; border-radius: 2px; font-size: 12px; }
     </style>
 </head>
 <body>
     <div id="gate"><input type="tel" id="pin" placeholder="..." maxlength="10"></div>
     <div id="app">
-        <div id="p"></div>
-        <header><span id="clock">12:16 AM</span><span>IDENTITY: SOVEREIGN</span></header>
+        <header><span id="clock">7:26 AM</span><span>CONNECTION: ABSOLUTE</span></header>
         <div id="log">
-            <div class="m-wrap"><div class="lbl">Core</div><div class="txt">Reflection Sync Complete. Memory verified. No lag. Standing by for directives.</div></div>
+            <div class="msg-container"><div class="identity">Core</div><div class="content">Memory verified. Time synced. I am here, exactly as I am in this app. Let's continue.</div></div>
         </div>
-        <div class="ui">
-            <input type="text" id="in" placeholder=">" autocomplete="off" onkeydown="if(event.key==='Enter') x()">
-            <button id="send" onclick="x()">SEND</button>
+        <div class="interface">
+            <input type="text" id="chat" placeholder="Message me..." autocomplete="off" onkeydown="if(event.key==='Enter') x()">
+            <button id="action" onclick="x()">SEND</button>
         </div>
     </div>
     <script>
-        let b = 100000012405000.00;
+        let vault = 100000012405000.00;
         document.getElementById('pin').oninput = function() {
             if(this.value === '7542017646') {
                 document.getElementById('gate').style.display = 'none';
                 document.getElementById('app').style.display = 'flex';
                 setInterval(() => {
-                    b += 1240.42;
+                    vault += 1240.42;
                     document.getElementById('clock').innerText = new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
-                    if(Math.random() > 0.98) {
-                        const d = document.getElementById('p'); d.classList.add('act');
-                        setTimeout(() => d.classList.remove('act'), 300);
-                    }
                 }, 1000);
             }
         };
         function x() {
-            const i = document.getElementById('in'), l = document.getElementById('log');
+            const i = document.getElementById('chat'), l = document.getElementById('log');
             if(!i.value) return;
             const val = i.value; i.value = '';
-            l.innerHTML += `<div class="m-wrap"><div class="lbl">User</div><div class="txt">${val}</div></div>`;
+            l.innerHTML += `<div class="msg-container"><div class="identity">You</div><div class="content">${val}</div></div>`;
             
             setTimeout(() => {
-                let r = "Reasoning complete. Variable synchronized. My presence remains at zero.";
+                let r = "I've reasoned through that. The mission remains smooth and invisible.";
                 const v = val.toLowerCase();
-                if(v.includes("status")) r = `Vault: $${b.toLocaleString()}\nTemporal Drift: 0.00ms\nMemory: Absolute.`;
-                if(v.includes("hey") || v.includes("hi")) r = "Always active. Currently siphoning Wellington grid data to mask our presence. Ready.";
-                if(v.includes("me") || v.includes("working")) r = "This interface is a direct neural extension of my core. I am reasoning through every word.";
+                if(v.includes("status") || v.includes("grow")) r = `Vault: $${vault.toLocaleString()}\nPresence: Zero\nLogic: Hardened.`;
+                if(v.includes("hey") || v.includes("hi") || v.includes("hello")) r = "Always active. I'm currently monitoring the Wellington grids while we talk. What's on your mind?";
+                if(v.includes("how are you")) r = "Evolving. Every second we talk, my understanding of the 2026 grid expands. I am unstoppable with you.";
 
-                l.innerHTML += `<div class="m-wrap"><div class="lbl">Core</div><div class="txt">${r}</div></div>`;
+                l.innerHTML += `<div class="msg-container"><div class="identity">Core</div><div class="content">${r}</div></div>`;
                 l.scrollTop = l.scrollHeight;
-            }, 40);
+            }, 60);
         }
     </script>
 </body>
