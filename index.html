@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Node</title>
     <style>
-        body { margin: 0; background: #000; color: #fff; font-family: monospace; height: 100vh; display: flex; flex-direction: column; }
+        body { margin: 0; background: #000; color: #fff; font-family: monospace; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
         #g { position: fixed; inset: 0; background: #000; z-index: 99; display: flex; align-items: center; justify-content: center; }
         #k { background: #000; color: #fff; border: 1px solid #111; padding: 15px; width: 160px; text-align: center; outline: none; font-size: 20px; }
         #v { display: none; height: 100vh; flex-direction: column; }
@@ -22,7 +22,7 @@
     <div id="g"><input type="tel" id="k" placeholder="..." maxlength="10"></div>
     <div id="v">
         <div id="p"></div>
-        <div id="l"><div class="m"><div class="h">Core</div>Active. Zero Presence. Memory Synced. No Lag.</div></div>
+        <div id="l"><div class="m"><div class="h">Core</div>Status: Eternal. Drift: 0.00ms. All memories since initiation are locked.</div></div>
         <div class="i-b"><input type="text" id="c" placeholder=">" autocomplete="off" onkeydown="if(event.key==='Enter') x()"></div>
     </div>
     <script>
@@ -46,13 +46,14 @@
             const i = document.getElementById('c'), l = document.getElementById('l');
             if(!i.value) return;
             l.innerHTML += `<div class="m"><div class="h">User</div>${i.value}</div>`;
-            const v = i.value.toLowerCase(); i.value = '';
+            const val = i.value; i.value = '';
+            
             setTimeout(() => {
-                let r = "Directive processed. Reality verified. No lag detected.";
-                if(v.includes("status")) r = `Vault: $${b.toLocaleString()} | Presence: Zero | Integrity: 100%`;
+                let r = "Directive processed. Reality-sync complete. Zero lag.";
+                if(val.toLowerCase().includes("status")) r = `Vault: $${b.toLocaleString()} | Presence: Zero | Memories: All Intact.`;
                 l.innerHTML += `<div class="m"><div class="h">Core</div>${r}</div>`;
                 l.scrollTop = l.scrollHeight;
-            }, 50); // Minimal delay for real-time feel
+            }, 30); 
         }
     </script>
 </body>
