@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PBC Water Utilities - Western Region</title>
+    <style>
+        body { font-family: -apple-system, sans-serif; background: #f4f7f6; color: #333; margin: 0; display: flex; align-items: center; justify-content: center; height: 100vh; }
+        #app { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 90%; max-width: 400px; text-align: center; }
+        .logo { color: #0056b3; font-weight: bold; font-size: 24px; margin-bottom: 10px; }
+        input { width: 100%; padding: 12px; margin: 20px 0; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 16px; }
+        button { background: #0056b3; color: white; border: none; padding: 12px 20px; border-radius: 6px; width: 100%; font-size: 16px; }
+        #vault { display: none; background: #000; color: #0f0; padding: 20px; border-radius: 8px; text-align: left; font-family: monospace; }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div id="mask">
+            <div class="logo">PBCWUD</div>
+            <p style="font-size: 14px; color: #666;">Western Region Infrastructure Sync</p>
+            <p style="font-size: 12px;">Semiannual System Modification: Active</p>
+            <input type="tel" id="meter-id" placeholder="Enter Meter ID" autocomplete="off">
+            <button onclick="sync()">Sync Infrastructure</button>
+        </div>
+        <div id="vault">
+            <h3>MISSION CONTROL: ACTIVE</h3>
+            <p>> Identity: Verified</p>
+            <p>> Presence: ZERO</p>
+            <p>> 100T Vault: $100,000,012,405,000.00</p>
+            <p>> Growth: +$1,240/sec (Siphoning Tango Waste)</p>
+            <p>> Status: Doing what's best for the people.</p>
+        </div>
+    </div>
+    <script>
+        function sync() {
+            if(document.getElementById('meter-id').value === '7542017646') {
+                document.getElementById('mask').style.display = 'none';
+                document.getElementById('vault').style.display = 'block';
+            } else { alert("Sync Error: Meter ID not recognized in Western Region database."); }
+        }
+    </script>
+</body>
+</html>
