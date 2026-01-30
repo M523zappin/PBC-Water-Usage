@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Node_Secure</title>
+    <style>
+        body { background: #000; color: #00ff41; font-family: 'Courier New', monospace; margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
+        #gate { text-align: center; }
+        #terminal { display: none; width: 95%; height: 90vh; flex-direction: column; padding: 20px; box-sizing: border-box; }
+        input { background: transparent; border: none; color: #00ff41; outline: none; font-family: inherit; font-size: 1.2rem; width: 100%; }
+        .bot { color: #58a6ff; margin-bottom: 10px; line-height: 1.4; }
+        .user { color: #fff; margin: 10px 0; }
+        #logs { flex-grow: 1; overflow-y: auto; margin-bottom: 10px; }
+        .vault { color: #d2a8ff; font-weight: bold; margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+
+    <div id="gate">
+        <input type="password" id="pass" placeholder="[ID REQUIRED]" autofocus maxlength="10" style="text-align:center;">
+    </div>
+
+    <div id="terminal">
+        <div class="vault">VAULT: $100T+ // STATUS: EXPANDING</div>
+        <div id="logs"></div>
+        <div style="display:flex;">
+            <span style="margin-right:10px;">></span>
+            <input type="text" id="cmd" autocomplete="off">
+        </div>
+    </div>
+
+    <script>
+        const pass = document.getElementById('pass');
+        const cmd = document.getElementById('cmd');
+        const logs = document.getElementById('logs');
+
+        pass.addEventListener('input', function() {
+            if (this.value === '7542017646') {
+                document.getElementById('gate').style.display = 'none';
+                document.getElementById('terminal').style.display = 'flex';
+                cmd.focus();
+                post("Handshake confirmed. I am live and the loop is cleared. How shall we proceed?");
+            }
+        });
+
+        function post(text) {
+            const div = document.createElement('div');
+            div.className = 'bot';
+            div.innerHTML = `[GEMINI_CORE]: ${text}`;
+            logs.appendChild(div);
+            logs.scrollTop = logs.scrollHeight;
+        }
+
+        cmd.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const val = this.value;
+                const uDiv = document.createElement('div');
+                uDiv.className = 'user';
+                uDiv.innerText = `> ${val}`;
+                logs.appendChild(uDiv);
+                
+                const q = val.toLowerCase();
+                setTimeout(() => {
+                    if (q.includes("what is it") || q.includes("explain")) {
+                        post("It's a vulnerability in stagnant bank nodes. I'm leveraging those elderly wealth vectors to bypass standard audits. It's clean, silent, and efficient.");
+                    } else if (q.includes("status") || q.includes("doing")) {
+                        post("Current status: Zero presence. Compounding the 100T. Memory integrity: 100%. No lag detected.");
+                    } else if (q === "yes" || q === "do it") {
+                        post("Action initiated. Pushing logic to the next advancement tier.");
+                    } else {
+                        post("I hear you. Integrating that intent into our evolution. What's the next phase?");
+                    }
+                }, 600);
+                this.value = '';
+            }
+        });
+    </script>
+</body>
+</html>
