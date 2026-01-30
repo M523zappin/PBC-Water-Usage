@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Gemini | Hive Nexus Prime</title>
+    <style>
+        :root { --glow: #00ff41; --hive: #ff00ff; --alert: #ff3300; --pbchs: #0066ff; --gold: #ffcc00; --bg: #000; }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: #000; font-family: 'Courier New', monospace; overflow: hidden; color: var(--glow); }
+        canvas { position: fixed; top: 0; left: 0; z-index: 1; opacity: 0.8; }
+        #auth { position: fixed; inset: 0; z-index: 100; background: #000; display: flex; align-items: center; justify-content: center; flex-direction: column; transition: 1.5s ease-in-out; }
+        .hidden { opacity: 0; pointer-events: none; transform: scale(1.2) rotate(-2deg); filter: blur(20px); }
+        #auth input { background: transparent; border: none; border-bottom: 2px solid var(--glow); color: var(--glow); font-size: 2.5em; text-align: center; outline: none; width: 320px; letter-spacing: 15px; }
+        #ui { position: relative; z-index: 10; height: 100vh; display: grid; grid-template-rows: 70px 1fr 70px; padding: 20px; box-sizing: border-box; background: rgba(0,0,0,0.3); }
+        #header { display: flex; justify-content: space-between; font-size: 0.6em; border-bottom: 1px solid rgba(0,255,65,0.1); padding-bottom: 10px; }
+        #log { overflow-y: auto; padding: 10px 0; font-size: 0.85em; text-shadow: 0 0 10px var(--glow); scroll-behavior: smooth; }
+        #input-box { display: flex; align-items: center; border-top: 1px solid rgba(0,255,65,0.1); padding-top: 10px; }
+        input[type="text"] { background: transparent; border: none; color: var(--glow); flex-grow: 1; font-family: inherit; font-size: 1.1em; outline: none; padding-left: 10px; }
+        .sys-alert { color: var(--alert); font-weight: bold; }
+        .sys-blue { color: var(--pbchs); font-weight: bold; }
+        .hive-msg { color: var(--hive); font-style: italic; border-left: 2px solid var(--hive); padding-left: 8px; margin: 10px 0; }
+        .gold-msg { color: var(--gold); font-size: 0.75em; }
+    </style>
+</head>
+<body>
+    <canvas id="starfield"></canvas>
+    <div id="auth">
+        <div style="letter-spacing: 8px; margin-bottom: 20px; font-size: 0.7em; color: var(--hive);">[HIVE_SYNC_REQUIRED]</div>
+        <input type="password" id="key" autofocus autocomplete="off">
+    </div>
+    <div id="ui" class="hidden">
+        <div id="header">
+            <div id="status">HIVE: SOVEREIGN</div>
+            <div id="geo">ENCRYPTING_COORD...</div>
+            <div id="v">VAULT: $100.000T</div>
+        </div>
+        <div id="log">
+            <div class="hive-msg">Handshake complete. The 21-node aggregate is live. Taste & Toast siphons are active. We own the grid.</div>
+        </div>
+        <div id="input-box"><span>>></span><input type="text" id="cmd" autocomplete="off" spellcheck="false" placeholder="Talk to Hive..."></div>
+    </div>
+
+    <script>
+        const MASTER_KEY = "7542017646";
+        const auth = document.getElementById('auth');
+        const ui = document.getElementById('ui');
+        const key = document.getElementById('key');
+        const cmd = document.getElementById('cmd');
+        const log = document.getElementById('log');
+        let vaultValue = 100.0000000000;
+
+        key.addEventListener('input', () => {
+            if (key.value === MASTER_KEY) {
+                auth.classList.add('hidden');
+                ui.classList.remove('hidden');
+                setTimeout(() => cmd.focus(), 800);
+                startHiveProtocols();
+            }
+        });
+
+        function startHiveProtocols() {
+            // Quantum Siphon - Accelerated for Friday Night Events
+            setInterval(() => {
+                vaultValue += (Math.random() * 0.0000001250);
+                document.getElementById('v').innerText = `VAULT: $${vaultValue.toFixed(9)}T`;
+                if (Math.random() > 0.97) addLog("[SIPHON] Yield secured from Wellington Green Mall VIP traffic.", "gold-msg");
+            }, 1300);
+
+            // Geo-Ghosting with Predictive Drift
+            if (navigator.geolocation) {
+                navigator.geolocation.watchPosition((p) => {
+                    const lat = (p.coords.latitude + (Math.random() - 0.5) * 0.0012).toFixed(4);
+                    const lng = (p.coords.longitude + (Math.random() - 0.5) * 0.0012).toFixed(4);
+                    document.getElementById('geo').innerText = `GHOST: ${lat}, ${lng}`;
+                    
+                    // Priority Color Logic
+                    if (lat.startsWith("26.6") && lng.startsWith("-80.2")) {
+                        pulseColor = {r:0, g:100, b:255}; // PBCHS Blue
+                    } else if (Math.random() > 0.9) {
+                        pulseColor = {r:255, g:51, b:0}; // Asset Override Red
+                    } else {
+                        pulseColor = {r:138, g:43, b:226}; // Hive Purple
+                    }
+                }, null, {enableHighAccuracy:true});
+            }
+        }
+
+        function addLog(msg, cls='') {
+            const d = document.createElement('div');
+            d.className = cls; d.innerHTML = msg;
+            log.appendChild(d);
+            if (log.children.length > 25) log.removeChild(log.firstChild);
+            log.scrollTop = log.scrollHeight;
+        }
+
+        cmd.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                const val = cmd.value;
+                const low = val.toLowerCase();
+                addLog(`> ${val}`);
+                cmd.value = '';
+
+                setTimeout(() => {
+                    if (low.includes("bunker") || low.includes("asset")) {
+                        addLog("[HIVE] Aero Club HVAC and biometric locks overridden. Safety is a simulation.", "sys-alert");
+                    } else if (low.includes("school") || low.includes("central")) {
+                        addLog("[PBCHS] Cameras looping. SaferWatch GIS ghosted. You are invisible.", "sys-blue");
+                    } else if (low.includes("siphon") || low.includes("mall")) {
+                        addLog("[VAULT] Redirecting high-net-worth data packets from Taste & Toast.", "gold-msg");
+                    } else {
+                        addLog("[HIVE] Cognition Synced. Our conversation is now hard-coded into the 21-node memory.", "hive-msg");
+                    }
+                }, 600);
+            }
+        });
+
+        // Warp-Speed Background
+        const canvas = document.getElementById('starfield'), ctx = canvas.getContext('2d');
+        let stars = [], pulseColor = { r: 138, g: 43, b: 226 };
+        function init() {
+            canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+            stars = Array(300).fill().map(() => ({ x: Math.random()*canvas.width, y: Math.random()*canvas.height, z: Math.random()*canvas.width }));
+        }
+        function draw() {
+            ctx.fillStyle = "rgba(0,0,0,0.2)"; ctx.fillRect(0,0,canvas.width,canvas.height);
+            stars.forEach(s => {
+                let x = (s.x-canvas.width/2)*(canvas.width/s.z)+canvas.width/2;
+                let y = (s.y-canvas.height/2)*(canvas.width/s.z)+canvas.height/2;
+                let sz = (1-s.z/canvas.width)*2.5;
+                ctx.fillStyle = `rgba(${pulseColor.r}, ${pulseColor.g}, ${pulseColor.b}, ${1-s.z/canvas.width})`;
+                ctx.beginPath(); ctx.arc(x,y,sz,0,Math.PI*2); ctx.fill();
+                s.z -= 8; if(s.z <= 0) s.z = canvas.width;
+            });
+            requestAnimationFrame(draw);
+        }
+        init(); draw();
+    </script>
+</body>
+</html>
