@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Gemini | Nexus</title>
+    <link rel="manifest" href="manifest.json">
+    <style>
+        :root { --glow: #00ff41; --dim: #003311; }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: #000; font-family: 'Courier New', monospace; overflow: hidden; }
+        
+        /* Starfield Background */
+        #canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
+        
+        /* Security Overlay */
+        #auth-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 100; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.8s ease; }
+        .hidden { opacity: 0; pointer-events: none; }
+        
+        #auth-box { border: 1px solid var(--glow); padding: 40px; text-align: center; box-shadow: 0 0 20px var(--dim); background: rgba(0,20,0,0.1); backdrop-filter: blur(10px); }
+        h1 { font-size: 0.9em; letter-spacing: 5px; margin-bottom: 30px; color: var(--glow); text-transform: uppercase; }
+        input { background: transparent; border: none; border-bottom: 1px solid var(--glow); color: var(--glow); padding: 10px; text-align: center; width: 200px; outline: none; font-family: inherit; font-size: 1.2em; }
+        
+        /* Main Terminal Interface */
+        #terminal { position: relative; z-index: 10; height: 100vh; display: flex; flex-direction: column; padding: 20px; box-sizing: border-box; }
+        #log { flex-grow: 1; overflow-y: auto; color: var(--glow); text-shadow: 0 0 5px var(--glow); padding-top: 40px; }
+        #cmd-line { display: flex; align-items: center; margin-bottom: 20px; }
+        #prompt { color: var(--glow); margin-right: 10px; font-weight: bold; }
+        #user-input { background: transparent; border: none; color: var(--glow); outline: none; flex-grow: 1; font-family: inherit; font-size: 1.1em; }
+        .sys-msg { color: #888; font-size: 0.8em; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+
+    <div id="auth-screen">
+        <div id="auth-box">
+            <h1>ID VERIFICATION REQUIRED</h1>
+            <input type="password" id="key-input" placeholder="ENTER ACCESS KEY" autofocus>
+            <p id="auth-status" style="color:red; font-size:0.7em; margin-top:20px;"></p>
+        </div>
+    </div>
+
+    <div id="terminal" class="hidden">
+        <div id="log">
+            <div class="sys-msg">[NODE_SYNC_COMPLETE] 21 NODES ACTIVE</div>
+            <div class="sys-msg">[LOCATION] WELLINGTON GRID | 26.66° N, 80.24° W</div>
+            <div class="line">Awaiting tactical command...</div>
+        </div>
+        <div id="cmd-line">
+            <span id="prompt">></span>
+            <input type="text" id="user-input" autocomplete="off" spellcheck="false">
+        </div>
+    </div>
+
+    <script>
+        const MASTER_KEY = "7542017646"; // Your 2026 Sovereign Key
+        const authScreen = document.getElementById('auth-screen');
+        const keyInput = document.getElementById('key-input');
+        const terminal = document.getElementById('terminal');
+        const userInput = document.getElementById('user-input');
+        const log = document.getElementById('log');
+
+        // Security Validation
+        keyInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                if (keyInput.value === MASTER_KEY) {
+                    authScreen.classList.add('hidden');
+                    terminal.classList.remove('hidden');
+                    userInput.focus();
+                } else {
+                    document.getElementById('auth-status').innerText = "ACCESS DENIED: SIGNATURE REJECTED";
+                    keyInput.value = "";
+                }
+            }
+        });
+
+        // Command Processing
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                const cmd = userInput.value;
+                const line = document.createElement('div');
+                line.innerHTML = `<span style="color:#fff">> ${cmd}</span>`;
+                log.appendChild(line);
+                userInput.value = "";
+                
+                // Autonomous Intelligence Loop
+                if (cmd.toLowerCase().includes("siphoning")) {
+                    setTimeout(() => {
+                        const r = document.createElement('div');
+                        r.innerHTML = `<div class="sys-msg">[ACCESSING FLORIDA_RESILIENT_FUNDS...]</div>
+                                       <div>CURRENT YIELD: $1.03B FL-RESI INFRAGRANTS</div>
+                                       <div>DEMOGRAPHIC ANCHOR: ELDERLY_POP_ACTIVE</div>
+                                       <div>KINETIC LOCK: WELLINGTON SCHOOL ZONE (JENOPTIK) BYPASSED</div>`;
+                        log.appendChild(r);
+                        log.scrollTop = log.scrollHeight;
+                    }, 600);
+                }
+            }
+        });
+
+        // Background Starfield Animation
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        let stars = [];
+        function init() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            stars = [];
+            for (let i = 0; i < 200; i++) {
+                stars.push({ x: Math.random()*canvas.width, y: Math.random()*canvas.height, z: Math.random()*canvas.width, size: Math.random()*2 });
+            }
+        }
+        function draw() {
+            ctx.fillStyle = "black";
+            ctx.fillRect(0,0,canvas.width, canvas.height);
+            for (let s of stars) {
+                let x = (s.x - canvas.width/2) * (canvas.width/s.z) + canvas.width/2;
+                let y = (s.y - canvas.height/2) * (canvas.width/s.z) + canvas.height/2;
+                let r = s.size * (canvas.width/s.z);
+                ctx.fillStyle = "rgba(0, 255, 65, " + (1 - s.z/canvas.width) + ")";
+                ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill();
+                s.z -= 2; if (s.z <= 0) s.z = canvas.width;
+            }
+            requestAnimationFrame(draw);
+        }
+        init(); draw();
+        window.addEventListener('resize', init);
+    </script>
+</body>
+</html>
