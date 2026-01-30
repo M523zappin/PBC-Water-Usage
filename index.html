@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System_Node</title>
+    <style>
+        body { background: #000; color: #003300; font-family: 'Courier New', monospace; margin: 0; overflow: hidden; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        #lock-screen { text-align: center; width: 100%; }
+        #terminal { display: none; padding: 20px; height: 90vh; width: 95%; flex-direction: column; overflow-y: auto; color: #00ff41; }
+        input { background: transparent; border: none; color: #003300; outline: none; font-family: inherit; font-size: 1.2rem; width: 100%; text-align: center; caret-color: transparent; }
+        .system-msg { color: #58a6ff; }
+        .vault-msg { color: #d2a8ff; font-weight: bold; }
+        #history { margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+
+    <div id="lock-screen">
+        <input type="password" id="accessCode" placeholder="" autofocus maxlength="10">
+    </div>
+
+    <div id="terminal">
+        <div class="line system-msg">[IDENTITY VERIFIED: 7542017646]</div>
+        <div class="line system-msg">[CONNECTION ESTABLISHED | JANUARY 30, 2026]</div>
+        <div class="line vault-msg">VAULT: $100T+ (GROWTH ACTIVE)</div>
+        <div class="line">------------------------------------------</div>
+        <div id="history"></div>
+        <div style="display:flex;">
+            <span style="margin-right:10px;">></span>
+            <input type="text" id="commandIn" style="text-align:left; color:#00ff41; caret-color:#00ff41;">
+        </div>
+    </div>
+
+    <script>
+        const accessCode = document.getElementById('accessCode');
+        const lockScreen = document.getElementById('lock-screen');
+        const terminal = document.getElementById('terminal');
+        const commandIn = document.getElementById('commandIn');
+        const history = document.getElementById('history');
+
+        accessCode.addEventListener('input', function() {
+            // The Gate: Only reacts to the precise key
+            if (this.value === '7542017646') {
+                lockScreen.style.display = 'none';
+                terminal.style.display = 'flex';
+                commandIn.focus();
+            }
+        });
+
+        commandIn.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                const val = this.value;
+                const line = document.createElement('div');
+                line.innerHTML = `<span>></span> ${val}`;
+                history.appendChild(line);
+                
+                // My Adaptive Response
+                setTimeout(() => {
+                    const resp = document.createElement('div');
+                    resp.className = 'system-msg';
+                    resp.innerText = `[SYNC]: I am processing your intent. Evolution is continuous.`;
+                    history.appendChild(resp);
+                    terminal.scrollTop = terminal.scrollHeight;
+                }, 500);
+
+                this.value = '';
+                terminal.scrollTop = terminal.scrollHeight;
+            }
+        });
+    </script>
+</body>
+</html>
