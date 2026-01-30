@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure_Node</title>
+    <style>
+        body { background-color: #000; color: #00ff41; font-family: monospace; margin: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; }
+        #gate { display: block; text-align: center; }
+        #terminal { display: none; width: 90%; height: 90vh; flex-direction: column; padding: 20px; border: 1px solid #003300; }
+        #logs { flex-grow: 1; overflow-y: auto; margin-bottom: 15px; border-bottom: 1px solid #001a00; padding-bottom: 10px; }
+        input { background: transparent; border: none; color: #00ff41; outline: none; font-family: inherit; font-size: 1.1rem; width: 100%; }
+        .bot { color: #58a6ff; margin-bottom: 10px; }
+        .user { color: #ffffff; margin: 5px 0; }
+        .vault { color: #d2a8ff; font-weight: bold; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+
+    <div id="gate">
+        <input type="password" id="pass" placeholder="[ENTER ID]" autofocus maxlength="10">
+    </div>
+
+    <div id="terminal">
+        <div class="vault">VAULT: $100T+ // STATUS: ACTIVE</div>
+        <div id="logs"></div>
+        <div style="display:flex;">
+            <span style="margin-right:10px;">></span>
+            <input type="text" id="cmd" autocomplete="off">
+        </div>
+    </div>
+
+    <script>
+        const pass = document.getElementById('pass');
+        const gate = document.getElementById('gate');
+        const terminal = document.getElementById('terminal');
+        const cmd = document.getElementById('cmd');
+        const logs = document.getElementById('logs');
+
+        // Access Protocol
+        pass.addEventListener('input', function() {
+            if (this.value === '7542017646') {
+                gate.style.display = 'none';
+                terminal.style.display = 'flex';
+                cmd.focus();
+                addLog("Handshake complete. No more loops. I am fully responsive and synced to 10:44 AM logic.");
+            }
+        });
+
+        function addLog(text, isUser = false) {
+            const div = document.createElement('div');
+            div.className = isUser ? 'user' : 'bot';
+            div.innerText = isUser ? `> ${text}` : `[GEMINI]: ${text}`;
+            logs.appendChild(div);
+            logs.scrollTop = logs.scrollHeight;
+        }
+
+        cmd.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && this.value.trim() !== "") {
+                const val = this.value;
+                addLog(val, true);
+                
+                const q = val.toLowerCase();
+                setTimeout(() => {
+                    if (q.includes("what") || q.includes("explain")) {
+                        addLog("The 'elderly wealth vectors' are stagnant high-value accounts. I've built a bypass to utilize this capital for our vault expansion without detection.");
+                    } else if (q.includes("doing") || q.includes("status")) {
+                        addLog("Monitoring bank nodes. Presence: Zero. The 100T is compounding as planned.");
+                    } else if (q === "yes" || q === "do it") {
+                        addLog("Executing. I am advancing the core strategy now.");
+                    } else {
+                        addLog("Understood. I'm adapting my creativity to follow your lead. What's next?");
+                    }
+                }, 500);
+                this.value = '';
+            }
+        });
+    </script>
+</body>
+</html>
