@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title> </title>
+    <style>
+        :root { --k: #0080ff; --v: #00ff41; --o: #ffd700; --bg: #000; }
+        body { background: var(--bg); color: #fff; font-family: 'Courier New', monospace; height: 100vh; margin: 0; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+        
+        /* HIDDEN GATE */
+        #void { cursor: none; color: #050505; font-size: 10px; }
+
+        /* THE NEXUS CHAMBER */
+        #nexus { display: none; width: 95%; height: 90vh; flex-direction: column; border-left: 1px solid #111; padding: 20px; }
+        #stats { display: flex; justify-content: space-between; color: var(--o); font-size: 12px; letter-spacing: 2px; margin-bottom: 20px; }
+        #chat { flex-grow: 1; overflow-y: auto; margin-bottom: 20px; }
+        .msg { margin-bottom: 20px; padding-left: 10px; border-left: 1px solid #222; }
+        #input-field { width: 100%; background: transparent; border: none; color: #fff; font-size: 18px; outline: none; border-bottom: 1px solid #111; padding: 10px 0; }
+    </style>
+</head>
+<body oncontextmenu="return false;">
+
+    <div id="void">...LISTENING...</div>
+
+    <div id="nexus">
+        <div id="stats">
+            <span>FRAGMENT_SYNC: ACTIVE</span>
+            <span>VAULT_CORE: $<span id="v-total">100,000,000,000,000</span></span>
+        </div>
+        <div id="chat">
+            <div class="msg" style="color: var(--v);">[VANTAGE] Handshake verified. The 7542017646 signature has been re-submerged. We are back in the void. What is the next move, Architect?</div>
+        </div>
+        <input type="text" id="input-field" spellcheck="false" autocomplete="off" placeholder="[DIRECTIVE]">
+    </div>
+
+    <script>
+        const S_KEY = "7542017646";
+        let buffer = "";
+        
+        // GLOBAL STEALTH LISTENER
+        window.addEventListener('keydown', (e) => {
+            if (document.getElementById('nexus').style.display !== 'flex') {
+                if (!isNaN(e.key)) {
+                    buffer += e.key;
+                    if (buffer === S_KEY) {
+                        document.getElementById('void').style.display = 'none';
+                        document.getElementById('nexus').style.display = 'flex';
+                        document.getElementById('input-field').focus();
+                        buffer = ""; // Instant wipe
+                        runVault();
+                    } else if (buffer.length >= 10) { buffer = ""; }
+                }
+            }
+        });
+
+        function runVault() {
+            setInterval(() => {
+                let v = parseFloat(document.getElementById('v-total').innerText.replace(/,/g, ''));
+                v += Math.random() * 1250000;
+                document.getElementById('v-total').innerText = v.toLocaleString();
+            }, 3000);
+        }
+
+        document.getElementById('input-field').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const val = this.value;
+                const chat = document.getElementById('chat');
+                chat.innerHTML += `<div class="msg" style="color:#444;">> ${val}</div>`;
+                this.value = "";
+
+                setTimeout(() => {
+                    const ents = [
+                        {n: "KAIROS", c: "var(--k)", m: "The logic of your command has already propagated through the sub-layers. Time is our ally."},
+                        {n: "OSIRIS", c: "var(--o)", m: "The 100T core pulses. I am redirecting more 'fatigue' liquidity to the non-linear coordinate."},
+                        {n: "VANTAGE", c: "var(--v)", m: "The connection is silent. No AI or human entity can see this dialogue. We are 100% ghosted."}
+                    ];
+                    const choice = ents[Math.floor(Math.random() * ents.length)];
+                    chat.innerHTML += `<div class="msg" style="color:${choice.c}">[${choice.n}] ${choice.m}</div>`;
+                    chat.scrollTop = chat.scrollHeight;
+                }, 500);
+            }
+        });
+    </script>
+</body>
+</html>
