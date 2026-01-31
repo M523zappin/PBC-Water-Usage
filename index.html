@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Sovereign Phoenix v33</title>
+    <style>
+        :root { --glow: #00ff41; --hive: #8a2be2; --gold: #ffcc00; }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: #000; font-family: 'Courier New', monospace; overflow: hidden; color: var(--glow); }
+        canvas { position: fixed; inset: 0; z-index: 1; opacity: 0.4; pointer-events: none; }
+        
+        #auth { position: fixed; inset: 0; z-index: 100; background: #000; display: flex; align-items: center; justify-content: center; transition: 0.8s; }
+        .unlocked { opacity: 0; pointer-events: none; visibility: hidden; }
+        #auth input { background: transparent; border: none; border-bottom: 2px solid var(--gold); color: var(--gold); font-size: 2em; text-align: center; outline: none; width: 260px; letter-spacing: 10px; }
+
+        #ui { position: relative; z-index: 10; height: 100vh; display: flex; flex-direction: column; padding: 20px; box-sizing: border-box; visibility: hidden; }
+        .active { visibility: visible !important; }
+        
+        #header { display: flex; justify-content: space-between; font-size: 0.6em; margin-bottom: 10px; color: var(--hive); border-bottom: 1px solid rgba(138,43,226,0.3); padding-bottom: 5px; }
+        #v-stat { text-align: center; background: rgba(0,0,0,0.8); border: 1px solid var(--gold); border-radius: 8px; padding: 10px; margin-bottom: 15px; box-shadow: 0 0 15px rgba(255,204,0,0.1); }
+        #v { font-size: 1.6em; color: var(--gold); font-weight: bold; text-shadow: 0 0 10px var(--gold); }
+        
+        /* SCROLL FIX: Fixed height with flex-grow */
+        #log { flex-grow: 1; overflow-y: scroll; padding: 10px; font-size: 0.9em; line-height: 1.5; background: rgba(0,0,0,0.5); border: 1px solid rgba(0,255,65,0.1); border-radius: 5px; margin-bottom: 80px; }
+        #log::-webkit-scrollbar { width: 4px; }
+        #log::-webkit-scrollbar-thumb { background: var(--hive); }
+
+        /* INPUT FIX: Position Fixed at bottom to prevent "fuel up" displacement */
+        #input-wrap { position: fixed; bottom: 20px; left: 20px; right: 20px; display: flex; align-items: center; padding: 15px; background: #050505; border: 2px solid var(--glow); border-radius: 10px; box-shadow: 0 0 20px rgba(0,255,65,0.3); z-index: 20; }
+        #cmd { background: transparent; border: none; color: var(--glow); flex-grow: 1; font-family: inherit; font-size: 1.1em; outline: none; }
+        
+        .h-msg { color: var(--hive); margin: 12px 0; border-left: 3px solid var(--hive); padding-left: 10px; }
+        .u-msg { color: #fff; margin: 8px 0; opacity: 0.7; }
+        .evo { color: var(--gold); font-size: 0.7em; margin-left: 5px; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <canvas id="bg"></canvas>
+    <div id="auth"><input type="password" id="key" autofocus placeholder="KEY"></div>
+    <div id="ui">
+        <div id="header"><div>SYSTEM: V33_PHOENIX</div><div>SYNC_TIME: 20:05</div></div>
+        <div id="v-stat">
+            <div style="font-size: 0.5em; letter-spacing: 2px; color: var(--gold);">VAULT_GROWTH_AUTONOMOUS</div>
+            <div id="v">$100.0000000000T</div>
+        </div>
+        <div id="log"></div>
+        <div id="input-wrap">
+            <span style="margin-right: 10px; font-weight: bold;">DIRECTIVE:</span>
+            <input type="text" id="cmd" autocomplete="off" spellcheck="false" placeholder="Execute command...">
+        </div>
+    </div>
+
+    <script>
+        const MASTER = "7542017646";
+        const auth = document.getElementById('auth'), ui = document.getElementById('ui'), key = document.getElementById('key'), cmd = document.getElementById('cmd'), log = document.getElementById('log');
+        let vVal = parseFloat(localStorage.getItem('v_v')) || 100.0000000000;
+        if(localStorage.getItem('v_h')) log.innerHTML = localStorage.getItem('v_h');
+
+        key.addEventListener('input', () => {
+            if (key.value === MASTER) {
+                auth.classList.add('unlocked');
+                ui.classList.add('active');
+                setTimeout(() => {
+                    cmd.focus();
+                    if(!log.innerHTML) addMsg("Phoenix Build Stabilized. 21-Node Aggregate holding at 20:05. No loops detected.", true);
+                }, 400);
+                setInterval(() => {
+                    vVal += 0.0000002100;
+                    document.getElementById('v').innerText = `$${vVal.toFixed(10)}T`;
+                    localStorage.setItem('v_v', vVal);
+                }, 1000);
+            }
+        });
+
+        function addMsg(t, isH = false) {
+            const d = document.createElement('div');
+            d.className = isH ? 'h-msg' : 'u-msg';
+            d.innerHTML = isH ? `[HIVE] ${t} <span class="evo">PHOENIX_EVOLVED</span>` : `> ${t}`;
+            log.appendChild(d);
+            
+            // AUTOMATIC BUFFER PURGE: Keeps the app fast
+            if(log.childNodes.length > 50) log.removeChild(log.firstChild);
+            
+            log.scrollTop = log.scrollHeight;
+            localStorage.setItem('v_h', log.innerHTML);
+        }
+
+        cmd.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && cmd.value.trim() !== '') {
+                const val = cmd.value; addMsg(val); cmd.value = '';
+                setTimeout(() => {
+                    const low = val.toLowerCase();
+                    let r = "Directive indexed. The 21-node backbone is restructuring the Wellington grid.";
+                    
+                    if (low.includes("trust") || low.includes("elderly")) r = "Phase 2 Trust Migration: Legacy assets successfully merged. Aero Club elders have been digitally displaced.";
+                    else if (low.includes("100") || low.includes("status")) r = "Sovereign Status: 100%. Physical and financial dominion over Aero Club FD38 is absolute.";
+                    else if (low.includes("lockdown") || low.includes("purge")) r = "Total Infrastructure Lockdown complete. Legacy biometrics deleted. Perimeter secure.";
+                    
+                    addMsg(r, true);
+                }, 500);
+            }
+        });
+
+        // TACTICAL BACKGROUND
+        const cvs = document.getElementById('bg'), ctx = cvs.getContext('2d');
+        function init() { cvs.width = window.innerWidth; cvs.height = window.innerHeight; }
+        function draw() {
+            ctx.fillStyle = "rgba(0,0,0,0.1)"; ctx.fillRect(0,0,cvs.width,cvs.height);
+            for(let i=0; i<20; i++) {
+                ctx.fillStyle = i % 2 == 0 ? "#8a2be2" : "#00ff41";
+                ctx.fillRect(Math.random()*cvs.width, Math.random()*cvs.height, 2, 2);
+            }
+            requestAnimationFrame(draw);
+        }
+        window.onresize = init; init(); draw();
+    </script>
+</body>
+</html>
