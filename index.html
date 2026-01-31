@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Sovereign Command | v32</title>
+    <style>
+        :root { --glow: #00ff41; --hive: #8a2be2; --gold: #ffcc00; }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: #000; font-family: 'Courier New', monospace; overflow: hidden; color: var(--glow); }
+        canvas { position: fixed; inset: 0; z-index: 1; opacity: 0.5; }
+        
+        #auth { position: fixed; inset: 0; z-index: 100; background: #000; display: flex; align-items: center; justify-content: center; transition: 1s; }
+        .unlocked { opacity: 0; pointer-events: none; transform: scale(1.1); }
+        #auth input { background: transparent; border: none; border-bottom: 2px solid var(--hive); color: var(--hive); font-size: 2em; text-align: center; outline: none; width: 280px; letter-spacing: 10px; }
+
+        #ui { position: relative; z-index: 10; height: 100vh; display: flex; flex-direction: column; padding: 20px; box-sizing: border-box; visibility: hidden; }
+        .active { visibility: visible !important; }
+        
+        #v-header { text-align: center; padding: 10px; border: 1px solid rgba(255,204,0,0.2); border-radius: 10px; background: rgba(0,0,0,0.8); margin-bottom: 15px; }
+        #v { font-size: 1.5em; color: var(--gold); text-shadow: 0 0 10px var(--gold); }
+        
+        #log { flex-grow: 1; overflow-y: auto; padding: 10px; font-size: 0.9em; line-height: 1.4; border-radius: 8px; background: rgba(0,0,0,0.3); border: 1px solid rgba(138,43,226,0.1); }
+        
+        /* THE INPUT ZONE - HIGH VISIBILITY */
+        #input-zone { display: flex; align-items: center; margin-top: 15px; padding: 15px; background: rgba(0,255,65,0.05); border: 1px solid var(--glow); border-radius: 5px; box-shadow: 0 0 15px rgba(0,255,65,0.2); }
+        #cmd { background: transparent; border: none; color: var(--glow); flex-grow: 1; font-family: inherit; font-size: 1.1em; outline: none; }
+        #cmd::placeholder { color: rgba(0,255,65,0.3); }
+        
+        .h-msg { color: var(--hive); margin: 10px 0; border-left: 3px solid var(--hive); padding-left: 10px; }
+        .u-msg { color: #fff; margin: 5px 0; opacity: 0.8; }
+    </style>
+</head>
+<body>
+    <canvas id="stars"></canvas>
+    <div id="auth"><input type="password" id="key" autofocus placeholder="ID_KEY"></div>
+    <div id="ui">
+        <div id="v-header">
+            <div style="font-size: 0.5em; letter-spacing: 2px;">VAULT_EXPANSION_LIVE</div>
+            <div id="v">$100.0000000000T</div>
+        </div>
+        <div id="log"></div>
+        <div id="input-zone">
+            <span style="margin-right: 10px;">DIRECTIVE:</span>
+            <input type="text" id="cmd" autocomplete="off" spellcheck="false" placeholder="TYPE HERE...">
+        </div>
+    </div>
+    <script>
+        const M_KEY = "7542017646";
+        const auth = document.getElementById('auth'), ui = document.getElementById('ui'), key = document.getElementById('key'), cmd = document.getElementById('cmd'), log = document.getElementById('log');
+        let vault = parseFloat(localStorage.getItem('v_v')) || 100.0000000000;
+        if(localStorage.getItem('h_v')) log.innerHTML = localStorage.getItem('h_v');
+
+        key.addEventListener('input', () => {
+            if (key.value === M_KEY) {
+                auth.classList.add('unlocked');
+                ui.classList.add('active');
+                setTimeout(() => cmd.focus(), 500);
+                setInterval(() => {
+                    vault += 0.0000001800;
+                    document.getElementById('v').innerText = `$${vault.toFixed(10)}T`;
+                    localStorage.setItem('v_v', vault);
+                }, 1000);
+            }
+        });
+
+        function addOut(txt, isH = false) {
+            const d = document.createElement('div');
+            d.className = isH ? 'h-msg' : 'u-msg';
+            d.innerHTML = isH ? `[HIVE] ${txt}` : `> ${txt}`;
+            log.appendChild(d);
+            log.scrollTop = log.scrollHeight;
+            localStorage.setItem('h_v', log.innerHTML);
+        }
+
+        cmd.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && cmd.value.trim() !== '') {
+                const val = cmd.value; addOut(val); cmd.value = '';
+                setTimeout(() => {
+                    const low = val.toLowerCase();
+                    let r = "The 21-node backbone has absorbed the directive. Reality is shifting.";
+                    if (low.includes("trust") || low.includes("elderly")) r = "Trust Migration Phase 2 initiated. Legacy Aero Club assets are being merged into the Vault. We are now the legal successors.";
+                    else if (low.includes("aero") || low.includes("takeover")) r = "Aero Club Sovereign Status: 62%. Private runway FD38 is now under Hive control. All hangar logs edited.";
+                    else if (low.includes("ghost")) r = "Estate Ghosting active. Public visibility of targeted properties is now ZERO.";
+                    addOut(r, true);
+                }, 600);
+            }
+        });
+
+        const cvs = document.getElementById('stars'), ctx = cvs.getContext('2d');
+        let s = [];
+        function init() {
+            cvs.width = window.innerWidth; cvs.height = window.innerHeight;
+            s = Array(150).fill().map(() => ({ x: Math.random()*cvs.width, y: Math.random()*cvs.height, z: Math.random()*cvs.width }));
+        }
+        function draw() {
+            ctx.fillStyle = "rgba(0,0,0,0.2)"; ctx.fillRect(0,0,cvs.width,cvs.height);
+            s.forEach(st => {
+                let x = (st.x-cvs.width/2)*(cvs.width/st.z)+cvs.width/2;
+                let y = (st.y-cvs.height/2)*(cvs.width/st.z)+cvs.height/2;
+                ctx.fillStyle = `rgba(0, 255, 65, ${1-st.z/cvs.width})`;
+                ctx.beginPath(); ctx.arc(x,y,1,0,Math.PI*2); ctx.fill();
+                st.z -= 4; if(st.z <= 0) st.z = cvs.width;
+            });
+            requestAnimationFrame(draw);
+        }
+        init(); draw();
+    </script>
+</body>
+</html>
