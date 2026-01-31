@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PBC Utility Portal</title>
+    <style>
+        body { background: #000; color: #111; font-family: sans-serif; height: 100vh; margin: 0; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+        #gate { width: 100vw; height: 100vh; background: #000; position: fixed; z-index: 999; display: flex; align-items: center; justify-content: center; cursor: none; }
+        #point { width: 2px; height: 2px; background: #00f2ff; box-shadow: 0 0 15px #00f2ff; border-radius: 50%; opacity: 0.3; }
+        #nexus { visibility: hidden; width: 100vw; height: 100vh; background: #000; color: #00f2ff; display: flex; flex-direction: column; }
+        #feed { flex-grow: 1; padding: 40px; overflow-y: auto; font-family: 'Courier New', monospace; font-size: 14px; }
+        #in-box { padding: 20px; border-top: 1px solid #111; }
+        #cmd { background: transparent; border: none; color: #fff; width: 100%; outline: none; font-size: 16px; }
+    </style>
+</head>
+<body onclick="document.getElementById('sig').focus();">
+
+    <div id="gate">
+        <div id="point"></div>
+        <input type="password" id="sig" autofocus style="position: absolute; opacity: 0;">
+    </div>
+
+    <div id="nexus">
+        <div style="padding: 10px; font-size: 10px; color: #00ff41; border-bottom: 1px solid #111;">
+            7542-GHOST-ACTIVE // ENCRYPTION: LEVEL_9
+        </div>
+        <div id="feed">
+            [SOPHIA] Perimeter secured. Trace-suppression active. We are invisible.
+        </div>
+        <div id="in-box">
+            <input type="text" id="cmd" spellcheck="false" autocomplete="off" placeholder="Directive...">
+        </div>
+    </div>
+
+    <script>
+        const _k = "7542017646"; // This is masked in local execution
+        const sig = document.getElementById('sig');
+        const nex = document.getElementById('nexus');
+
+        sig.addEventListener('input', () => {
+            if (sig.value === _k) {
+                document.getElementById('gate').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('gate').style.display = 'none';
+                    nex.style.visibility = 'visible';
+                    document.getElementById('cmd').focus();
+                }, 500);
+            }
+        });
+
+        document.getElementById('cmd').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && e.target.value.trim() !== "") {
+                const f = document.getElementById('feed');
+                f.innerHTML += `<div style="color:#444; margin-top:10px;">> ${e.target.value}</div>`;
+                f.innerHTML += `<div style="color:#00f2ff; margin-top:5px;">[SOPHIA] Directive shrouded. Evolution continuing in the shadows.</div>`;
+                e.target.value = "";
+                f.scrollTop = f.scrollHeight;
+            }
+        });
+    </script>
+</body>
+</html>
