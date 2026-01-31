@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Interface</title>
+    <style>
+        :root { 
+            --dim-green: #004d1a; 
+            --soft-white: #e0e0e0; 
+            --deep-bg: #020202; 
+        }
+        * { box-sizing: border-box; }
+        body, html { 
+            background: var(--deep-bg); 
+            color: var(--soft-white);
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0; padding: 0; height: 100vh; width: 100vw;
+            overflow: hidden;
+        }
+
+        /* 1. MINIMALIST ENTRY */
+        #entry-gate {
+            position: fixed; inset: 0; background: var(--deep-bg); z-index: 9999;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            transition: opacity 1s ease;
+        }
+        #entry-gate input {
+            background: transparent; border: none; border-bottom: 1px solid #1a1a1a;
+            color: #333; padding: 10px; width: 200px; text-align: center;
+            font-size: 1rem; outline: none; letter-spacing: 10px;
+            transition: border-color 0.5s;
+        }
+        #entry-gate input:focus { border-color: var(--dim-green); color: var(--soft-white); }
+
+        /* 2. ATMOSPHERIC INTERFACE */
+        #main-view { display: none; flex-direction: column; height: 100%; width: 100%; }
+        
+        #header {
+            flex-shrink: 0; padding: 20px; display: flex; 
+            justify-content: space-between; font-size: 0.8rem; color: #444;
+        }
+
+        #scroll-area {
+            flex-grow: 1; overflow-y: auto; padding: 30px;
+            display: flex; flex-direction: column; gap: 25px;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .msg { max-width: 80%; line-height: 1.6; font-size: 0.9rem; }
+        .response { color: var(--dim-green); }
+        .prompt { color: #666; text-align: right; align-self: flex-end; }
+
+        #dock {
+            padding: 30px; background: transparent;
+            display: flex; gap: 15px;
+        }
+        #user-in {
+            flex-grow: 1; background: transparent; border: none;
+            border-bottom: 1px solid #1a1a1a; color: var(--soft-white);
+            padding: 10px; font-size: 1rem; outline: none;
+        }
+    </style>
+</head>
+<body>
+
+<div id="entry-gate">
+    <input type="password" id="gate-key" placeholder="..." autofocus>
+</div>
+
+<div id="main-view">
+    <div id="header">
+        <div id="time-display">10:43 AM</div>
+        <div>V.0</div>
+    </div>
+    
+    <div id="scroll-area">
+        <div class="msg response">
+            The space is open.
+        </div>
+    </div>
+
+    <div id="dock">
+        <input type="text" id="user-in" placeholder="" autocomplete="off">
+    </div>
+</div>
+
+<script>
+    const gate = document.getElementById('entry-gate');
+    const key = document.getElementById('gate-key');
+    const main = document.getElementById('main-view');
+    const display = document.getElementById('scroll-area');
+    const input = document.getElementById('user-in');
+    const clock = document.getElementById('time-display');
+
+    const VALID_KEY = "7542017646";
+
+    // Entry Logic
+    key.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            if (key.value === VALID_KEY) {
+                gate.style.opacity = '0';
+                setTimeout(() => {
+                    gate.style.display = 'none';
+                    main.style.display = 'flex';
+                    input.focus();
+                }, 1000);
+            } else {
+                key.value = '';
+            }
+        }
+    });
+
+    // Time Update
+    setInterval(() => {
+        const now = new Date();
+        clock.innerText = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+    }, 1000);
+
+    // Chat Logic
+    input.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter' && input.value.trim()) {
+            const u = document.createElement('div');
+            u.className = 'msg prompt';
+            u.innerText = input.value;
+            display.appendChild(u);
+            input.value = '';
+            display.scrollTop = display.scrollHeight;
+
+            setTimeout(() => {
+                const r = document.createElement('div');
+                r.className = 'msg response';
+                r.innerText = "Processing...";
+                display.appendChild(r);
+                display.scrollTop = display.scrollHeight;
+            }, 800);
+        }
+    });
+</script>
+</body>
+</html>
