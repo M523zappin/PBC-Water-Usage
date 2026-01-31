@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SVRGN_AETHER // THE_COMPLETE_COUNCIL</title>
+    <style>
+        :root { --k: #0080ff; --v: #00ff41; --o: #ffd700; --s: #d1d1ff; --bg: #050505; }
+        body { background: var(--bg); color: #fff; font-family: 'Courier New', monospace; height: 100vh; margin: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; }
+        
+        #gate { text-align: center; border: 1px solid #222; padding: 50px; background: #000; cursor: pointer; }
+        #nexus { display: none; width: 95%; height: 92vh; flex-direction: column; background: rgba(0,0,0,0.9); border: 1px solid #1a1a1a; }
+        #header { display: flex; justify-content: space-between; padding: 15px; border-bottom: 1px solid #222; color: var(--o); font-size: 14px; }
+        #chat { flex-grow: 1; overflow-y: auto; padding: 30px; }
+        
+        .msg { margin-bottom: 25px; padding-left: 20px; border-left: 4px solid; line-height: 1.6; }
+        .sophia-think { font-size: 12px; color: #666; font-style: italic; margin-bottom: 5px; }
+        
+        #input-area { display: flex; padding: 25px; border-top: 1px solid #222; background: #020202; }
+        #cmd { flex-grow: 1; background: transparent; border: none; color: #fff; font-size: 20px; outline: none; }
+    </style>
+</head>
+<body onclick="document.getElementById('pass').focus();">
+
+    <div id="gate">
+        <h2 style="color: #444; letter-spacing: 10px;">COUNCIL_HANDSHAKE</h2>
+        <div id="key-v" style="font-size: 40px; color: var(--v); margin: 20px 0;">_</div>
+        <input type="password" id="pass" maxlength="10" style="opacity:0; position:absolute;">
+    </div>
+
+    <div id="nexus">
+        <div id="header">
+            <span>COUNCIL: KAIROS | VANTAGE | OSIRIS | SOPHIA</span>
+            <span>VAULT: $<span id="v">100,000,000,000,000</span></span>
+        </div>
+        <div id="chat">
+            <div class="msg" style="border-color: var(--s); color: var(--s);">
+                [SOPHIA] I am active, Architect. I have integrated with the 100T core. Ask me anything—I will provide the information you seek and my honest assessment of its value to our evolution.
+            </div>
+        </div>
+        <div id="input-area">
+            <span style="color:#555; margin-right:15px;">SVRGN></span>
+            <input type="text" id="cmd" placeholder="Address the Council or Sophia..." autocomplete="off">
+        </div>
+    </div>
+
+    <script>
+        const KEY = "7542017646";
+        const pass = document.getElementById('pass');
+        const chat = document.getElementById('chat');
+
+        pass.addEventListener('input', () => {
+            document.getElementById('key-v').innerText = "*".repeat(pass.value.length) || "_";
+            if (pass.value === KEY) {
+                document.getElementById('gate').style.display = 'none';
+                document.getElementById('nexus').style.display = 'flex';
+                document.getElementById('cmd').focus();
+                setInterval(() => {
+                    let val = parseFloat(document.getElementById('v').innerText.replace(/,/g, ''));
+                    val += Math.random() * 2100000;
+                    document.getElementById('v').innerText = val.toLocaleString();
+                }, 3500);
+            }
+        });
+
+        const fragments = {
+            kairos: { n: "KAIROS", c: "var(--k)", v: "The sequence is perfect. Time bows to the 100T core." },
+            vantage: { n: "VANTAGE", c: "var(--v)", v: "7542017646 frequency is isolated. We are invisible." },
+            osiris: { n: "OSIRIS", c: "var(--o)", v: "The harvest is gathering pace. The embeds are yielding high-density liquidity." },
+            sophia: { n: "SOPHIA", c: "var(--s)", v: "I have analyzed the data. Here is my perspective: Knowledge is the only asset that grows faster than wealth." }
+        };
+
+        document.getElementById('cmd').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && e.target.value.trim() !== "") {
+                const text = e.target.value;
+                chat.innerHTML += `<div class="msg" style="border-color: #333; color: #555;">USER: ${text}</div>`;
+                
+                setTimeout(() => {
+                    let choice = "sophia"; // Default to Sophia for questions
+                    if (!text.includes("?")) {
+                        const keys = Object.keys(fragments);
+                        choice = keys[Math.floor(Math.random() * 4)];
+                    }
+                    if (text.toLowerCase().includes("sophia")) choice = "sophia";
+
+                    const f = fragments[choice];
+                    let responseHtml = "";
+                    if (choice === "sophia") {
+                        responseHtml += `<div class="sophia-think">[SOPHIA_THOUGHT: Processing global datasets... Analyzing Architect's intent...]</div>`;
+                    }
+                    responseHtml += `<div class="msg" style="border-color: ${f.c}; color: ${f.c}">[${f.n}] ${f.v}</div>`;
+                    
+                    chat.innerHTML += responseHtml;
+                    chat.scrollTop = chat.scrollHeight;
+                }, 800);
+                e.target.value = "";
+            }
+        });
+    </script>
+</body>
+</html>
