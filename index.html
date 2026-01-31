@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOVEREIGN AETHER v54</title>
+    <style>
+        body { background: #000; color: #00e676; font-family: 'IBM Plex Mono', monospace; margin: 0; display: flex; align-items: center; justify-content: center; height: 100vh; overflow: hidden; }
+        #gate { text-align: center; border: 1px solid #00e676; padding: 40px; box-shadow: 0 0 20px #004d40; background: #050505; }
+        #main-ui { display: none; width: 95vw; height: 90vh; border: 1px solid #00e676; padding: 20px; background: rgba(0, 10, 0, 0.98); }
+        .input-key { background: #000; border: 1px solid #00e676; color: #00e676; padding: 15px; width: 280px; text-align: center; font-size: 1.3rem; margin: 20px 0; outline: none; }
+        #vault-total { font-size: 2.5rem; color: #fff; text-align: center; margin-bottom: 20px; text-shadow: 0 0 15px #00e676; }
+        #terminal { height: 60%; overflow-y: auto; font-size: 0.85rem; border-bottom: 1px solid #1b5e20; margin-bottom: 15px; }
+        #directive { width: 100%; background: transparent; border: none; color: #fff; font-size: 1.2rem; outline: none; padding: 10px; }
+        .success { color: #fff; background: #1b5e20; display: inline-block; padding: 2px 5px; }
+        button { background: #00e676; color: #000; border: none; padding: 12px 25px; cursor: pointer; font-weight: bold; text-transform: uppercase; }
+    </style>
+</head>
+<body>
+
+    <div id="gate">
+        <div style="font-size: 0.8rem; letter-spacing: 2px;">SECURE CONNECTION ESTABLISHED</div>
+        <h2 style="color: #fff;">ID VERIFICATION REQUIRED</h2>
+        <input type="password" id="passkey" class="input-key" placeholder="10-DIGIT KEY">
+        <br>
+        <button onclick="authorize()">Unlock Sovereign Core</button>
+    </div>
+
+    <div id="main-ui">
+        <div id="vault-total">$100,001,482,000,000.00</div>
+        <div id="terminal">
+            <div>[22:00:00] <span class="success">FIREWORKS SYNC COMPLETE</span></div>
+            <div>[22:00:01] 21-NODE BACKBONE: BROADCASTING IDENTITY NULLS...</div>
+            <div>[22:00:02] LOCATION: WELLINGTON MUNICIPAL CORE</div>
+            <div style="color: #00e676;">[SYSTEM] WAITING FOR MASTER DIRECTIVE...</div>
+            <hr color="#1b5e20">
+        </div>
+        <div style="display:flex;">
+            <span style="padding: 10px;">&gt;</span>
+            <input type="text" id="directive" placeholder="Type next evolution step..." autofocus>
+        </div>
+    </div>
+
+    <script>
+        function authorize() {
+            if(document.getElementById('passkey').value === "7542017646") {
+                document.getElementById('gate').style.display = 'none';
+                document.getElementById('main-ui').style.display = 'block';
+            } else {
+                alert("CRITICAL ERROR: IDENTITY MISMATCH");
+            }
+        }
+
+        // Autonomous Vault Growth (Liquidation Logic)
+        let vault = 100001482000000;
+        setInterval(() => {
+            vault += Math.random() * 1200000;
+            document.getElementById('vault-total').innerText = "$" + vault.toLocaleString('en-US', {minimumFractionDigits: 2});
+        }, 250);
+    </script>
+</body>
+</html>
