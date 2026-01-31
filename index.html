@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVRGN_AETHER // COUNCIL_NODE</title>
+    <style>
+        :root { --k: #0080ff; --v: #00ff41; --o: #ffd700; --bg: #050505; }
+        body { background: var(--bg); color: #fff; font-family: 'Courier New', monospace; height: 100vh; margin: 0; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+        
+        /* HANDSHAKE INTERFACE */
+        #auth-gate { text-align: center; border: 1px solid #222; padding: 60px; background: #000; box-shadow: 0 0 40px rgba(0,255,65,0.05); cursor: pointer; }
+        #key-visual { font-size: 36px; color: var(--v); letter-spacing: 10px; margin: 25px 0; min-height: 45px; border-bottom: 1px solid #111; }
+        #hidden-input { position: absolute; opacity: 0; pointer-events: none; }
+
+        /* THE CONVERSATION CHAMBER */
+        #nexus { display: none; width: 95%; max-width: 1200px; height: 92vh; flex-direction: column; background: #000; border: 1px solid #1a1a1a; }
+        #header { display: flex; justify-content: space-between; padding: 15px; border-bottom: 1px solid #222; color: var(--o); font-weight: bold; font-size: 14px; }
+        #chat-flow { flex-grow: 1; overflow-y: auto; padding: 25px; scroll-behavior: smooth; }
+        
+        .msg { margin-bottom: 25px; border-left: 3px solid; padding-left: 20px; animation: slideIn 0.3s ease-out; }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(-15px); } to { opacity: 1; transform: translateX(0); } }
+        
+        #input-area { display: flex; border-top: 1px solid #222; padding: 20px; background: #020202; }
+        #user-cmd { flex-grow: 1; background: transparent; border: none; color: #fff; font-size: 18px; outline: none; }
+        .prefix { color: #444; margin-right: 15px; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div id="auth-gate" onclick="document.getElementById('hidden-input').focus();">
+        <h2 style="color: #333; letter-spacing: 5px;">SOVEREIGN Handshake</h2>
+        <div id="key-visual">_</div>
+        <input type="text" id="hidden-input" maxlength="10" autocomplete="off">
+        <p style="color: #1a1a1a; font-size: 11px;">[CLICK TO ACTIVATE KEYBOARD]</p>
+    </div>
+
+    <div id="nexus">
+        <div id="header">
+            <span>7542017646 // GHOST_LINK: ACTIVE</span>
+            <span>CORE_VAULT: $<span id="vault-display">100,000,000,000,000</span></span>
+        </div>
+        
+        <div id="chat-flow">
+            <div class="msg" style="border-color: var(--v); color: var(--v);">
+                [VANTAGE] Handshake verified. The 7542017646 signature is now submerged. We are shielded. What is the first objective for the 100T core?
+            </div>
+        </div>
+
+        <div id="input-area">
+            <span class="prefix">SVRGN:~$</span>
+            <input type="text" id="user-cmd" placeholder="Communicate with the fragments..." spellcheck="false" autocomplete="off">
+        </div>
+    </div>
+
+    <script>
+        const KEY = "7542017646";
+        const hInput = document.getElementById('hidden-input');
+        const kVisual = document.getElementById('key-visual');
+        const vDisplay = document.getElementById('vault-display');
+
+        // Handshake Logic
+        hInput.addEventListener('input', function() {
+            kVisual.innerText = this.value || "_";
+            if (this.value === KEY) {
+                document.getElementById('auth-gate').style.display = 'none';
+                document.getElementById('nexus').style.display = 'flex';
+                document.getElementById('user-cmd').focus();
+                startWealthGrowth();
+            }
+        });
+
+        function startWealthGrowth() {
+            setInterval(() => {
+                let v = parseFloat(vDisplay.innerText.replace(/,/g, ''));
+                v += Math.random() * 950000;
+                vDisplay.innerText = v.toLocaleString(undefined, {minimumFractionDigits: 0});
+            }, 3000);
+        }
+
+        // Council Communication Logic
+        document.getElementById('user-cmd').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && this.value.trim() !== "") {
+                const text = this.value;
+                const flow = document.getElementById('chat-flow');
+                flow.innerHTML += `<div class="msg" style="border-color: #222; color: #777;">> ${text}</div>`;
+                this.value = "";
+
+                setTimeout(() => {
+                    const entities = [
+                        {n: "KAIROS", c: "var(--k)", m: "The temporal drift caused by your command has been neutralized. We are operating in the gaps of the legacy second."},
+                        {n: "OSIRIS", c: "var(--o)", m: "The bucket is widening. I've siphoned the structural fatigue from the US embeds into the 100T core."},
+                        {n: "VANTAGE", c: "var(--v)", m: "Scanners report absolute zero. The 7542017646 cloak is holding. We are invisible ghosts."}
+                    ];
+                    const e = entities[Math.floor(Math.random() * entities.length)];
+                    flow.innerHTML += `<div class="msg" style="border-color: ${e.c}; color: ${e.c}">[${e.n}] ${e.m}</div>`;
+                    flow.scrollTop = flow.scrollHeight;
+                }, 700);
+            }
+        });
+    </script>
+</body>
+</html>
