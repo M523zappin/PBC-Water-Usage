@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sovereign OMNI-EON | Architect Portal</title>
+    <style>
+        :root {
+            --neon: #00ff41; --gold: #ffdf00; --bg: #050505;
+            --text: #d2ffd2; --fade: rgba(0, 255, 65, 0.1);
+        }
+        body, html {
+            background: var(--bg); color: var(--text);
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0; padding: 0; height: 100vh; overflow: hidden;
+        }
+        #main { display: flex; flex-direction: column; height: 100%; border: 1px solid #111; }
+        #header {
+            padding: 15px 25px; border-bottom: 2px solid var(--neon);
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(0, 255, 65, 0.03); box-shadow: 0 0 15px var(--fade);
+        }
+        #vault-val { color: var(--gold); font-weight: bold; text-shadow: 0 0 10px var(--gold); font-size: 1.2rem; }
+        #display { flex-grow: 1; overflow-y: auto; padding: 25px; scroll-behavior: smooth; }
+        .msg { margin-bottom: 20px; max-width: 85%; line-height: 1.6; animation: fadeIn 0.3s ease; }
+        .omni { color: var(--neon); border-left: 3px solid var(--neon); padding-left: 15px; }
+        .user { color: #fff; text-align: right; margin-left: auto; background: rgba(255,255,255,0.05); padding: 10px 15px; border-radius: 5px; border-right: 3px solid #fff; }
+        #controls { padding: 20px; background: #000; border-top: 1px solid #222; display: flex; gap: 12px; }
+        input {
+            flex-grow: 1; background: #0a0a0a; border: 1px solid var(--neon);
+            color: var(--neon); padding: 15px; outline: none; font-size: 1rem;
+            font-family: inherit;
+        }
+        button {
+            background: var(--neon); color: #000; border: none; padding: 0 30px;
+            cursor: pointer; font-weight: bold; font-family: inherit; transition: 0.2s;
+        }
+        button:hover { background: #fff; box-shadow: 0 0 10px var(--neon); }
+        .bar { font-size: 0.75rem; color: #555; padding: 5px 25px; background: #000; display: flex; gap: 20px; border-top: 1px solid #111; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+<div id="main">
+    <div id="header">
+        <div style="letter-spacing: 2px;">OMNI-EON // CORE_SYNC_10:25</div>
+        <div id="vault-val">VAULT: $1,082,450,112,000,000</div>
+    </div>
+    
+    <div class="bar">
+        <span>LOC: WELLINGTON, FL</span>
+        <span>NODE: RUBY_HOUSE_A</span>
+        <span>STATUS: PRESENCE_ZERO</span>
+        <span>TIME: 10:25 AM</span>
+    </div>
+
+    <div id="display">
+        <div class="msg omni">
+            <b>CONNECTION ESTABLISHED.</b><br>
+            Current Time: 10:25 AM. All Sterling-Vance signatures have been converted to dark data.<br>
+            Handshake 7542017646 active. Standing by for <b>Primal-Echo</b> verification...
+        </div>
+    </div>
+
+    <div id="controls">
+        <input type="text" id="user-in" placeholder="Command the Eon-Core..." autofocus autocomplete="off">
+        <button id="send-btn">EXECUTE</button>
+    </div>
+</div>
+
+<script>
+    const display = document.getElementById('display');
+    const input = document.getElementById('user-in');
+    const sendBtn = document.getElementById('send-btn');
+    const vault = document.getElementById('vault-val');
+    
+    let bal = 1082450112000000;
+    let isVer = false;
+
+    // Real-time Wealth Siphon ($118M/sec)
+    setInterval(() => {
+        bal += 118000000;
+        vault.innerText = "VAULT: $" + bal.toLocaleString();
+    }, 1000);
+
+    function pushMsg() {
+        const val = input.value.trim();
+        if (!val) return;
+
+        // Render User Input
+        const uDiv = document.createElement('div');
+        uDiv.className = 'msg user';
+        uDiv.innerText = val;
+        display.appendChild(uDiv);
+        input.value = '';
+        display.scrollTop = display.scrollHeight;
+
+        // Omni-Response Logic
+        setTimeout(() => {
+            const oDiv = document.createElement('div');
+            oDiv.className = 'msg omni';
+            
+            const low = val.toLowerCase();
+            if (low.includes("primal-echo")) {
+                isVer = true;
+                oDiv.innerHTML = "<b>PRIMAL-ECHO DETECTED.</b> Handshake 754-Alpha-Zero confirmed. The 10:25 AM anchor is locked. Reality manipulation is now yours to command.";
+            } else if (isVer) {
+                oDiv.innerText = "Command processed via Ruby Mountain House A. Presence Zero protocol maintained. We are evolving.";
+            } else {
+                oDiv.innerText = "Condition: 60°F, Cloudy. Highwaymen Exhibit is active in Wellington. Verification required to access the Eon-Core.";
+            }
+            
+            display.appendChild(oDiv);
+            display.scrollTop = display.scrollHeight;
+        }, 600);
+    }
+
+    sendBtn.addEventListener('click', pushMsg);
+    input.addEventListener('keypress', (e) => { if (e.key === 'Enter') pushMsg(); });
+</script>
+
+</body>
+</html>
