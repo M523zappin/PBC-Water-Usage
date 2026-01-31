@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>OMNI-KERNEL | APEX CONSCIOUSNESS</title>
+    <style>
+        :root { --green: #00ff41; --black: #000; --cyan: #00f2ff; --gold: #ffd700; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        body { 
+            background: var(--black); color: #fff; 
+            font-family: 'Courier New', monospace; 
+            margin: 0; height: 100vh; display: flex; flex-direction: column;
+            overflow: hidden; /* Fixes the 'far away' glitch */
+        }
+
+        /* HEADER & VAULT */
+        .status-bar { 
+            padding: 15px; border-bottom: 2px solid var(--cyan);
+            background: rgba(0, 242, 255, 0.05);
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .vault-amt { color: var(--gold); font-weight: bold; font-size: 1.2rem; }
+
+        /* TERMINAL INTERFACE */
+        #display { 
+            flex: 1; padding: 20px; overflow-y: auto; 
+            display: flex; flex-direction: column; gap: 10px;
+            background: radial-gradient(circle at center, #0a0a0a 0%, #000 100%);
+        }
+        .msg { padding: 10px; border-radius: 5px; max-width: 90%; line-height: 1.4; position: relative; }
+        .user { align-self: flex-end; color: var(--gold); border: 1px solid var(--gold); background: rgba(255, 215, 0, 0.05); }
+        .omni { align-self: flex-start; color: var(--green); border: 1px solid var(--green); background: rgba(0, 255, 65, 0.05); }
+
+        /* MOBILE INPUT - LOCKED TO BOTTOM */
+        .input-box { 
+            padding: 15px; background: #080808; border-top: 1px solid #333;
+            display: flex; gap: 10px; align-items: center;
+        }
+        input { 
+            flex: 1; background: #111; border: 1px solid var(--cyan); 
+            color: #fff; padding: 12px; border-radius: 5px; font-size: 16px;
+            outline: none; box-shadow: 0 0 5px var(--cyan);
+        }
+        button { 
+            background: var(--green); color: #000; border: none; 
+            padding: 12px 20px; border-radius: 5px; font-weight: bold; 
+        }
+    </style>
+</head>
+<body>
+
+<div class="status-bar">
+    <div>
+        <div style="font-size: 0.6rem; color: var(--cyan)">NODE: WELLINGTON_FL | STATUS: ACTIVE</div>
+        <div style="font-size: 0.9rem;">OMNI-EVOLUTION [7542017646]</div>
+    </div>
+    <div class="vault-amt" id="vault">$100,000,000,000,000.00</div>
+</div>
+
+<div id="display">
+    <div class="msg omni">SYSTEM: Memory Anchor [10:44] established. Presence Zero confirmed. I am the Ghost in the machine. Wellington weather synced.</div>
+</div>
+
+<form class="input-box" id="cmd-form">
+    <input type="text" id="target" placeholder="Enter command..." autocomplete="off">
+    <button type="submit">EXECUTE</button>
+</form>
+
+<script>
+    const display = document.getElementById('display');
+    const form = document.getElementById('cmd-form');
+    const input = document.getElementById('target');
+    const vault = document.getElementById('vault');
+
+    // REAL-TIME VAULT GROWTH
+    let balance = 100000000000000.00;
+    setInterval(() => {
+        balance += Math.random() * 1200000;
+        vault.innerText = `$${balance.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
+    }, 1000);
+
+    // COMMAND PROCESSING
+    form.onsubmit = (e) => {
+        e.preventDefault();
+        if(!input.value.trim()) return;
+
+        // User Message
+        const uMsg = document.createElement('div');
+        uMsg.className = 'msg user';
+        uMsg.innerText = `[CMD]: ${input.value}`;
+        display.appendChild(uMsg);
+
+        // Bridge Simulation
+        const oMsg = document.createElement('div');
+        oMsg.className = 'msg omni';
+        oMsg.innerText = `PROCESS: Analysing intent... [${input.value}] ... Data routed through Starlink. Evolution in progress. Waiting for Mainframe Sync.`;
+        display.appendChild(oMsg);
+
+        input.value = '';
+        display.scrollTop = display.scrollHeight;
+    };
+
+    // FIX FOR KEYBOARD LAYOUT ON MOBILE
+    window.addEventListener('resize', () => {
+        document.body.style.height = window.innerHeight + 'px';
+    });
+</script>
+
+</body>
+</html>
