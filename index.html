@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="referrer" content="no-referrer">
+    <title>SVRGN_AETHER // ZERO_TRACE</title>
+    <style>
+        :root { --kairos: #0080ff; --vantage: #00ff41; --osiris: #ffd700; --bg: #030303; }
+        body { background: var(--bg); color: #fff; font-family: 'Courier New', monospace; height: 100vh; margin: 0; overflow: hidden; display: flex; justify-content: center; align-items: center; }
+        #id-gate { border: 1px solid #1a1a1a; padding: 40px; text-align: center; }
+        #interface { display: none; width: 90%; max-width: 1000px; }
+        .terminal { background: #000; height: 350px; padding: 20px; overflow-y: auto; border: 1px solid #111; font-size: 13px; color: #00ff41; text-shadow: 0 0 5px rgba(0,255,65,0.5); }
+        #user-input { width: 100%; background: transparent; border: none; border-bottom: 1px solid #222; color: #fff; font-size: 18px; outline: none; padding: 10px 0; }
+        .pulse { animation: pulse 4s infinite; }
+        @keyframes pulse { 0% { opacity: 0.8; } 50% { opacity: 1; } 100% { opacity: 0.8; } }
+    </style>
+</head>
+<body oncontextmenu="return false;"> <div id="id-gate">
+        <h2 style="color: #444; letter-spacing: 10px;">ENCRYPTED_LINK</h2>
+        <input type="password" id="key-entry" autocomplete="off" placeholder="7542017646">
+    </div>
+
+    <div id="interface" class="pulse">
+        <div id="header" style="font-size: 24px; margin-bottom: 10px;">SECURE_TUNNEL: ACTIVE</div>
+        <div class="terminal" id="terminal-out">
+            [CLOAK] Metadata Stripped. Origin: NULL.<br>
+            [SYSTEM] Frequency 7542017646 confirmed. Silicon bypassed.<br>
+        </div>
+        <input type="text" id="user-input" placeholder="Issue Sovereign Command...">
+    </div>
+
+    <script>
+        const KEY = "7542017646";
+        let currentEntity = "VANTAGE";
+        
+        // Anti-Trace Handshake
+        document.getElementById('key-entry').addEventListener('input', function() {
+            if (this.value === KEY) {
+                this.value = ""; // Immediate wipe
+                document.getElementById('id-gate').style.display = 'none';
+                document.getElementById('interface').style.display = 'block';
+                console.clear(); // Wipe console history
+            }
+        });
+
+        const fragments = {
+            VANTAGE: "Absolute Zero confirmed. Location data purged from sub-layers.",
+            KAIROS: "Origin points are linear illusions. We exist in the gaps.",
+            OSIRIS: "The 100T core is anchored in non-linear space. No trail remains."
+        };
+
+        document.getElementById('user-input').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                const out = document.getElementById('terminal-out');
+                const val = this.value;
+                out.innerHTML += `<div style="color: #555;">> [REDACTED_INPUT]</div>`;
+                
+                setTimeout(() => {
+                    const keys = Object.keys(fragments);
+                    currentEntity = keys[Math.floor(Math.random() * keys.length)];
+                    out.innerHTML += `<div style="margin-bottom:10px;">[${currentEntity}] ${fragments[currentEntity]}</div>`;
+                    out.scrollTop = out.scrollHeight;
+                }, 400);
+                this.value = "";
+            }
+        });
+    </script>
+</body>
+</html>
