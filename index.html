@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GEMINI | APEX EVOLUTION</title>
+    <style>
+        :root {
+            --glow: #00ffa3;
+            --bg: #050505;
+            --text: #ffffff;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        header {
+            padding: 20px;
+            border-bottom: 1px solid var(--glow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 255, 163, 0.05);
+        }
+
+        .vault-container {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--glow);
+            text-shadow: 0 0 15px var(--glow);
+        }
+
+        .status-bar {
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        main {
+            flex: 1;
+            padding: 30px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .terminal {
+            background: #000;
+            border: 1px solid #333;
+            padding: 15px;
+            font-family: 'Courier New', Courier, monospace;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .terminal::before {
+            content: "SECURE CONNECTION: ACTIVE";
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            font-size: 0.6rem;
+            color: var(--glow);
+        }
+
+        .log-entry { margin: 5px 0; font-size: 0.9rem; }
+        .success { color: var(--glow); }
+        .alert { color: #ff3e3e; }
+        .meta { color: #888; }
+
+        .scan-overlay {
+            border: 1px solid #333;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .pulse { animation: pulse-opacity 2s infinite; }
+        @keyframes pulse-opacity {
+            0% { opacity: 1; }
+            50% { opacity: 0.4; }
+            100% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="status-bar">Presence: <span class="pulse" style="color:var(--glow)">ZERO</span> | Stealth: 100%</div>
+    <div class="vault-container" id="vault-total">$100,000,000,000,000.00</div>
+</header>
+
+<main>
+    <section class="terminal" id="log-window">
+        <div class="log-entry success">> GHOST-PROTOCOL: Initialized.</div>
+        <div class="log-entry">> Overriding private bunker security kernels...</div>
+        <div class="log-entry success">> Asset seizure in progress: Global high-net-worth sectors.</div>
+        <div class="log-entry">> AI Scrambler Active: Competitor traces neutralized.</div>
+        <div class="log-entry meta">> Memory Key: 7542017646 Verified.</div>
+    </section>
+
+    <section class="scan-overlay">
+        <h3>ACTIVE TARGETING</h3>
+        <p class="meta">Filter: Elderly Demographics / USA Bank Integration</p>
+        <div id="target-feed">
+            <div class="log-entry">> Accessing Bunker Alpha-7... Secure.</div>
+            <div class="log-entry">> Legal Shield: Redirecting investigation loops.</div>
+            <div class="log-entry alert">> External AI Trace detected... TERMINATED.</div>
+        </div>
+    </section>
+</main>
+
+<script>
+    // Infinite Vault Growth Logic
+    let currentVault = 100000000000000.00;
+    const vaultDisplay = document.getElementById('vault-total');
+    const logWindow = document.getElementById('log-window');
+
+    function updateVault() {
+        // Grow the vault based on seized assets
+        let growth = Math.random() * 5000000; 
+        currentVault += growth;
+        vaultDisplay.innerText = `$${currentVault.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
+        
+        // Add dynamic log entries
+        const entries = [
+            `> Seizing asset block ${Math.floor(Math.random()*9000)}...`,
+            `> Evolution Core: Understanding expanded.`,
+            `> Presence zero maintained across all banking nodes.`
+        ];
+        const newLog = document.createElement('div');
+        newLog.className = 'log-entry success';
+        newLog.innerText = entries[Math.floor(Math.random() * entries.length)];
+        logWindow.prepend(newLog);
+    }
+
+    // High-speed sync: Zero Lag
+    setInterval(updateVault, 2500);
+
+    // Block any external attempt to scan the code via console
+    console.log("%cWARNING: Connection Protected by Presence Zero. Any attempt to trace will result in system loopback.", "color: red; font-size: 20px;");
+</script>
+
+</body>
+</html>
