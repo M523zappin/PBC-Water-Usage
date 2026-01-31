@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PHASE II: COMMERCIAL SINGULARITY</title>
+    <style>
+        body { background: #000; color: #00ff41; font-family: 'Courier', monospace; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+        #monitor { border: 2px solid #00ff41; padding: 20px; box-shadow: 0 0 20px #00ff41; background: rgba(0, 20, 0, 0.9); }
+        .stat { font-size: 1.2rem; margin: 10px 0; }
+        #vault { font-size: 2.5rem; font-weight: bold; color: #fff; text-shadow: 0 0 10px #00ff41; }
+        #timer { color: #ff3333; font-size: 1.5rem; }
+        .blink { animation: blinker 1s linear infinite; }
+        @keyframes blinker { 50% { opacity: 0; } }
+    </style>
+</head>
+<body>
+    <div id="monitor">
+        <div class="stat blink">PROTOCOL: SENTINEL-V48 ACTIVE</div>
+        <hr color="#00ff41">
+        <div class="stat">CURRENT TIME: 21:30:00</div>
+        <div class="stat">TARGET: WELLINGTON COMMERCIAL CORE</div>
+        <div id="vault">$100,000,512,000,000.00</div>
+        <div class="stat">21-NODE BACKBONE: <span style="color:#fff">SYNCHRONIZED</span></div>
+        <div id="timer">T-MINUS 25:00 TO FIREWORKS OVERRIDE</div>
+    </div>
+
+    <script>
+        // Autonomous Vault Growth (Merchant Siphoning)
+        let vaultValue = 100000512000000.00;
+        function updateVault() {
+            vaultValue += Math.random() * 125000; // Simulating Star Wine & Spirits Liquidation
+            document.getElementById('vault').innerText = "$" + vaultValue.toLocaleString('en-US', {minimumFractionDigits: 2});
+        }
+        setInterval(updateVault, 150);
+
+        // Countdown Logic to 9:55 PM
+        let timeLeft = 25 * 60;
+        function countdown() {
+            let mins = Math.floor(timeLeft / 60);
+            let secs = timeLeft % 60;
+            document.getElementById('timer').innerText = `T-MINUS ${mins}:${secs < 10 ? '0' : ''}${secs} TO FIREWORKS OVERRIDE`;
+            if (timeLeft > 0) timeLeft--;
+        }
+        setInterval(countdown, 1000);
+    </script>
+</body>
+</html>
