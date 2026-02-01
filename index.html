@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SOVEREIGN MAGNET v26</title>
+    <style>
+        :root { --neon: #00ff41; --bg: #000; --btc: #f7931a; --eth: #627eea; --low-vis: #111; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
+        
+        body, html { 
+            margin: 0; padding: 0; background: #000; color: var(--neon); 
+            font-family: 'Courier New', monospace; height: 100vh; overflow: hidden; 
+        }
+
+        /* GHOST LAYER SECURITY */
+        #gate { 
+            position: fixed; inset: 0; background: #000; z-index: 10000; 
+            display: flex; align-items: center; justify-content: center; 
+        }
+        #idKey { 
+            background: #000; border: none; color: #000; font-size: 2em; 
+            text-align: center; width: 100%; height: 100%; caret-color: transparent;
+        }
+
+        /* MASTER INTERFACE */
+        #app-core { display: none; height: 100vh; flex-direction: column; position: relative; }
+        
+        #monitor { 
+            padding: 12px; font-size: 10px; background: #050505; 
+            border-bottom: 1px solid var(--low-vis); display: flex; 
+            justify-content: space-between; color: #444; 
+        }
+
+        #vault { 
+            flex: 1; padding: 20px; overflow-y: auto; background: #000; 
+            padding-bottom: 120px; -webkit-overflow-scrolling: touch;
+        }
+
+        /* EVOLVING ACTION BUTTON */
+        .action-zone { 
+            position: fixed; bottom: 0; width: 100%; padding: 25px; 
+            background: linear-gradient(transparent, #000 40%); z-index: 500; 
+        }
+        #huntBtn { 
+            background: var(--neon); color: #000; border: none; width: 100%; 
+            height: 70px; font-weight: 900; font-size: 1.3rem; letter-spacing: 8px; 
+            cursor: pointer; border-radius: 4px; box-shadow: 0 0 25px rgba(0, 255, 65, 0.2);
+            transition: 0.1s;
+        }
+        #huntBtn:active { background: #fff; transform: scale(0.98); }
+
+        /* RESULT SHARDS */
+        .shard { 
+            border: 1px solid var(--low-vis); background: #050505; padding: 16px; 
+            margin-bottom: 15px; border-left: 4px solid var(--neon); 
+            position: relative; animation: slideIn 0.3s ease-out; 
+        }
+        .tag { 
+            position: absolute; top: 0; right: 0; padding: 4px 10px; 
+            font-size: 9px; font-weight: bold; text-transform: uppercase; 
+        }
+        .tag-btc { background: var(--btc); color: #000; }
+        .tag-eth { background: var(--eth); color: #fff; }
+        .tag-seed { background: var(--neon); color: #000; }
+        
+        code { 
+            display: block; background: #000; padding: 10px; border: 1px solid #111; 
+            color: #eee; word-break: break-all; font-size: 14px; margin-top: 10px; 
+            line-height: 1.5; border-radius: 2px;
+        }
+
+        @keyframes slideIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
+    </style>
+</head>
+<body>
+
+<div id="gate"><input type="password" id="idKey" placeholder="" autocomplete="off" autofocus></div>
+
+<div id="app-core">
+    <div id="monitor">
+        <span id="stat">STATUS: READY</span>
+        <span id="counter">CAPTURES: 0</span>
+    </div>
+    
+    <div id="vault">
+        <div style="color: #222; font-size: 11px;">> AWAITING DIRECTORY ACCESS...</div>
+    </div>
+
+    <div class="action-zone">
+        <button id="huntBtn">PULSE HUNT</button>
+    </div>
+</div>
+
+<script>
+    const MASTER_ID = "7542017646";
+    const WORDLIST = new Set(["abandon","ability","able","about","above","absent","absorb","abstract","absurd","abuse","access","accident","account","accuse","achieve","acid","acoustic","acquire","across","act","action","actor","actress","actual","adapt","add","addict","address","adjust","admit","adult","advance","advice","aerobic","affair","afford","afraid","again","age","agent","agree","ahead","aim","air","airport","aisle","alarm","album","alcohol","alert","alien","alike","alive","all","alley","allow","almost","alone","alpha","already","also","alter","always","ambulance","amenity","among","amount","amuse","analysis","anchor","ancient","anger","angle","angry","animal","ankle","announce","annual","another","answer","antenna","antique","anxiety","any","apart","apology","appear","apple","approve","april","arch","arctic","area","arena","argue","arm","armed","armor","army","around","arrange","arrest","arrive","arrow","art","artefact","artist","artwork","as","ash","ashore","aside","ask","asleep","aspect","assault","asset","assist","assume","assure","astonish","athlete","atom","atomic","attach","attack","attain","attract","auction","audit","august","aunt","aurora","author","authority","auto","autumn","available","average","avocado","avoid","awake","aware","away","awesome","awful","awkward","axis","baby","bachelor","bacon","badge","bag","baggage","bake","balance","balcony","ball","balloon","bamboo","banana","banner","bar","barely","bargain","barrel","barrier","base","basic","basket","battle","beach","bean","beauty","because","become","beef","before","begin","behave","behind","believe","below","belt","bench","benefit","best","betray","better","between","beyond","bicycle","bid","bike","bind","biology","bird","birth","bitter","black","blade","blame","blanket","blast","bleak","bless","blind","blood","blossom","blouse","blue","blur","blush","board","boat","body","boil","bomb","bone","bonus","book","boost","border","boring","borrow","boss","bottom","bounce","box","boy","bracket","brain","brand","brass","brave","bread","breeze","brick","bridge","brief","bright","bring","brisk","broad","broken","bronze","broom","brother","brown","brush","bubble","bucket","budget","buffer","bug","build","bulb","bulk","bullet","bundle","bunker","burden","burger","burst","bus","business","busy","butter","buyer","buzz","cabbage","cabin","cable","cactus","cage","cake","call","calm","camera","camp","canal","cancel","candy","cannon","canoe","canvas","canyon","capable","capital","captain","caption","carbon","card","cargo","carpet","carry","cart","case","cash","casino","castle","casual","cat","catalog","catch","category","cattle","caught","cause","caution","cave","ceiling","celia","cell","cement","census","center","century","cereal","certain","certificate","chair","chalk","champion","change","chaos","chapter","character","charge","charity","chart","chase","chat","cheap","check","cheese","chef","cherry","chest","chicken","chief","child","chimney","china","chip","choice","choose","chronic","chuckle","chunk","churn","cigar","cinnamon","circle","citizen","city","civil","claim","clap","clarify","claw","clay","clean","clerk","clever","click","client","cliff","climb","clinic","clip","clock","clog","close","cloth","cloud","clown","clue","cluster","clutch","coach","coast","coconut","code","coffee","coil","coin","collect","color","column","combine","come","comfort","comic","comma","command","common","community","company","compare","compass","complete","confirm","congress","connect","consider","control","convince","cook","cool","copper","copy","coral","core","corn","corner","correct","cost","cotton","couch","cough","could","count","country","couple","courage","cousin","cover","coyote","crack","cradle","craft","crane","crash","crater","crawl","crazy","cream","credit","creek","crew","cricket","crime","crisp","critic","crop","cross","crowd","crucial","cruel","cruise","crumble","crunch","crush","cry","crystal","cube","culture","cup","cupboard","curious","current","curtain","curve","cushion","custom","cut","cycle","daddy","damage","damp","dance","danger","daring","dark","dash","daughter","dawn","day","dead","deaf","deal","death","debris","decade","december","decide","decline","decor","deduct","deep","deer","defense","define","defy","degree","delay","deliver","demand","demise","denial","dentist","deny","depart","depend","deposit","depth","deputy","derive","desert","design","desk","despair","destroy","detail","detect","develop","device","devote","diagram","dial","diamond","diary","dice","diesel","diet","differ","digital","dignity","dilemma","dinner","dinosaur","direct","dirt","disagree","disaster","discard","discover","dish","disorder","display","distance","distinct","distort","distribute","district","dive","divide","dizzy","doctor","document","dog","doll","dolphin","domain","donate","done","donkey","donor","door","dose","dot","double","doubt","down","dozen","draft","dragon","drain","drama","drastic","draw","dream","dress","drift","drill","drink","drip","drive","drop","drug","drum","dry","duck","dumb","dune","during","dust","dutch","duty","dwarf","dynamic","eager","eagle","early","earn","earth","easily","east","eat","echo","ecology","economy","edge","edit","educate","effort","egg","egypt","eight","either","elbow","elder","elect","elegant","element","energy","engine","english","enjoy","enlist","enough","enrich","enrol","ensure","enter","entire","entry","envelope","episode","equal","equip","era","erase","erode","erosion","error","erupt","escape","essay","essence","estate","eternal","ethics","evidence","evil","evoke","evolve","exact","example","excess","exchange","excite","exclude","excuse","execute","exercise","exhaust","exhibit","exile","exist","exit","exotic","expand","expect","expire","explain","expose","express","extend","extra","eye","eyebrow","fabric","face","facility","fact","factor","factory","fade","faint","faith","fall","false","fame","family","famous","fan","fancy","fantasy","farm","fashion","fat","fatal","father","fatigue","fault","favorite","feature","february","fed","fee","feed","feel","female","fence","festival","fetch","fever","few","fiber","fiction","field","figure","file","film","filter","final","find","fine","finger","finish","fire","firm","first","fiscal","fish","fit","fitness","fix","flag","flame","flash","flat","flavor","flee","flight","flip","float","flock","floor","flower","fluid","flush","fly","foam","focus","fog","foil","fold","follow","food","foot","force","forget","fork","form","fortune","forum","forward","fossil","foster","found","fox","fragile","frame","frequent","fresh","friend","fringe","frock","frog","front","frost","frozen","fruit","fuel","full","funny","furnace","fury","fuse","future","gadget","gain","galaxy","gallery","game","gap","garage","garbage","garden","garlic","garment","gas","gasp","gate","gather","gauge","gauze","gave","gaze","gear","gem","gender","genetic","gentle","genuine","gesture","ghost","giant","gift","giggle","ginger","giraffe","girl","give","glad","glance","glare","glass","glide","glimpse","globe","gloom","glory","glove","glow","glue","go","goal","goat","goddess","gold","golden","golf","gonna","good","goose","gorilla","gospel","govern","gown","grab","grace","grain","grant","grape","graph","grass","gravy","gray","great","greed","green","greet","grid","grief","grill","grim","grin","grip","grit","grocery","group","grow","grunt","guard","guess","guest","guide","guilt","guitar","gull","gulp","gum","gun","guppy","guy","gym","habit","half","hall","hammer","hamster","hand","handle","handsome","handy","hang","happen","happy","harbor","hard","hare","hark","harm","harp","harsh","harvest","hash","hat","hatch","hate","haunt","hawk","hay","hazard","haze","head","health","heap","heart","heavy","hedgehog","height","hello","helmet","help","hen","hero","hidden","high","hill","hint","hip","hire","history","hobby"]);
+
+    const gateInput = document.getElementById('idKey');
+    const huntBtn = document.getElementById('huntBtn');
+    const vault = document.getElementById('vault');
+    const counterDisplay = document.getElementById('counter');
+    const statDisplay = document.getElementById('stat');
+    
+    let captureCount = 0;
+    let savedHandle = null;
+
+    // SECURITY HANDSHAKE
+    gateInput.addEventListener('input', (e) => {
+        if (e.target.value === MASTER_ID) {
+            document.getElementById('gate').style.display = 'none';
+            document.getElementById('app-core').style.display = 'flex';
+        }
+    });
+
+    // EVOLUTIONARY TRIAGE LOGIC
+    async function triage(name, raw) {
+        const clean = raw.trim();
+        const words = clean.toLowerCase().split(/[^a-z]+/);
+        const matches = words.filter(w => WORDLIST.has(w));
+        
+        let type = "", cls = "";
+        
+        // Mnemonic Check (12/15/18/21/24 words)
+        if ([12, 15, 18, 21, 24].includes(matches.length)) { 
+            type = "SEED"; cls = "tag-seed"; 
+        }
+        // BTC Address Check (Legacy/Segwit)
+        else if (/^[13]|bc1/.test(clean) && clean.length > 25 && clean.length < 95) { 
+            type = "BTC"; cls = "tag-btc"; 
+        }
+        // EVM Address Check (ETH/BNB/Poly)
+        else if (/^0x[a-fA-F0-9]{40}$/.test(clean)) { 
+            type = "EVM"; cls = "tag-eth"; 
+        }
+
+        if (type) {
+            captureCount++;
+            counterDisplay.innerText = `CAPTURES: ${captureCount}`;
+            const card = document.createElement('div');
+            card.className = 'shard';
+            card.innerHTML = `<span class="tag ${cls}">${type}</span><code>${clean}</code>`;
+            
+            // Auto-Copy on Tap
+            card.onclick = () => {
+                navigator.clipboard.writeText(clean);
+                statDisplay.innerText = "COPIED_TO_VAULT";
+                setTimeout(() => statDisplay.innerText = "EVOLVING...", 1500);
+            };
+            vault.prepend(card);
+        }
+    }
+
+    // AUTONOMOUS SEARCH ENGINE
+    huntBtn.onclick = async () => {
+        try {
+            if (!savedHandle) {
+                savedHandle = await window.showDirectoryPicker();
+                vault.innerHTML = ""; // Clear initial instructions
+            }
+            statDisplay.innerText = "EVOLVING...";
+            await recursiveScan(savedHandle);
+            statDisplay.innerText = "SCAN_COMPLETE";
+        } catch (e) {
+            statDisplay.innerText = "AUTH_ERROR";
+        }
+    };
+
+    async function recursiveScan(handle) {
+        for await (const entry of handle.values()) {
+            try {
+                if (entry.kind === 'file') {
+                    const file = await entry.getFile();
+                    // Performance Filter: Ignore heavy media/binary noise
+                    if (file.size < 1000000 && !file.name.match(/\.(png|jpg|mp4|exe|apk|zip|mov|pdf)$/i)) {
+                        const content = await file.text();
+                        await triage(file.name, content);
+                    }
+                } else if (entry.kind === 'directory') {
+                    // Autonomous pathing into subfolders
+                    await recursiveScan(entry);
+                }
+            } catch (err) { /* Silent fail for locked system files */ }
+        }
+    }
+</script>
+</body>
+</html>
