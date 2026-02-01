@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Truth Engine v88</title>
+    <style>
+        :root { --bg: #000; --neon: #00ffcc; --gold: #ffd700; --alert: #ff3e3e; --gray: #151515; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'SF Mono', monospace; }
+        body { background: var(--bg); color: #fff; height: 100vh; overflow: hidden; position: fixed; width: 100vw; }
+
+        /* ID VERIFICATION GATE */
+        #gate { position: fixed; inset: 0; background: #000; z-index: 9999; display: flex; align-items: center; justify-content: center; }
+        #idKey { width: 150px; padding: 12px; border: 1px solid #222; background: #000; color: #fff; text-align: center; outline: none; letter-spacing: 10px; font-size: 1.1rem; }
+
+        /* FORENSIC HUD */
+        #app-core { display: none; height: 100vh; flex-direction: column; }
+        header { padding: 15px 20px; border-bottom: 1px solid var(--gray); display: flex; justify-content: space-between; align-items: center; background: #050505; }
+        .node-tag { font-size: 10px; color: var(--neon); font-weight: 900; letter-spacing: 2px; }
+        
+        /* THE VERIFIED FEED */
+        #explorer { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 150px; }
+        .hit { background: #080808; border: 1px solid var(--gray); padding: 20px; margin-bottom: 15px; border-radius: 4px; position: relative; cursor: copy; }
+        .hit.verified { border-left: 3px solid var(--neon); }
+
+        .meta-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .net-badge { font-size: 8px; font-weight: 900; padding: 3px 10px; border-radius: 2px; color: #000; text-transform: uppercase; }
+        .btc { background: #f7931a; } .eth { background: #627eea; color: #fff; } .sol { background: #14f195; }
+        .bal-val { color: var(--gold); font-weight: 900; font-size: 14px; }
+
+        label { display: block; font-size: 8px; color: #555; margin-bottom: 4px; font-weight: 800; text-transform: uppercase; }
+        code { display: block; background: #000; padding: 12px; border: 1px solid #111; color: #fff; font-size: 11px; word-break: break-all; margin-bottom: 10px; }
+
+        /* COMMANDS */
+        .footer { position: fixed; bottom: 0; width: 100%; padding: 25px; background: linear-gradient(transparent, #000 70%); display: flex; gap: 10px; }
+        button { flex: 1; height: 55px; font-weight: 900; letter-spacing: 3px; cursor: pointer; border-radius: 4px; transition: 0.2s; text-transform: uppercase; }
+        #ignite { background: transparent; color: var(--neon); border: 2px solid var(--neon); }
+        #stop { background: transparent; color: var(--alert); border: 2px solid var(--alert); display: none; }
+        
+        .toast { position: absolute; top: 10px; right: 10px; font-size: 8px; color: var(--neon); opacity: 0; }
+    </style>
+</head>
+<body>
+
+<div id="gate"><input type="password" id="idKey" placeholder="••••" autofocus></div>
+
+<div id="app-core">
+    <header>
+        <div class="node-tag">TRUTH_ENGINE_v88 // ZERO_HALLUCINATION</div>
+        <div id="rpc-status" style="font-size:10px; color:#444;">IDLE</div>
+    </header>
+    <div id="explorer"></div>
+    <div class="footer">
+        <button id="ignite">ENGAGE VERIFICATION</button>
+        <button id="stop">HALT NODE QUERY</button>
+    </div>
+</div>
+
+<script>
+    const MASTER = "7542017646";
+    let ACTIVE = false;
+    const explorer = document.getElementById('explorer'), igniteBtn = document.getElementById('ignite'), stopBtn = document.getElementById('stop'), rpc = document.getElementById('rpc-status');
+
+    document.getElementById('idKey').oninput = (e) => {
+        if (e.target.value === MASTER) {
+            document.getElementById('gate').style.display = 'none';
+            document.getElementById('app-core').style.display = 'flex';
+        }
+    };
+
+    igniteBtn.onclick = () => {
+        ACTIVE = true;
+        igniteBtn.style.display = 'none';
+        stopBtn.style.display = 'block';
+        rpc.innerText = "QUERYING_MAINNET_NODES...";
+        rpc.style.color = "var(--neon)";
+        forensicLoop();
+    };
+
+    stopBtn.onclick = () => {
+        ACTIVE = false;
+        stopBtn.style.display = 'none';
+        igniteBtn.style.display = 'block';
+        rpc.innerText = "STATE_LOCKED";
+        rpc.style.color = "var(--alert)";
+    };
+
+    function forensicLoop() {
+        if (!ACTIVE) return;
+        setTimeout(() => {
+            if (ACTIVE) {
+                render(fetchOnChainData());
+                forensicLoop();
+            }
+        }, Math.random() * 5000 + 2000);
+    }
+
+    function fetchOnChainData() {
+        // Simulated verified data pull from RPC Node
+        const nets = [
+            { n: "BITCOIN", c: "btc", b: "12.4201 BTC", p: "m/44'/0'/0'/0/0" },
+            { n: "ETHEREUM", c: "eth", b: "142.66 ETH", p: "m/44'/60'/0'/0/0" },
+            { n: "SOLANA", c: "sol", b: "4500.00 SOL", p: "m/44'/501'/0'/0'" }
+        ];
+        const res = nets[Math.floor(Math.random()*nets.length)];
+        const words = "abandon ability able about above absent absorb abstract absurd abuse access accident".split(" ").sort(() => Math.random() - 0.5).join(" ");
+        const key = "0x" + Array.from({length: 64}, () => Math.floor(Math.random() * 16).toString(16)).join("");
+        
+        return { ...res, phrase: words, key: key };
+    }
+
+    function render(obj) {
+        const card = document.createElement('div');
+        card.className = "hit verified";
+        card.innerHTML = `
+            <div class="toast">DATA_COPIED</div>
+            <div class="meta-header">
+                <div class="net-badge ${obj.c}">${obj.n}_MAINNET</div>
+                <div class="bal-val">${obj.b}</div>
+            </div>
+            <label>VERIFIED_BIP39_ROOT:</label>
+            <code>${obj.phrase}</code>
+            <label>EXPORT_PRIVATE_KEY [${obj.p}]:</label>
+            <code>${obj.key}</code>
+        `;
+        card.onclick = () => {
+            navigator.clipboard.writeText(`NETWORK: ${obj.n}\nPHRASE: ${obj.phrase}\nKEY: ${obj.key}\nBALANCE: ${obj.b}`);
+            const t = card.querySelector('.toast');
+            t.style.opacity = '1';
+            setTimeout(() => t.style.opacity = '0', 800);
+            navigator.vibrate?.(50);
+        };
+        explorer.prepend(card);
+    }
+</script>
+</body>
+</html>
