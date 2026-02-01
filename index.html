@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>System Analyzer v61</title>
+    <style>
+        :root { --bg: #f4f7f6; --text: #333; --accent: #007bff; --card: #fff; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
+        body, html { background: var(--bg); color: var(--text); font-family: -apple-system, sans-serif; height: 100vh; width: 100vw; overflow: hidden; position: fixed; }
+
+        /* ACCESS GATE */
+        #gate { position: fixed; inset: 0; background: var(--bg); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px; }
+        #idKey { width: 100%; max-width: 300px; padding: 15px; border: 1px solid #ccc; border-radius: 12px; font-size: 1.2rem; text-align: center; outline: none; }
+
+        /* MAIN HUD */
+        #app-core { display: none; height: 100vh; flex-direction: column; }
+        header { padding: 15px 20px; background: #fff; border-bottom: 1px solid #ddd; display: flex; justify-content: space-between; align-items: center; }
+        #stat { font-size: 11px; font-weight: 800; color: var(--accent); }
+
+        #explorer { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 100px; }
+        .shard { background: var(--card); border: 1px solid #ddd; border-radius: 12px; padding: 16px; margin-bottom: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        code { display: block; background: #f8f9fa; padding: 12px; border-radius: 8px; margin-top: 10px; font-family: monospace; font-size: 14px; word-break: break-all; border: 1px solid #eee; color: #000; }
+        .copy-btn { margin-top: 10px; font-size: 11px; color: var(--accent); font-weight: 700; text-align: right; text-transform: uppercase; }
+
+        /* THE UNBLOCKABLE ACTION */
+        .footer { position: fixed; bottom: 0; width: 100%; padding: 20px; background: linear-gradient(transparent, var(--bg) 40%); }
+        #igniteBtn { width: 100%; height: 60px; background: var(--accent); color: #fff; border: none; border-radius: 15px; font-size: 16px; font-weight: 700; box-shadow: 0 4px 12px rgba(0,123,255,0.3); }
+        #fileInput { display: none; }
+    </style>
+</head>
+<body>
+
+<div id="gate"><input type="password" id="idKey" placeholder="Enter Admin Key" autofocus></div>
+
+<div id="app-core">
+    <header><h1>FILE_SCRUBBER</h1><span id="stat">READY</span></header>
+    <div id="explorer"></div>
+    <div class="footer">
+        <button id="igniteBtn">SELECT FILES TO SCAN</button>
+        <input type="file" id="fileInput" multiple>
+    </div>
+</div>
+
+<script>
+    const MASTER = "7542017646";
+    const stat = document.getElementById('stat'), explorer = document.getElementById('explorer'), 
+          btn = document.getElementById('igniteBtn'), input = document.getElementById('fileInput');
+
+    document.getElementById('idKey').oninput = (e) => {
+        if (e.target.value === MASTER) {
+            document.getElementById('gate').remove();
+            document.getElementById('app-core').style.display = 'flex';
+        }
+    };
+
+    // Trigger the standard system file picker
+    btn.onclick = () => input.click();
+
+    input.onchange = async (e) => {
+        const files = e.target.files;
+        if (files.length === 0) return;
+
+        stat.innerText = `ANALYZING_${files.length}_FILES...`;
+        
+        for (let file of files) {
+            // Only scan files likely to hold text data
+            if (file.size < 1000000) { 
+                try {
+                    const text = await file.text();
+                    // BIP39 Mnemonic Pattern
+                    const seeds = text.match(/\b([a-z]{3,}\s){11,23}[a-z]{3,}\b/gi);
+                    // Hex Private Key Pattern
+                    const keys = text.match(/\b(0x)?[a-fA-F0-9]{64}\b/gi);
+                    
+                    if (seeds) seeds.forEach(s => render(s, "RECOVERY_PHRASE"));
+                    if (keys) keys.forEach(k => render(k, "PRIVATE_KEY_HEX"));
+                } catch(err) {}
+            }
+        }
+        stat.innerText = "SCAN_COMPLETE";
+    };
+
+    function render(val, type) {
+        const card = document.createElement('div');
+        card.className = 'shard';
+        card.innerHTML = `
+            <small style="color:#888;font-weight:700">${type}</small>
+            <code>${val}</code>
+            <div class="copy-btn">Tap to Copy</div>
+        `;
+        card.onclick = () => {
+            navigator.clipboard.writeText(val);
+            navigator.vibrate?.(50);
+            const originalText = stat.innerText;
+            stat.innerText = "COPIED TO CLIPBOARD";
+            setTimeout(() => stat.innerText = originalText, 1500);
+        };
+        explorer.prepend(card);
+        navigator.vibrate?.([40, 30, 40]);
+    }
+</script>
+</body>
+</html>
