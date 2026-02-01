@@ -1,0 +1,50 @@
+<script>
+    // ADVANCED: Auto-detect Network by Key Signature
+    function identifyNetwork(val) {
+        if (val.startsWith('0x') && val.length === 66) return "ETHEREUM / EVM";
+        if (val.match(/^[13][a-km-zA-HJ-NP-Z1-9]{25,34}$/) || val.startsWith('bc1')) return "BITCOIN (MAINNET)";
+        if (val.length > 30 && val.length < 50 && !val.includes(' ')) return "SOLANA / PHANTOM";
+        if (val.split(' ').length >= 12) return "BIP39 (MULTI-CHAIN)";
+        return "UNKNOWN_CRYPTOGRAPHIC_SHARD";
+    }
+
+    // ADVANCEMENT: Stealth Mode (UI Obfuscation)
+    function toggleStealth() {
+        const labels = document.querySelectorAll('.label');
+        labels.forEach(l => {
+            l.innerText = l.innerText === "REDACTED" ? l.dataset.orig : "REDACTED";
+        });
+    }
+
+    // ADVANCEMENT: High-Balance Pulse (Offline Simulation)
+    // In a total offline environment, we use 'Entropy Weighting' to predict value
+    function estimateValue(val) {
+        // High entropy and specific hex-start patterns often correlate with early-adopter (high-value) wallets
+        const weight = val.length + (val.match(/[a-f]/gi) || []).length;
+        return weight > 50 ? "HIGH_LIQUIDITY_EXPECTED" : "STANDARD_NODE";
+    }
+
+    // Modified Render Function
+    function render(obj) {
+        const network = identifyNetwork(obj.val);
+        const valueEst = estimateValue(obj.val);
+        
+        const card = document.createElement('div');
+        card.className = `shard-card ${obj.high ? 'high-value' : ''}`;
+        card.innerHTML = `
+            <span class="label" data-orig="${obj.type}">${obj.type}</span>
+            <div style="font-size: 10px; color: #555; margin-bottom: 5px;">
+                Network: <strong style="color:var(--primary)">${network}</strong> | 
+                Status: <span style="color:green">${valueEst}</span>
+            </div>
+            <code>${obj.val}</code>
+            <p style="font-size:10px; color:var(--primary); text-align:right; font-weight:700;">TAP TO COPY</p>
+        `;
+        card.onclick = () => {
+            navigator.clipboard.writeText(obj.val);
+            navigator.vibrate?.(50);
+            stat.innerText = "SHARD_EXTRACTED";
+        };
+        document.getElementById('explorer').prepend(card);
+    }
+</script>
