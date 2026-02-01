@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>NEMESIS // COMMAND</title>
+    <style>
+        :root { --accent: #00f3ff; --bg: #050505; --card: #111; --text: #eee; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { background: var(--bg); color: var(--text); font-family: 'Courier New', monospace; margin: 0; padding: 15px; }
+
+        /* GATED ACCESS */
+        #gate { position: fixed; inset: 0; background: var(--bg); z-index: 1000; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .key-box { background: #1a1a1a; border: 1px solid var(--accent); color: var(--accent); padding: 20px; font-size: 1.5rem; text-align: center; border-radius: 12px; width: 80%; outline: none; }
+
+        /* BENTO DASHBOARD */
+        #dashboard { display: none; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 10px; }
+        .card { background: var(--card); border: 1px solid #222; border-radius: 16px; padding: 15px; }
+        .full { grid-column: span 2; }
+        .kpi { font-size: 1.5rem; font-weight: bold; color: var(--accent); display: block; }
+        .label { font-size: 0.65rem; color: #666; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* INTERACTIVE CONSOLE */
+        #console { background: #000; color: var(--accent); padding: 10px; height: 150px; overflow-y: auto; font-size: 0.75rem; margin-top: 12px; border-radius: 8px; border: 1px solid #222; }
+        #user-input { background: #111; border: 1px solid #333; color: white; width: 100%; padding: 12px; margin-top: 5px; border-radius: 8px; outline: none; }
+    </style>
+</head>
+<body>
+
+    <div id="gate">
+        <div style="letter-spacing: 5px; margin-bottom: 20px;">NEMESIS // AUTH</div>
+        <input type="password" id="id-key" class="key-box" placeholder="KEY" inputmode="numeric">
+    </div>
+
+    <div id="dashboard">
+        <div class="card"><span class="kpi" id="count-targets">142</span><span class="label">Targets Scouted</span></div>
+        <div class="card"><span class="kpi" id="count-exfil">89%</span><span class="label">Sync Rate</span></div>
+        
+        <div class="card full" id="data-feed">
+            <span class="label">Latest Verified Dossier</span>
+            <div id="result-display" style="margin-top:10px; font-size: 0.85rem; color: #00ff41;">
+                [STATUS] Waiting for Auth...
+            </div>
+        </div>
+
+        <div class="card full">
+            <span class="label">Autonomous Console</span>
+            <div id="console">> System standby...</div>
+            <input type="text" id="user-input" placeholder="Enter Directive (e.g. /scout /filter)">
+        </div>
+    </div>
+
+    <script>
+        const MASTER = "7542017646";
+        const gate = document.getElementById('gate');
+        const dash = document.getElementById('dashboard');
+        const consoleLog = document.getElementById('console');
+        const userInput = document.getElementById('user-input');
+
+        document.getElementById('id-key').addEventListener('input', (e) => {
+            if (e.target.value === MASTER) {
+                gate.style.display = 'none';
+                dash.style.display = 'grid';
+                log("> Access Granted. Welcome, Nemesis.");
+            }
+        });
+
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                const cmd = userInput.value;
+                log(`<span style="color:white">> USER: ${cmd}</span>`);
+                processCommand(cmd);
+                userInput.value = '';
+            }
+        });
+
+        function log(msg) {
+            consoleLog.innerHTML += `<div>${msg}</div>`;
+            consoleLog.scrollTop = consoleLog.scrollHeight;
+        }
+
+        function processCommand(cmd) {
+            // This is where the AI responds to your text
+            setTimeout(() => {
+                if(cmd.includes('/scout')) log("> Scout Protocol: Focusing on USA West Coast Banks.");
+                else if(cmd.includes('/results')) log("> Fetching most recent 5 high-value Dossiers...");
+                else log("> Directive processed. Evolving script parameters.");
+            }, 800);
+        }
+    </script>
+</body>
+</html>
