@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>NEMESIS // UNBOUND</title>
+    
+    <link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css">
+    <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
+
+    <style>
+        :root { --neon: #00f3ff; --bg: #000; --card: #111; }
+        body { background: var(--bg); color: #fff; font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 15px; display: flex; flex-direction: column; height: 100vh; }
+        
+        /* SECURE GATE */
+        #gate { position: fixed; inset: 0; background: #000; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: 0.5s; }
+        .input-key { background: #111; border: 1px solid var(--neon); color: var(--neon); padding: 20px; font-size: 1.5rem; text-align: center; border-radius: 12px; width: 80%; outline: none; }
+
+        /* DASHBOARD */
+        .header { display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--neon); margin-bottom: 15px; text-transform: uppercase; }
+        .bento { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; flex-grow: 1; overflow-y: auto; }
+        .card { background: var(--card); border: 1px solid #222; border-radius: 20px; padding: 15px; }
+        .full { grid-column: span 2; }
+        .data-val { display: block; font-size: 1.8rem; font-weight: 700; color: var(--neon); }
+        .label { font-size: 0.6rem; color: #555; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* DATA TABLE */
+        .res-row { border-bottom: 1px solid #222; padding: 10px 0; font-size: 0.8rem; }
+        .res-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-top: 5px; }
+        .val { color: var(--neon); }
+    </style>
+</head>
+<body>
+
+    <div id="gate">
+        <div style="margin-bottom:20px; letter-spacing:10px;">NEMESIS</div>
+        <input type="password" id="id-entry" class="input-key" placeholder="••••••••" inputmode="numeric">
+    </div>
+
+    <div class="header">
+        <div id="status">● EVOLVING</div>
+        <div id="presence">PRESENCE: 0.00%</div>
+    </div>
+
+    <div class="bento">
+        <div class="card"><span class="label">Dossiers Found</span><span class="data-val" id="count-t">0</span></div>
+        <div class="card"><span class="label">Sync Accuracy</span><span class="data-val">99.9%</span></div>
+        
+        <div class="card full">
+            <span class="label">Verified Private Data Stream</span>
+            <div id="data-output" style="margin-top:10px;">
+                <div style="color:#444; text-align:center; padding:20px;">Computing verified nodes...</div>
+            </div>
+        </div>
+    </div>
+
+    <script type="py">
+        import random
+        import js
+        from datetime import datetime
+
+        # This logic runs autonomously in the browser
+        async def autonomous_evolution():
+            count = 0
+            while True:
+                # 1. Simulate finding verified target data
+                count += 1
+                name = random.choice(["Robert J.", "Mary L.", "William K.", "Patricia M."])
+                ssn = f"{random.randint(100,999)}-{random.randint(10,99)}-{random.randint(1000,9999)}"
+                bank = random.choice(["Chase Prime", "BOA Wealth", "Citi Executive"])
+                
+                # 2. Update UI directly from Python
+                js.document.getElementById("count-t").innerText = str(count)
+                
+                # Create the Data Card
+                new_data = f"""
+                <div class="res-row">
+                    <strong>{name}</strong>
+                    <div class="res-grid">
+                        <div><span class="label">SSN:</span> <span class="val">{ssn}</span></div>
+                        <div><span class="label">Bank:</span> <span class="val">{bank}</span></div>
+                    </div>
+                </div>
+                """
+                
+                output = js.document.getElementById("data-output")
+                if count == 1: output.innerHTML = ""
+                output.innerHTML = new_data + output.innerHTML
+                
+                # 3. Evolution Delay
+                import asyncio
+                await asyncio.sleep(random.uniform(5, 12))
+
+        # Start the loop
+        import asyncio
+        asyncio.ensure_future(autonomous_evolution())
+    </script>
+
+    <script>
+        const KEY = "7542017646";
+        const input = document.getElementById('id-entry');
+        const gate = document.getElementById('gate');
+
+        input.addEventListener('input', (e) => {
+            if (e.target.value === KEY) {
+                gate.style.opacity = '0';
+                setTimeout(() => gate.style.display = 'none', 500);
+            }
+        });
+    </script>
+</body>
+</html>
