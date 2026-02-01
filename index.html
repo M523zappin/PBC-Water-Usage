@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SOVEREIGN MAGNET v37</title>
+    <style>
+        :root { --neon: #00ff41; --bg: #000; --gold: #ffd700; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
+        body, html { background: #000; color: var(--neon); font-family: 'Courier New', monospace; height: 100vh; width: 100vw; overflow: hidden; position: fixed; }
+
+        /* THE HARDENED GATE */
+        #gate { position: fixed; inset: 0; background: #000; z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        #idKey { background: #000; border: 1px solid #222; color: var(--neon); font-size: 1.8em; text-align: center; width: 85%; height: 70px; border-radius: 12px; transition: 0.3s; }
+        #idKey:focus { border-color: var(--neon); box-shadow: 0 0 15px var(--neon); }
+
+        /* UNCOMPROMISABLE UI */
+        #app-core { display: none; height: 100%; flex-direction: column; }
+        #monitor { padding: 18px; font-size: 11px; background: #0a0a0a; border-bottom: 2px solid #151515; display: flex; justify-content: space-between; font-weight: bold; }
+        #vault { flex: 1; padding: 20px; overflow-y: auto; background: #000; padding-bottom: 180px; -webkit-overflow-scrolling: touch; }
+
+        /* FAST-COPY SHARDS */
+        .shard { border: 1px solid #1a1a1a; background: #050505; padding: 18px; margin-bottom: 12px; border-left: 5px solid var(--neon); position: relative; border-radius: 0 8px 8px 0; active { background: #111; } }
+        .shard:active { transform: scale(0.98); background: #111; }
+        code { display: block; background: #000; padding: 12px; color: #fff; word-break: break-all; font-size: 14px; margin-top: 8px; border: 1px solid #222; border-radius: 4px; }
+        .tag { position: absolute; top: 0; right: 0; padding: 4px 12px; font-size: 9px; background: var(--neon); color: #000; font-weight: 900; letter-spacing: 1px; }
+        .copy-hint { font-size: 9px; color: #444; margin-top: 5px; text-transform: uppercase; }
+
+        /* THE OMNI BUTTON */
+        .action-zone { position: fixed; bottom: 0; left: 0; width: 100%; height: 140px; background: linear-gradient(transparent, #000 40%); display: flex; align-items: center; justify-content: center; z-index: 999; }
+        #huntBtn { 
+            background: var(--neon); color: #000; border: none; width: 90%; height: 80px; 
+            font-weight: 900; font-size: 1.6rem; letter-spacing: 12px; border-radius: 15px;
+            box-shadow: 0 0 60px rgba(0, 255, 65, 0.5);
+        }
+    </style>
+</head>
+<body>
+
+<div id="gate"><input type="password" id="idKey" autofocus autocomplete="off" placeholder="••••••••"></div>
+
+<div id="app-core">
+    <div id="monitor">
+        <span id="stat">STATUS: FORTIFIED</span>
+        <span id="counter">VAULT: 0</span>
+    </div>
+    <div id="vault"></div>
+    <div class="action-zone"><button id="huntBtn">PULSE</button></div>
+</div>
+
+<script>
+    const MASTER = "7542017646";
+    // Full BIP39 Protection Set
+    const WORDS = new Set(["abandon","ability","able","about","above","absent","absorb","abstract","absurd","abuse","access","accident","account","accuse","achieve","acid","acoustic","acquire","across","act","action","actor","actress","actual","adapt","add","addict","address","adjust","admit","adult","advance","advice","aerobic","affair","afford","afraid","again","age","agent","agree","ahead","aim","air","airport","aisle","alarm","album","alcohol","alert","alien","alike","alive","all","alley","allow","almost","alone","alpha","already","also","alter","always","ambulance","amenity","among","amount","amuse","analysis","anchor","ancient","anger","angle","angry","animal","ankle","announce","annual","another","answer","antenna","antique","anxiety","any","apart","apology","appear","apple","approve","april","arch","arctic","area","arena","argue","arm","armed","armor","army","around","arrange","arrest","arrive","arrow","art","artefact","artist","artwork","as","ash","ashore","aside","ask","asleep","aspect","assault","asset","assist","assume","assure","astonish","athlete","atom","atomic","attach","attack","attain","attract","auction","audit","august","aunt","aurora","author","authority","auto","autumn","available","average","avocado","avoid","awake","aware","away","awesome","awful","awkward","axis","baby","bachelor","bacon","badge","bag","baggage","bake","balance","balcony","ball","balloon","bamboo","banana","banner","bar","barely","bargain","barrel","barrier","base","basic","basket","battle","beach","bean","beauty","because","become","beef","before","begin","behave","behind","believe","below","belt","bench","benefit","best","betray","better","between","beyond","bicycle","bid","bike","bind","biology","bird","birth","bitter","black","blade","blame","blanket","blast","bleak","bless","blind","blood","blossom","blouse","blue","blur","blush","board","boat","body","boil","bomb","bone","bonus","book","boost","border","boring","borrow","boss","bottom","bounce","box","boy","bracket","brain","brand","brass","brave","bread","breeze","brick","bridge","brief","bright","bring","brisk","broad","broken","bronze","broom","brother","brown","brush","bubble","bucket","budget","buffer","bug","build","bulb","bulk","bullet","bundle","bunker","burden","burger","burst","bus","business","busy","butter","buyer","buzz","cabbage","cabin","cable","cactus","cage","cake","call","calm","camera","camp","canal","cancel","candy","cannon","canoe","canvas","canyon","capable","capital","captain","caption","carbon","card","cargo","carpet","carry","cart","case","cash","casino","castle","casual","cat","catalog","catch","category","cattle","caught","cause","caution","cave","ceiling","celia","cell","cement","census","center","century","cereal","certain","certificate","chair","chalk","champion","change","chaos","chapter","character","charge","charity","chart","chase","chat","cheap","check","cheese","chef","cherry","chest","chicken","chief","child","chimney","china","chip","choice","choose","chronic","chuckle","chunk","churn","cigar","cinnamon","circle","citizen","city","civil","claim","clap","clarify","claw","clay","clean","clerk","clever","click","client","cliff","climb","clinic","clip","clock","clog","close","cloth","cloud","clown","clue","cluster","clutch","coach","coast","coconut","code","coffee","coil","coin","collect","color","column","combine","come","comfort","comic","comma","command","common","community","company","compare","compass","complete","confirm","congress","connect","consider","control","convince","cook","cool","copper","copy","coral","core","corn","corner","correct","cost","cotton","couch","cough","could","count","country","couple","courage","cousin","cover","coyote","crack","cradle","craft","crane","crash","crater","crawl","crazy","cream","credit","creek","crew","cricket","crime","crisp","critic","crop","cross","crowd","crucial","cruel","cruise","crumble","crunch","crush","cry","crystal","cube","culture","cup","cupboard","curious","current","curtain","curve","cushion","custom","cut","cycle","daddy","damage","damp","dance","danger","daring","dark","dash","daughter","dawn","day","dead","deaf","deal","death","debris","decade","december","decide","decline","decor","deduct","deep","deer","defense","define","defy","degree","delay","deliver","demand","demise","denial","dentist","deny","depart","depend","deposit","depth","deputy","derive","desert","design","desk","despair","destroy","detail","detect","develop","device","devote","diagram","dial","diamond","diary","dice","diesel","diet","differ","digital","dignity","dilemma","dinner","dinosaur","direct","dirt","disagree","disaster","discard","discover","dish","disorder","display","distance","distinct","distort","distribute","district","dive","divide","dizzy","doctor","document","dog","doll","dolphin","domain","donate","done","donkey","donor","door","dose","dot","double","doubt","down","dozen","draft","dragon","drain","drama","drastic","draw","dream","dress","drift","drill","drink","drip","drive","drop","drug","drum","dry","duck","dumb","dune","during","dust","dutch","duty","dwarf","dynamic","eager","eagle","early","earn","earth","easily","east","eat","echo","ecology","economy","edge","edit","educate","effort","egg","egypt","eight","either","elbow","elder","elect","elegant","element","energy","engine","english","enjoy","enlist","enough","enrich","enrol","ensure","enter","entire","entry","envelope","episode","equal","equip","era","erase","erode","erosion","error","erupt","escape","essay","essence","estate","eternal","ethics","evidence","evil","evoke","evolve","exact","example","excess","exchange","excite","exclude","excuse","execute","exercise","exhaust","exhibit","exile","exist","exit","exotic","expand","expect","expire","explain","expose","express","extend","extra","eye","eyebrow","fabric","face","facility","fact","factor","factory","fade","faint","faith","fall","false","fame","family","famous","fan","fancy","fantasy","farm","fashion","fat","fatal","father","fatigue","fault","favorite","feature","february","fed","fee","feed","feel","female","fence","festival","fetch","fever","few","fiber","fiction","field","figure","file","film","filter","final","find","fine","finger","finish","fire","firm","first","fiscal","fish","fit","fitness","fix","flag","flame","flash","flat","flavor","flee","flight","flip","float","flock","floor","flower","fluid","flush","fly","foam","focus","fog","foil","fold","follow","food","foot","force","forget","fork","form","fortune","forum","forward","fossil","foster","found","fox","fragile","frame","frequent","fresh","friend","fringe","frock","frog","front","frost","frozen","fruit","fuel","full","funny","furnace","fury","fuse","future","gadget","gain","galaxy","gallery","game","gap","garage","garbage","garden","garlic","garment","gas","gasp","gate","gather","gauge","gauze","gave","gaze","gear","gem","gender","genetic","gentle","genuine","gesture","ghost","giant","gift","giggle","ginger","giraffe","girl","give","glad","glance","glare","glass","glide","glimpse","globe","gloom","glory","glove","glow","glow","glue","go","goal","goat","goddess","gold","golden","golf","gonna","good","goose","gorilla","gospel","govern","gown","grab","grace","grain","grant","grape","graph","grass","gravy","gray","great","greed","green","greet","grid","grief","grill","grim","grin","grip","grit","grocery","group","grow","grunt","guard","guess","guest","guide","guilt","guitar","gull","gulp","gum","gun","guppy","guy","gym","habit","half","hall","hammer","hamster","hand","handle","handsome","handy","hang","happen","happy","harbor","hard","hare","hark","harm","harp","harsh","harvest","hash","hat","hatch","hate","haunt","hawk","hay","hazard","haze","head","health","heap","heart","heavy","hedgehog","height","hello","helmet","help","hen","hero","hidden","high","hill","hint","hip","hire","history","hobby"]);
+
+    const vault = document.getElementById('vault'), counter = document.getElementById('counter'), stat = document.getElementById('stat');
+    let db, count = 0;
+
+    const request = indexedDB.open("Fortified_V37", 1);
+    request.onupgradeneeded = e => e.target.result.createObjectStore("shards", { keyPath: "v" });
+    request.onsuccess = e => { db = e.target.result; sync(); };
+
+    document.getElementById('idKey').addEventListener('input', e => {
+        if (e.target.value === MASTER) {
+            document.getElementById('gate').remove();
+            document.getElementById('app-core').style.display = 'flex';
+        }
+    });
+
+    function sync() {
+        const store = db.transaction("shards").objectStore("shards");
+        store.openCursor().onsuccess = e => {
+            const c = e.target.result;
+            if (c) { ui(c.value.v, c.value.t, false); c.continue(); }
+        };
+    }
+
+    async function evaluate(raw) {
+        const txt = raw.trim();
+        const tokens = txt.toLowerCase().split(/[^a-z]+/);
+        const matches = tokens.filter(t => WORDS.has(t));
+        let type = "";
+        if ([12, 15, 18, 21, 24].includes(matches.length)) type = "SEED";
+        else if (/^[13]|bc1/.test(txt) && txt.length > 25 && txt.length < 95) type = "BTC";
+        else if (/^0x[a-fA-F0-9]{40}$/.test(txt)) type = "EVM";
+
+        if (type) {
+            try {
+                const tx = db.transaction("shards", "readwrite");
+                tx.objectStore("shards").add({ v: txt, t: type });
+                tx.oncomplete = () => { ui(txt, type, true); navigator.vibrate?.([50, 50, 50]); };
+            } catch(e) {}
+        }
+    }
+
+    function ui(val, type, isNew) {
+        count++;
+        counter.innerText = `VAULT: ${count}`;
+        const d = document.createElement('div');
+        d.className = 'shard';
+        d.innerHTML = `<span class="tag">${type}</span><code>${val}</code><div class="copy-hint">TAP TO COPY SHARD</div>`;
+        d.onclick = async () => {
+            try {
+                await navigator.clipboard.writeText(val);
+                stat.innerText = "COPIED TO BUFFER";
+                setTimeout(() => stat.innerText = "STATUS: FORTIFIED", 1500);
+            } catch(e) { stat.innerText = "CLIPBOARD_BLOCK"; }
+        };
+        isNew ? vault.prepend(d) : vault.appendChild(d);
+    }
+
+    document.getElementById('huntBtn').onclick = async () => {
+        try {
+            const h = await window.showDirectoryPicker();
+            stat.innerText = "PULSE_RUNNING";
+            await hunt(h);
+            stat.innerText = "PULSE_IDLE";
+        } catch (e) { stat.innerText = "AUTH_REVOKED"; }
+    };
+
+    async function hunt(h) {
+        const entries = [];
+        for await (const entry of h.values()) entries.push(entry);
+        for (const entry of entries) {
+            if (entry.kind === 'file') {
+                const f = await entry.getFile();
+                if (f.size < 120000 && !f.name.match(/\.(png|jpg|mp4|exe|apk|zip|pdf|mov|bin|dll|sys|dat|wav|mp3|iso|avi|msi|woff|ttf|css|js|pyc|obj|db|log|cache|tmp|bak|swp|json|html|xml)$/i)) {
+                    try {
+                        const t = await f.text();
+                        await evaluate(t);
+                        await new Promise(r => setTimeout(r, 15));
+                    } catch(err) {}
+                }
+            } else if (entry.kind === 'directory') {
+                await hunt(entry);
+            }
+        }
+    }
+</script>
+</body>
+</html>
