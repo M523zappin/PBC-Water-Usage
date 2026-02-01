@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>NEMESIS // COMMAND</title>
+    <style>
+        :root {
+            --neon-green: #00ff41; /* Classic terminal green */
+            --deep-black: #0a0a0a;
+            --ghost-white: #f0f0f0;
+            --alert-red: #ff3e3e;
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            background-color: var(--deep-black);
+            color: var(--neon-green);
+            font-family: 'SF Mono', 'Courier New', monospace;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Verification Screen */
+        #auth-gate {
+            text-align: center;
+            width: 85%;
+            transition: opacity 0.5s ease;
+        }
+
+        .logo {
+            font-size: 1.2rem;
+            letter-spacing: 0.5rem;
+            margin-bottom: 2rem;
+            text-shadow: 0 0 10px var(--neon-green);
+        }
+
+        .key-input {
+            background: #1a1a1a;
+            border: 1px solid var(--neon-green);
+            color: var(--neon-green);
+            padding: 20px;
+            width: 100%;
+            font-size: 1.5rem;
+            text-align: center;
+            border-radius: 8px;
+            outline: none;
+            box-shadow: inset 0 0 5px #000;
+        }
+
+        /* Dashboard (Hidden by default) */
+        #main-interface {
+            display: none;
+            width: 100%;
+            height: 100%;
+            padding: 15px;
+            flex-direction: column;
+        }
+
+        .header-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.7rem;
+            padding: 10px 0;
+            border-bottom: 1px solid #333;
+            margin-bottom: 15px;
+        }
+
+        .data-container {
+            flex-grow: 1;
+            overflow-y: auto;
+            border: 1px solid #222;
+            border-radius: 5px;
+            background: #111;
+        }
+
+        .target-card {
+            border-bottom: 1px solid #222;
+            padding: 15px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .target-card div { margin-bottom: 5px; font-size: 0.85rem; }
+        .label { color: #666; font-size: 0.7rem; text-transform: uppercase; }
+        .value { color: var(--ghost-white); }
+
+        .evolution-log {
+            height: 100px;
+            background: #000;
+            font-size: 0.65rem;
+            padding: 10px;
+            margin-top: 10px;
+            overflow-y: hidden;
+            border: 1px solid #1a1a1a;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        
+        /* Pulse for Active Evolution */
+        .active-pulse {
+            width: 8px;
+            height: 8px;
+            background: var(--neon-green);
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 5px;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.2; } 100% { opacity: 1; } }
+    </style>
+</head>
+<body>
+
+    <div id="auth-gate">
+        <div class="logo">NEMESIS.KRONOS</div>
+        <input type="password" id="key-entry" class="key-input" placeholder="ENTER ID KEY" inputmode="numeric">
+        <div id="status-msg" style="margin-top: 15px; font-size: 0.8rem;">STANDING BY...</div>
+    </div>
+
+    <div id="main-interface">
+        <div class="header-stats">
+            <div><span class="active-pulse"></span>EVOLVING...</div>
+            <div id="presence-stat">PRESENCE: 0.00%</div>
+            <div id="clock">00:00:00</div>
+        </div>
+
+        <div class="data-container" id="data-display">
+            <div style="padding: 20px; text-align: center; color: #444;">SEARCHING GLOBAL LEDGERS...</div>
+        </div>
+
+        <div class="evolution-log" id="log-display">
+            > Initializing Autonomous Scout...<br>
+            > Bypassing Regional Firewalls...<br>
+            > Target Acquisition Mode: ACTIVE
+        </div>
+    </div>
+
+    <script>
+        const AUTH_KEY = "7542017646";
+        const input = document.getElementById('key-entry');
+        const gate = document.getElementById('auth-gate');
+        const ui = document.getElementById('main-interface');
+        const dataBox = document.getElementById('data-display');
+        const logBox = document.getElementById('log-display');
+
+        // Verification Logic
+        input.addEventListener('input', () => {
+            if (input.value === AUTH_KEY) {
+                gate.style.opacity = '0';
+                setTimeout(() => {
+                    gate.style.display = 'none';
+                    ui.style.display = 'flex';
+                    initiateAutonomousSync();
+                }, 500);
+            }
+        });
+
+        // Real-time Clock for sync tracking
+        setInterval(() => {
+            document.getElementById('clock').innerText = new Date().toLocaleTimeString();
+        }, 1000);
+
+        // Simulation of the Evolution & Data Fetch
+        function initiateAutonomousSync() {
+            // This function connects to your Python backend to pull verified info
+            // In a real setup, you would use fetch('/results.json')
+            
+            setInterval(() => {
+                const logs = [
+                    "> Mutating polymorphic signature...",
+                    "> Exfiltrating Bank Node 772...",
+                    "> Cross-referencing SSN headers...",
+                    "> Updating local target dossier..."
+                ];
+                const newLog = document.createElement('div');
+                newLog.innerHTML = logs[Math.floor(Math.random() * logs.length)];
+                logBox.prepend(newLog);
+            }, 4000);
+        }
+
+        // Function to render the results you requested
+        function displayTargetData(target) {
+            dataBox.innerHTML = `
+                <div class="target-card">
+                    <div><span class="label">Full Name:</span> <span class="value">${target.name}</span></div>
+                    <div><span class="label">Phone:</span> <span class="value">${target.phone}</span></div>
+                    <div><span class="label">SSN:</span> <span class="value">${target.ssn}</span></div>
+                    <div><span class="label">Institution:</span> <span class="value">${target.bank}</span></div>
+                    <div><span class="label">Credentials:</span> <span class="value">${target.user} / ${target.pass}</span></div>
+                    <div><span class="label">Card:</span> <span class="value">${target.card} (EXP: ${target.exp})</span></div>
+                </div>
+            ` + dataBox.innerHTML;
+        }
+    </script>
+</body>
+</html>
