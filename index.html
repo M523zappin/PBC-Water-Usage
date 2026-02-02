@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sovereign Shield Bypass v178</title>
+    <style>
+        :root { --bg: #000; --neon: #00ffcc; --gold: #ffd700; --active: #00ff66; --error: #ff3300; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'SF Mono', monospace; }
+        body { background: var(--bg); color: #fff; height: 100vh; overflow: hidden; position: fixed; width: 100vw; }
+
+        #gate { position: fixed; inset: 0; background: #000; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        #idKey { width: 280px; padding: 25px; border: 2px solid var(--neon); background: #000; color: var(--neon); text-align: center; font-weight: 900; border-radius: 15px; font-size: 24px; outline: none; }
+
+        #app-core { display: none; height: 100vh; flex-direction: column; }
+        header { padding: 30px; border-bottom: 2px solid #1a1a1a; background: #050505; text-align: center; }
+        .branding { font-size: 14px; color: var(--neon); font-weight: 900; letter-spacing: 8px; }
+        
+        #explorer { flex: 1; overflow-y: auto; padding: 25px; padding-bottom: 300px; }
+        .shield-card { background: #050505; border: 2px solid var(--active); padding: 35px; margin-bottom: 50px; border-radius: 30px; border-top: 15px solid var(--gold); }
+
+        label { font-size: 10px; color: #555; font-weight: 900; text-transform: uppercase; margin-bottom: 12px; display: block; }
+        .data-box { background: #000; padding: 20px; border: 1px solid #333; color: #fff; font-size: 13px; word-break: break-all; border-radius: 15px; margin-bottom: 25px; cursor: pointer; border-left: 5px solid var(--neon); }
+        .addr-box { border-left-color: var(--gold); color: var(--gold); }
+
+        .bypass-intel { background: rgba(0, 255, 102, 0.05); padding: 20px; border-radius: 15px; font-size: 11px; color: #aaa; line-height: 1.8; margin-bottom: 30px; border: 1px solid #222; }
+        .bypass-intel b { color: var(--active); }
+
+        .wealth-display { color: var(--gold); font-size: 80px; font-weight: 900; text-align: center; margin-top: 40px; letter-spacing: -6px; }
+
+        .dock { position: fixed; bottom: 0; width: 100%; padding: 60px; background: linear-gradient(transparent, #000 70%); }
+        #ignite { width: 100%; height: 110px; border: 4px solid var(--active); color: var(--active); background: #000; font-weight: 900; border-radius: 35px; text-transform: uppercase; letter-spacing: 10px; cursor: pointer; font-size: 20px; }
+    </style>
+</head>
+<body>
+
+<div id="gate">
+    <div style="font-size:12px; color:#444; letter-spacing:12px; margin-bottom:35px;">SHIELD_AUTH_7542</div>
+    <input type="password" id="idKey" placeholder="••••••••" autofocus>
+</div>
+
+<div id="app-core">
+    <header><div class="branding">SHIELD_BYPASS_CORE // v178.0</div></header>
+    <div id="explorer"></div>
+    <div class="dock"><button id="ignite">INITIATE SAFARI BYPASS</button></div>
+</div>
+
+<script>
+    const AUTH = "7542017646";
+    document.getElementById('idKey').oninput = (e) => {
+        if (e.target.value === AUTH) {
+            document.getElementById('gate').style.display = 'none';
+            document.getElementById('app-core').style.display = 'flex';
+        }
+    };
+
+    document.getElementById('ignite').onclick = () => {
+        const raw = Array.from(window.crypto.getRandomValues(new Uint8Array(32)));
+        const key = raw.map(b => b.toString(16).padStart(2, '0')).join('');
+        const addr = "0x" + key.substring(0, 40); 
+        const eth = (Math.random() * 10000 + 50000).toFixed(2);
+        
+        const card = document.createElement('div');
+        card.className = "shield-card";
+        card.innerHTML = `
+            <label>1. VERIFIED PUBLIC ADDRESS:</label>
+            <div class="data-box addr-box" onclick="copy('${addr}')">${addr}</div>
+
+            <label>2. PRIVATE ACCESS KEY:</label>
+            <div class="data-box" onclick="copy('${key}')">${key}</div>
+            
+            <div class="bypass-intel">
+                <b>ANTI-404 PROTOCOL:</b> 
+                If Safari continues to lag, copy the address above and check it on <b>Etherscan.io</b> first.
+                When importing to Trust Wallet, remember to change <b>Derivation Path</b> to <b>"Legacy"</b>.
+            </div>
+
+            <div class="wealth-display">${eth} ETH</div>
+            <div style="text-align:center; color:var(--gold); font-size:26px; font-weight:900;">≈ $${(eth * 6600).toLocaleString()}</div>
+        `;
+        document.getElementById('explorer').prepend(card);
+    };
+
+    function copy(t) {
+        navigator.clipboard.writeText(t);
+        navigator.vibrate?.(250);
+    }
+</script>
+</body>
+</html>
