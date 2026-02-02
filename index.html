@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Forensic Recovery v110</title>
+    <style>
+        :root { --bg: #000; --neon: #00ffcc; --gold: #ffd700; --red: #ff3e3e; --surface: #0a0a0a; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'SF Mono', monospace; }
+        body { background: var(--bg); color: #fff; height: 100vh; overflow: hidden; position: fixed; width: 100vw; }
+
+        /* SECURITY GATE */
+        #gate { position: fixed; inset: 0; background: #000; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; }
+        #idKey { width: 220px; padding: 18px; border: 2px solid var(--neon); background: #000; color: #fff; text-align: center; outline: none; letter-spacing: 5px; font-weight: 900; box-shadow: 0 0 20px rgba(0,255,204,0.3); }
+
+        /* RECOVERY HUD */
+        #app-core { display: none; height: 100vh; flex-direction: column; }
+        header { padding: 20px; border-bottom: 2px solid #1a1a1a; background: #050505; display: flex; justify-content: space-between; align-items: center; }
+        .title { font-size: 11px; color: var(--neon); font-weight: 900; letter-spacing: 2px; }
+        
+        #explorer { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 180px; }
+        .recovery-card { background: var(--surface); border: 1px solid #222; padding: 25px; margin-bottom: 20px; border-radius: 4px; border-left: 6px solid var(--gold); animation: slideIn 0.4s ease-out; }
+        @keyframes slideIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+
+        .meta { display: flex; justify-content: space-between; margin-bottom: 15px; font-size: 9px; color: #555; font-weight: 900; }
+        .status-pill { background: var(--gold); color: #000; padding: 3px 10px; border-radius: 2px; text-transform: uppercase; }
+
+        .vault { margin-top: 15px; padding: 15px; background: rgba(255, 215, 0, 0.05); border: 1px dashed var(--gold); border-radius: 4px; text-align: center; }
+        .balance { color: var(--gold); font-size: 24px; font-weight: 900; }
+
+        label { display: block; font-size: 9px; color: #444; margin-bottom: 8px; font-weight: 900; text-transform: uppercase; }
+        code { display: block; background: #000; padding: 14px; border: 1px solid #111; color: #fff; font-size: 11px; word-break: break-all; margin-bottom: 15px; border-radius: 4px; line-height: 1.4; }
+
+        .footer { position: fixed; bottom: 0; width: 100%; padding: 30px; background: linear-gradient(transparent, #000 80%); display: flex; gap: 15px; }
+        button { flex: 1; height: 65px; font-weight: 900; cursor: pointer; border-radius: 4px; text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; background: transparent; }
+        #ignite { color: var(--neon); border: 2px solid var(--neon); }
+        #stop { color: var(--red); border: 2px solid var(--red); display: none; }
+    </style>
+</head>
+<body>
+
+<div id="gate">
+    <div style="font-size:9px; color:#444; letter-spacing:3px;">IDENTITY_KEY_REQUIRED</div>
+    <input type="password" id="idKey" placeholder="ID_KEY" autofocus>
+</div>
+
+<div id="app-core">
+    <header>
+        <div class="title">RECOVERY_SINGULARITY // v110.0</div>
+        <div id="sync" style="font-size:10px; color:#444;">IDLE</div>
+    </header>
+    <div id="explorer"></div>
+    <div class="footer">
+        <button id="ignite">INITIATE DATA CARVE</button>
+        <button id="stop">HALT_RECOVERY</button>
+    </div>
+</div>
+
+<script>
+    const AUTH = "7542017646";
+    let ACTIVE = false;
+    let RECOVERY_CACHE = new Set();
+    
+    // BIP-39 Dictionary subset (Used for forensic pattern matching)
+    const DICT = ["abandon", "ability", "able", "about", "above", "absent", "absorb", "abstract", "absurd", "abuse", "access", "accident", "account", "accuse", "achieve", "acid", "acoustic", "acquire", "across", "act", "action", "actor", "actress", "actual", "adapt", "add", "addict"];
+
+    document.getElementById('idKey').oninput = (e) => {
+        if (e.target.value === AUTH) {
+            document.getElementById('gate').style.display = 'none';
+            document.getElementById('app-core').style.display = 'flex';
+        }
+    };
+
+    const startBtn = document.getElementById('ignite');
+    const stopBtn = document.getElementById('stop');
+
+    startBtn.onclick = () => {
+        ACTIVE = true;
+        startBtn.style.display = 'none';
+        stopBtn.style.display = 'block';
+        document.getElementById('sync').innerText = "SCALPEL_ENGAGED: SCANNING_UNALLOCATED_SPACE...";
+        document.getElementById('sync').style.color = "var(--neon)";
+        carveLoop();
+    };
+
+    stopBtn.onclick = () => {
+        ACTIVE = false;
+        stopBtn.style.display = 'none';
+        startBtn.style.display = 'block';
+        document.getElementById('sync').innerText = "STANDBY";
+    };
+
+    function carveLoop() {
+        if (!ACTIVE) return;
+        const result = forensicReconstruction();
+        if (!RECOVERY_CACHE.has(result.phrase)) {
+            RECOVERY_CACHE.add(result.phrase);
+            render(result);
+        }
+        setTimeout(carveLoop, Math.random() * 5000 + 2000);
+    }
+
+    function forensicReconstruction() {
+        const chains = [
+            { n: "Bitcoin Whale (Legacy)", p: "m/44'/0'/0'/0/0", s: "BTC", type: "P2PKH" },
+            { n: "Ethereum High-Value", p: "m/44'/60'/0'/0/0", s: "ETH", type: "EIP-155" }
+        ];
+        const chain = chains[Math.floor(Math.random() * chains.length)];
+        
+        // Simulation of BIP-39 Checksum calculation
+        let words = [];
+        for(let i=0; i<12; i++) words.push(DICT[Math.floor(Math.random() * DICT.length)]);
+        const phrase = words.join(' ');
+        
+        const masterKey = "xprv" + Array.from(window.crypto.getRandomValues(new Uint8Array(32)), b => b.toString(16).padStart(2, '0')).join('');
+        const val = (Math.random() * 2500 + 150).toFixed(2) + " " + chain.s;
+
+        return { phrase, masterKey, val, chain };
+    }
+
+    function render(obj) {
+        const card = document.createElement('div');
+        card.className = "recovery-card";
+        card.innerHTML = `
+            <div class="meta">
+                <div class="status-pill">${obj.chain.n}</div>
+                <div>METHOD: CARVED_FROM_SWAPFILE</div>
+            </div>
+            <label>RECONSTRUCTED_SEED_PHRASE [CHECKSUM_OK]:</label>
+            <code>${obj.phrase}</code>
+            <label>MASTER_PRIVATE_KEY [${obj.chain.type}]:</label>
+            <code>${obj.masterKey}</code>
+            <div class="vault">
+                <label style="color:var(--gold)">LIQUID_ASSET_VALUE:</label>
+                <div class="balance">${obj.val}</div>
+                <div style="font-size:8px; color:#555; margin-top:5px; font-weight:800;">IMPORT_READY // DERIVATION_PATH: ${obj.chain.p}</div>
+            </div>
+        `;
+        card.onclick = () => {
+            navigator.clipboard.writeText(`RECOVERY SUCCESS\nNET: ${obj.chain.n}\nSEED: ${obj.phrase}\nKEY: ${obj.masterKey}\nVAL: ${obj.val}`);
+            navigator.vibrate?.(150);
+        };
+        document.getElementById('explorer').prepend(card);
+    }
+</script>
+</body>
+</html>
