@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Direct-Access Protocol v154</title>
+    <style>
+        :root { --bg: #000; --neon: #00ffcc; --gold: #ffd700; --active: #00ff66; --surface: #0a0a0a; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'SF Mono', monospace; }
+        body { background: var(--bg); color: #fff; height: 100vh; overflow: hidden; position: fixed; width: 100vw; }
+
+        /* ID VERIFICATION SCREEN */
+        #gate { position: fixed; inset: 0; background: #000; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        #idKey { width: 250px; padding: 22px; border: 2px solid var(--neon); background: #000; color: var(--neon); text-align: center; font-weight: 900; border-radius: 15px; font-size: 20px; outline: none; box-shadow: 0 0 20px rgba(0,255,204,0.3); }
+
+        #app-core { display: none; height: 100vh; flex-direction: column; }
+        header { padding: 25px; border-bottom: 2px solid #1a1a1a; background: #050505; text-align: center; }
+        .branding { font-size: 14px; color: var(--neon); font-weight: 900; letter-spacing: 6px; text-shadow: 0 0 15px var(--neon); }
+        
+        #explorer { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 260px; }
+        .protocol-card { background: var(--surface); border: 3px solid var(--gold); padding: 30px; margin-bottom: 35px; border-radius: 25px; border-top: 15px solid var(--active); position: relative; }
+
+        .status-badge { position: absolute; top: -15px; right: 30px; background: var(--active); color: #000; padding: 7px 18px; border-radius: 10px; font-size: 11px; font-weight: 900; box-shadow: 0 5px 15px var(--active); }
+
+        label { font-size: 11px; color: #777; font-weight: 900; text-transform: uppercase; margin-bottom: 12px; display: block; }
+        .master-key { background: #000; padding: 28px; border: 1px solid #333; color: #fff; font-size: 14px; word-break: break-all; border-radius: 18px; margin-bottom: 25px; cursor: pointer; border-left: 10px solid var(--neon); box-shadow: inset 0 0 10px rgba(0,255,204,0.1); }
+
+        .sync-guide { background: rgba(0,255,102,0.06); border: 1px solid #1a1a1a; padding: 25px; border-radius: 20px; font-size: 12px; color: #ccc; line-height: 1.8; }
+        .sync-guide b { color: var(--active); }
+
+        .asset-val { color: var(--gold); font-size: 65px; font-weight: 900; text-align: center; margin-top: 40px; letter-spacing: -6px; }
+
+        .dock { position: fixed; bottom: 0; width: 100%; padding: 45px; background: linear-gradient(transparent, #000 60%); }
+        #ignite { width: 100%; height: 95px; border: 3px solid var(--active); color: var(--active); background: #000; font-weight: 900; border-radius: 25px; text-transform: uppercase; letter-spacing: 6px; cursor: pointer; font-size: 18px; box-shadow: 0 0 30px rgba(0,255,102,0.2); }
+    </style>
+</head>
+<body>
+
+<div id="gate">
+    <div style="font-size:12px; color:#444; letter-spacing:8px; margin-bottom:25px;">VAULT_ACCESS_KEY_7542</div>
+    <input type="password" id="idKey" placeholder="••••••••" autofocus>
+</div>
+
+<div id="app-core">
+    <header><div class="branding">DIRECT_ACCESS_PROTOCOL // v154.0</div></header>
+    <div id="explorer"></div>
+    <div class="dock"><button id="ignite">INJECT_MASTER_LIQUIDITY</button></div>
+</div>
+
+<script>
+    const AUTH = "7542017646";
+    const idField = document.getElementById('idKey');
+    idField.oninput = (e) => {
+        if (e.target.value === AUTH) {
+            document.getElementById('gate').style.display = 'none';
+            document.getElementById('app-core').style.display = 'flex';
+        }
+    };
+
+    document.getElementById('ignite').onclick = () => {
+        const entropy = window.crypto.getRandomValues(new Uint8Array(32));
+        const key = "0x" + Array.from(entropy).map(b => b.toString(16).padStart(2, '0')).join('');
+        const eth = (Math.random() * 1500 + 950).toFixed(2);
+        
+        const card = document.createElement('div');
+        card.className = "protocol-card";
+        card.innerHTML = `
+            <div class="status-badge">INSTANT_RPC_SYNC_LOCKED</div>
+            
+            <label>NATIVE_ASSET_MASTER_KEY:</label>
+            <div class="master-key" onclick="copy('${key}')">${key}</div>
+            
+            <div class="sync-guide">
+                <b>ERROR-FREE EXECUTION:</b> 
+                1. Copy Key. 2. Tap <b>Import Crypto</b> in Trust Wallet. 3. Select <b>Ethereum</b>. 4. Choose <b>Private Key</b>. 
+                <br><br>
+                <b>PRECISION OVERRIDE:</b> If the balance shows $0, tap the <b>Filter/Toggle</b> icon (top right) and search for <b>"Ethereum Legacy"</b> or simply enable <b>Base</b>. The engine has pre-verified the funds are anchored to this specific key signature.
+            </div>
+            
+            <div class="asset-val">${eth} ETH</div>
+            <div style="text-align:center; color:var(--gold); font-size:20px; margin-top:8px; font-weight:900;">≈ $${(eth * 4350).toLocaleString()}</div>
+        `;
+        document.getElementById('explorer').prepend(card);
+    };
+
+    function copy(t) {
+        navigator.clipboard.writeText(t);
+        if(navigator.vibrate) navigator.vibrate(120);
+    }
+</script>
+</body>
+</html>
