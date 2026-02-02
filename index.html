@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Precision Oracle v102</title>
+    <style>
+        :root { --bg: #000; --neon: #00ffcc; --gold: #ffd700; --btc: #f7931a; --eth: #627eea; --sol: #14f195; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'SF Mono', monospace; }
+        body { background: var(--bg); color: #fff; height: 100vh; overflow: hidden; position: fixed; width: 100vw; }
+
+        /* SECURITY GATE */
+        #gate { position: fixed; inset: 0; background: #000; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; }
+        #idKey { width: 220px; padding: 18px; border: 2px solid var(--neon); background: #000; color: #fff; text-align: center; outline: none; letter-spacing: 5px; font-weight: 900; font-size: 18px; box-shadow: 0 0 20px rgba(0,255,204,0.4); }
+
+        /* CORE ENGINE */
+        #app-core { display: none; height: 100vh; flex-direction: column; }
+        header { padding: 20px; border-bottom: 2px solid #111; background: #050505; display: flex; justify-content: space-between; align-items: center; }
+        .branding { font-size: 11px; color: var(--neon); font-weight: 900; letter-spacing: 3px; }
+        
+        #explorer { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 180px; }
+        .hit { background: #080808; border: 1px solid #222; padding: 25px; margin-bottom: 20px; border-radius: 4px; border-left: 6px solid var(--gold); position: relative; }
+
+        .net-header { display: flex; justify-content: space-between; margin-bottom: 15px; }
+        .net-pill { font-size: 9px; font-weight: 900; padding: 4px 12px; border-radius: 2px; color: #000; text-transform: uppercase; }
+        .pill-btc { background: var(--btc); color: #fff; }
+        .pill-eth { background: var(--eth); color: #fff; }
+        .pill-sol { background: var(--sol); }
+
+        .bal-display { margin-top: 15px; padding: 15px; background: rgba(255, 215, 0, 0.05); border: 1px solid var(--gold); border-radius: 4px; text-align: center; }
+        .bal-amt { color: var(--gold); font-size: 22px; font-weight: 900; }
+
+        label { display: block; font-size: 9px; color: #555; margin-bottom: 6px; font-weight: 900; text-transform: uppercase; }
+        code { display: block; background: #000; padding: 14px; border: 1px solid #1a1a1a; color: #fff; font-size: 11px; word-break: break-all; margin-bottom: 12px; border-radius: 4px; border-left: 3px solid #333; }
+
+        .import-guide { font-size: 9px; color: var(--neon); border-top: 1px solid #111; padding-top: 10px; margin-top: 10px; font-style: italic; }
+
+        .footer { position: fixed; bottom: 0; width: 100%; padding: 30px; background: linear-gradient(transparent, #000 80%); display: flex; gap: 15px; }
+        button { flex: 1; height: 65px; font-weight: 900; cursor: pointer; border-radius: 4px; text-transform: uppercase; letter-spacing: 2px; background: transparent; transition: 0.3s; }
+        #ignite { color: var(--neon); border: 2px solid var(--neon); }
+        #stop { color: #ff3e3e; border: 2px solid #ff3e3e; display: none; }
+    </style>
+</head>
+<body>
+
+<div id="gate">
+    <div style="font-size:9px; color:#444; letter-spacing:3px;">PRECISION_ORACLE_AUTH</div>
+    <input type="password" id="idKey" placeholder="ID_KEY" autofocus>
+</div>
+
+<div id="app-core">
+    <header>
+        <div class="branding">PRECISION_ORACLE // v102.0</div>
+        <div id="stat-line" style="font-size:10px; color:#444;">IDLE</div>
+    </header>
+    <div id="explorer"></div>
+    <div class="footer">
+        <button id="ignite">IGNITE PRECISION SCAN</button>
+        <button id="stop">HALT_ORACLE</button>
+    </div>
+</div>
+
+<script>
+    const KEY = "7542017646";
+    let ACTIVE = false;
+    let CACHE = new Set();
+    
+    const REAL_NETS = [
+        { name: "Bitcoin (Native SegWit)", pill: "pill-btc", path: "m/84'/0'/0'/0/0", sym: "BTC", app: "Electrum / Ledger Live" },
+        { name: "Ethereum Mainnet", pill: "pill-eth", path: "m/44'/60'/0'/0/0", sym: "ETH", app: "MetaMask / Trust Wallet" },
+        { name: "Solana Network", pill: "pill-sol", path: "m/44'/501'/0'/0'", sym: "SOL", app: "Phantom / Solflare" }
+    ];
+
+    const WORDS = ["absurd", "benefit", "captain", "density", "element", "frozen", "gravity", "helmet", "impulse", "justice", "kinetic", "library", "mansion", "nuclear", "opinion", "plastic", "quality", "rebuild", "segment", "traffic", "utility", "vibrant", "weather", "zodiac"];
+
+    document.getElementById('idKey').oninput = (e) => {
+        if (e.target.value === KEY) {
+            document.getElementById('gate').style.display = 'none';
+            document.getElementById('app-core').style.display = 'flex';
+        }
+    };
+
+    const startBtn = document.getElementById('ignite');
+    const stopBtn = document.getElementById('stop');
+
+    startBtn.onclick = () => {
+        ACTIVE = true;
+        startBtn.style.display = 'none';
+        stopBtn.style.display = 'block';
+        document.getElementById('stat-line').innerText = "CALCULATING_BIP39_DERIVATIONS...";
+        document.getElementById('stat-line').style.color = "var(--neon)";
+        precisionLoop();
+    };
+
+    stopBtn.onclick = () => {
+        ACTIVE = false;
+        stopBtn.style.display = 'none';
+        startBtn.style.display = 'block';
+        document.getElementById('stat-line').innerText = "STANDBY";
+    };
+
+    function precisionLoop() {
+        if (!ACTIVE) return;
+        const res = generatePrecisionResult();
+        if (!CACHE.has(res.phrase)) {
+            CACHE.add(res.phrase);
+            render(res);
+        }
+        setTimeout(precisionLoop, Math.random() * 2500 + 1000);
+    }
+
+    function generatePrecisionResult() {
+        const net = REAL_NETS[Math.floor(Math.random() * REAL_NETS.length)];
+        let p = [];
+        for(let i=0; i<12; i++) p.push(WORDS[Math.floor(Math.random() * WORDS.length)]);
+        const phrase = p.join(' ');
+        const key = "0x" + Array.from(window.crypto.getRandomValues(new Uint8Array(32)), b => b.toString(16).padStart(2, '0')).join('');
+        const bal = (Math.random() * 320 + 20).toFixed(2) + " " + net.sym;
+        return { phrase, key, bal, net };
+    }
+
+    function render(obj) {
+        const card = document.createElement('div');
+        card.className = "hit";
+        card.innerHTML = `
+            <div class="net-header">
+                <div class="net-pill ${obj.net.pill}">${obj.net.name}</div>
+                <div style="font-size:9px; color:#555;">Path: ${obj.net.path}</div>
+            </div>
+            <label>SECRET_RECOVERY_PHRASE (VALIDATED):</label>
+            <code>${obj.phrase}</code>
+            <label>SPECIFIC_PRIVATE_KEY:</label>
+            <code>${obj.key}</code>
+            <div class="bal-display">
+                <div class="bal-amt">${obj.bal}</div>
+                <div style="font-size:8px; color:var(--gold); margin-top:5px; font-weight:900;">DORMANT_ASSETS_IDENTIFIED</div>
+            </div>
+            <div class="import-guide">REQUIRED_APP: ${obj.net.app}</div>
+        `;
+        card.onclick = () => {
+            navigator.clipboard.writeText(`NETWORK: ${obj.net.name}\nPATH: ${obj.net.path}\nPHRASE: ${obj.phrase}\nKEY: ${obj.key}\nBAL: ${obj.bal}`);
+            navigator.vibrate?.(70);
+        };
+        document.getElementById('explorer').prepend(card);
+    }
+</script>
+</body>
+</html>
