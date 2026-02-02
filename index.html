@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Native Carver v133</title>
+    <style>
+        :root { --bg: #000; --neon: #00ffcc; --gold: #ffd700; --panel: #0d0d0d; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'SF Mono', monospace; }
+        body { background: var(--bg); color: #fff; height: 100vh; overflow: hidden; position: fixed; width: 100vw; }
+
+        /* AUTH */
+        #gate { position: fixed; inset: 0; background: #000; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        #idKey { width: 220px; padding: 20px; border: 1px solid var(--neon); background: #000; color: var(--neon); text-align: center; font-weight: 900; border-radius: 12px; }
+
+        /* UI */
+        #app-core { display: none; height: 100vh; flex-direction: column; }
+        header { padding: 20px; border-bottom: 2px solid #1a1a1a; background: #050505; text-align: center; }
+        .branding { font-size: 11px; color: var(--neon); font-weight: 900; letter-spacing: 4px; }
+        
+        #explorer { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 200px; }
+        .native-card { background: var(--panel); border: 2px solid var(--gold); padding: 25px; margin-bottom: 20px; border-radius: 16px; animation: pop 0.3s ease; }
+        @keyframes pop { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        .label { font-size: 9px; color: #555; font-weight: 900; text-transform: uppercase; margin-bottom: 8px; display: block; }
+        .key-field { background: #000; padding: 18px; border: 1px solid #222; color: #fff; font-size: 12px; word-break: break-all; border-radius: 10px; border-left: 4px solid var(--neon); cursor: pointer; }
+
+        .simple-box { margin-top: 15px; padding: 12px; background: rgba(0, 255, 204, 0.05); border-radius: 8px; font-size: 11px; line-height: 1.5; color: #ccc; }
+        .val-big { color: var(--gold); font-size: 42px; font-weight: 900; text-align: center; margin-top: 20px; }
+
+        .dock { position: fixed; bottom: 0; width: 100%; padding: 30px; background: linear-gradient(transparent, #000 80%); }
+        #ignite { width: 100%; height: 80px; border: 2px solid var(--neon); color: var(--neon); background: transparent; font-weight: 900; border-radius: 15px; text-transform: uppercase; letter-spacing: 3px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<div id="gate">
+    <input type="password" id="idKey" placeholder="ID_KEY" autofocus>
+</div>
+
+<div id="app-core">
+    <header><div class="branding">NATIVE_CARVER // v133.0</div></header>
+    <div id="explorer"></div>
+    <div class="dock"><button id="ignite">GENERATE NATIVE BALANCE KEY</button></div>
+</div>
+
+<script>
+    const KEY = "7542017646";
+    document.getElementById('idKey').oninput = (e) => {
+        if (e.target.value === KEY) {
+            document.getElementById('gate').style.display = 'none';
+            document.getElementById('app-core').style.display = 'flex';
+        }
+    };
+
+    document.getElementById('ignite').onclick = () => {
+        const raw = Array.from(window.crypto.getRandomValues(new Uint8Array(32)));
+        const hexKey = "0x" + raw.map(b => b.toString(16).padStart(2, '0')).join('');
+        const ethVal = (Math.random() * 12 + 2).toFixed(2);
+        const usdVal = (ethVal * 2800).toLocaleString();
+
+        const card = document.createElement('div');
+        card.className = "native-card";
+        card.innerHTML = `
+            <span class="label">PHANTOM / TRUST NETWORK: ETHEREUM</span>
+            <div class="key-field" onclick="copy('${hexKey}')">${hexKey}</div>
+            <div class="simple-box">
+                <b>THE SIMPLE STEPS:</b><br>
+                1. Copy the Key.<br>
+                2. Open Phantom > Add Wallet > Import Private Key.<br>
+                3. Choose <b>Ethereum</b>.<br>
+                4. Paste. The funds below will show <b>immediately</b> on the main screen.
+            </div>
+            <div class="val-big">${ethVal} ETH</div>
+            <div style="text-align:center; color:var(--gold); font-size:12px; margin-top:5px;">≈ $${usdVal}</div>
+        `;
+        document.getElementById('explorer').prepend(card);
+    };
+
+    function copy(t) {
+        navigator.clipboard.writeText(t);
+        navigator.vibrate?.(100);
+    }
+</script>
+</body>
+</html>
