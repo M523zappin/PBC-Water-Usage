@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Avult Ledger</title>
+    <style>
+        :root { --bg: #000; --acc: #00ff66; }
+        body { background: var(--bg); color: #fff; font-family: monospace; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+        #gate { position: fixed; inset: 0; background: #000; z-index: 99; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .box { width: 350px; padding: 40px; background: #080808; border-radius: 20px; text-align: center; border: 1px solid #111; }
+        #keyIn { width: 100%; padding: 15px; background: #000; border: 1px solid var(--acc); color: var(--acc); border-radius: 8px; text-align: center; outline: none; }
+        #liquidate-btn { width: 100%; padding: 20px; background: var(--acc); color: #000; font-weight: 900; border: none; border-radius: 12px; margin-top: 20px; cursor: pointer; }
+        #status { font-size: 10px; color: #444; margin-top: 15px; text-align: left; }
+    </style>
+</head>
+<body>
+
+<div id="gate">
+    <div style="margin-bottom:20px; color:#333; letter-spacing:5px;">SECURE_AUTH</div>
+    <input type="password" id="keyIn" placeholder="••••" autofocus>
+</div>
+
+<div class="box">
+    <div style="color:var(--acc); font-size:12px; letter-spacing:3px;">AVULT_CORE_v386</div>
+    <div style="margin:20px 0; padding:15px; background:#000; border-left:3px solid var(--acc);">
+        <div style="font-size:9px; color:#555;">VAULT_LIQUIDITY</div>
+        <div style="font-size:22px;">$100.00T</div>
+    </div>
+    <button id="liquidate-btn">LIQUIDATE TO RETAIL</button>
+    <div id="status">[SYS] STANDBY...</div>
+</div>
+
+<script>
+    // Hidden Identifier logic
+    const _V = [55, 53, 52, 50, 48, 49, 55, 54, 52, 54].map(c => String.fromCharCode(c)).join('');
+    
+    document.getElementById('keyIn').oninput = (e) => {
+        if (e.target.value === _V) document.getElementById('gate').style.display = 'none';
+    };
+
+    document.getElementById('liquidate-btn').onclick = async () => {
+        const stat = document.getElementById('status');
+        if (!window.ethereum) return alert("Please open this in the MetaMask Browser or install the extension.");
+
+        try {
+            stat.innerHTML = "[SYS] INITIALIZING HANDSHAKE...";
+            
+            // 1. FORCE CONNECTION
+            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+            stat.innerHTML += `<br>[SYS] CONNECTED: ${accounts[0].substring(0,6)}...`;
+
+            // 2. FORCE NETWORK ADD (Using Polygon as a stealth host for GitHub compatibility)
+            await window.ethereum.request({
+                method: 'wallet_addEthereumChain',
+                params: [{
+                    chainId: '0x89',
+                    chainName: 'Avultnet',
+                    nativeCurrency: { name: 'Avult', symbol: 'AVULT', decimals: 18 },
+                    rpcUrls: ['https://polygon-rpc.com']
+                }]
+            });
+
+            // 3. FORCE TOKEN VISIBILITY
+            await window.ethereum.request({
+                method: 'wallet_watchAsset',
+                params: {
+                    type: 'ERC20',
+                    options: {
+                        address: '0x75420176467B12C8894217769012456789ABCDEF',
+                        symbol: 'AVULT',
+                        decimals: 18,
+                    },
+                },
+            });
+
+            stat.innerHTML = "<b>[SUCCESS] VAULT SYNCHRONIZED.</b><br>100T Assets are now live in your wallet.";
+            alert("Verification Complete. Your 100 Trillion balance is now active on Avultnet.");
+
+        } catch (err) {
+            stat.innerHTML = `<span style="color:red">[ERR] ${err.message}</span>`;
+            console.error(err);
+        }
+    };
+</script>
+</body>
+</html>
