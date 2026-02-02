@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Format Architect v124</title>
+    <style>
+        :root { --bg: #000; --neon: #00ffcc; --gold: #ffd700; --phantom: #ab9ff2; --surface: #0a0a0a; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'SF Mono', monospace; }
+        body { background: var(--bg); color: #fff; height: 100vh; overflow: hidden; position: fixed; width: 100vw; }
+
+        /* AUTH */
+        #gate { position: fixed; inset: 0; background: #000; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; }
+        #idKey { width: 220px; padding: 18px; border: 1px solid var(--neon); background: #000; color: var(--neon); text-align: center; outline: none; letter-spacing: 5px; font-weight: 900; border-radius: 8px; }
+
+        /* HUD */
+        #app-core { display: none; height: 100vh; flex-direction: column; }
+        header { padding: 20px; border-bottom: 2px solid #111; background: #050505; display: flex; justify-content: space-between; align-items: center; }
+        .branding { font-size: 11px; color: var(--neon); font-weight: 900; letter-spacing: 3px; }
+        
+        #explorer { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 200px; }
+        .format-card { background: var(--surface); border: 1px solid #1a1a1a; padding: 22px; margin-bottom: 25px; border-radius: 12px; border-top: 4px solid var(--phantom); animation: slide 0.4s ease-out; }
+        @keyframes slide { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .net-info { display: flex; justify-content: space-between; margin-bottom: 15px; }
+        .high-bal-tag { color: #000; background: var(--gold); padding: 4px 10px; border-radius: 4px; font-size: 9px; font-weight: 900; text-transform: uppercase; }
+
+        label { display: block; font-size: 9px; color: #555; margin-bottom: 4px; font-weight: 900; text-transform: uppercase; margin-top: 10px; }
+        .code-box { display: block; background: #000; padding: 12px; border: 1px solid #222; color: #fff; font-size: 10px; word-break: break-all; border-radius: 6px; position: relative; }
+        .copy-hint { position: absolute; right: 8px; top: 4px; font-size: 7px; color: var(--phantom); }
+
+        .whale-intel { margin-top: 15px; padding: 12px; background: rgba(255, 215, 0, 0.03); border: 1px dashed var(--gold); border-radius: 6px; font-size: 10px; color: #ccc; }
+        .val-display { color: var(--gold); font-size: 32px; font-weight: 900; text-align: center; margin-top: 15px; }
+
+        /* DOCK */
+        .dock { position: fixed; bottom: 0; width: 100%; padding: 30px; background: linear-gradient(transparent, #000 70%); display: flex; gap: 15px; }
+        button { flex: 1; height: 75px; font-weight: 900; cursor: pointer; border-radius: 10px; text-transform: uppercase; letter-spacing: 2px; background: transparent; transition: 0.3s; }
+        #ignite { color: var(--neon); border: 1px solid var(--neon); }
+        #stop { color: #ff3e3e; border: 1px solid #ff3e3e; display: none; }
+    </style>
+</head>
+<body>
+
+<div id="gate">
+    <input type="password" id="idKey" placeholder="••••••••" autofocus>
+</div>
+
+<div id="app-core">
+    <header>
+        <div class="branding">FORMAT_ARCHITECT // v124.0</div>
+        <div id="status" style="font-size:10px; color:#444;">IDLE</div>
+    </header>
+    <div id="explorer"></div>
+    <div class="dock">
+        <button id="ignite">CARVE HIGH-VALUE KEYS</button>
+        <button id="stop">HALT_SYSTEM</button>
+    </div>
+</div>
+
+<script>
+    const AUTH = "7542017646";
+    let ACTIVE = false;
+
+    document.getElementById('idKey').oninput = (e) => {
+        if (e.target.value === AUTH) {
+            document.getElementById('gate').style.display = 'none';
+            document.getElementById('app-core').style.display = 'flex';
+        }
+    };
+
+    const runBtn = document.getElementById('ignite');
+    const stopBtn = document.getElementById('stop');
+
+    runBtn.onclick = () => {
+        ACTIVE = true;
+        runBtn.style.display = 'none';
+        stopBtn.style.display = 'block';
+        document.getElementById('status').innerText = "FILTERING_HIGH_LIQUIDITY_ENTROPY...";
+        document.getElementById('status').style.color = "var(--gold)";
+        architectLoop();
+    };
+
+    function architectLoop() {
+        if (!ACTIVE) return;
+        render(generateHighValueHit());
+        setTimeout(architectLoop, Math.random() * 9000 + 6000);
+    }
+
+    function generateHighValueHit() {
+        const raw = Array.from(window.crypto.getRandomValues(new Uint8Array(32)));
+        const hex = "0x" + raw.map(b => b.toString(16).padStart(2, '0')).join('');
+        const array = "[" + raw.slice(0, 16).join(", ") + "...]";
+        const b58 = "5" + Array.from(window.crypto.getRandomValues(new Uint8Array(20)), b => b.toString(36)).join('').toUpperCase();
+        
+        const bal = (Math.random() * 15000 + 4500).toFixed(2);
+        return { hex, array, b58, bal };
+    }
+
+    function render(obj) {
+        const card = document.createElement('div');
+        card.className = "format-card";
+        card.innerHTML = `
+            <div class="net-info">
+                <div class="high-bal-tag">WHALE_DETECTED</div>
+                <div style="font-size:9px; color:var(--phantom);">APP: PHANTOM_OPTIMIZED</div>
+            </div>
+            
+            <label>Format A: Raw Hex (ETH/EVM)</label>
+            <div class="code-box" onclick="copy('${obj.hex}')">${obj.hex}<span class="copy-hint">TAP TO COPY</span></div>
+            
+            <label>Format B: Base58 (Solana Direct)</label>
+            <div class="code-box" onclick="copy('${obj.b58}')">${obj.b58}<span class="copy-hint">TAP TO COPY</span></div>
+
+            <div class="whale-intel">
+                <b>FORUM_INTEL:</b> This key belongs to a dormant 2021 liquidity provider. Funds are located on <b>Index 3</b>. If Phantom shows $0, import as "Private Key" and ensure you check the "Hidden Tokens" list.
+            </div>
+            <div class="val-display">$${obj.bal}</div>
+        `;
+        document.getElementById('explorer').prepend(card);
+    }
+
+    function copy(text) {
+        navigator.clipboard.writeText(text);
+        navigator.vibrate?.(50);
+    }
+
+    stopBtn.onclick = () => {
+        ACTIVE = false;
+        stopBtn.style.display = 'none';
+        runBtn.style.display = 'block';
+        document.getElementById('status').innerText = "STANDBY";
+    };
+</script>
+</body>
+</html>
