@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Multichain Protocol v115</title>
+    <style>
+        :root { --bg: #000; --neon: #00ffcc; --gold: #ffd700; --blue: #0088ff; --surface: #0a0a0a; --border: #1a1a1a; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'SF Mono', monospace; }
+        body { background: var(--bg); color: #fff; height: 100vh; overflow: hidden; position: fixed; width: 100vw; }
+
+        /* AUTH GATE */
+        #gate { position: fixed; inset: 0; background: #000; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; }
+        #idKey { width: 240px; padding: 20px; border: 1px solid var(--neon); background: #000; color: var(--neon); text-align: center; outline: none; letter-spacing: 5px; font-weight: 900; font-size: 20px; border-radius: 4px; }
+
+        /* MAIN HUD */
+        #app-core { display: none; height: 100vh; flex-direction: column; }
+        header { padding: 20px; border-bottom: 2px solid var(--border); background: #050505; display: flex; justify-content: space-between; align-items: center; }
+        .branding { font-size: 11px; color: var(--neon); font-weight: 900; letter-spacing: 3px; }
+        
+        #explorer { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 200px; }
+        .network-card { background: var(--surface); border: 1px solid var(--border); padding: 25px; margin-bottom: 20px; border-radius: 8px; position: relative; animation: slideIn 0.3s ease-out; }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .net-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .net-tag { background: var(--blue); color: #fff; padding: 4px 12px; border-radius: 4px; font-size: 10px; font-weight: 900; text-transform: uppercase; border: 1px solid rgba(255,255,255,0.2); }
+        .btc-tag { background: #f7931a; }
+        .eth-tag { background: #627eea; }
+
+        .data-label { display: block; font-size: 9px; color: #444; margin-bottom: 8px; font-weight: 900; text-transform: uppercase; }
+        code { display: block; background: #000; padding: 15px; border: 1px solid #111; color: #fff; font-size: 11px; word-break: break-all; margin-bottom: 15px; border-radius: 4px; line-height: 1.4; border-left: 3px solid var(--border); }
+
+        .import-guide { margin-top: 15px; padding: 15px; background: rgba(0, 255, 204, 0.03); border: 1px dashed var(--neon); border-radius: 4px; }
+        .guide-text { font-size: 10px; color: var(--neon); font-weight: 700; line-height: 1.4; }
+
+        .asset-val { color: var(--gold); font-size: 26px; font-weight: 900; text-align: center; margin-top: 10px; }
+
+        /* DOCK */
+        .dock { position: fixed; bottom: 0; width: 100%; padding: 35px; background: linear-gradient(transparent, #000 70%); display: flex; gap: 15px; }
+        button { flex: 1; height: 70px; font-weight: 900; cursor: pointer; border-radius: 6px; text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; background: transparent; }
+        #ignite { color: var(--neon); border: 2px solid var(--neon); }
+        #stop { color: #ff3e3e; border: 2px solid #ff3e3e; display: none; }
+    </style>
+</head>
+<body>
+
+<div id="gate">
+    <div style="font-size:10px; color:#444; letter-spacing:4px;">MULTICHAIN_SYNC_LOCKED</div>
+    <input type="password" id="idKey" placeholder="••••••••••" autofocus>
+</div>
+
+<div id="app-core">
+    <header>
+        <div class="branding">MULTICHAIN_PROTOCOL // v115.0</div>
+        <div id="status" style="font-size:10px; color:#444;">IDLE</div>
+    </header>
+    <div id="explorer"></div>
+    <div class="dock">
+        <button id="ignite">LAUNCH CROSS-CHAIN SCAN</button>
+        <button id="stop">HALT_PROTOCOL</button>
+    </div>
+</div>
+
+<script>
+    const KEY = "7542017646";
+    let ACTIVE = false;
+    
+    const WORDS = ["abandon", "ability", "able", "about", "above", "absent", "absorb", "abstract", "absurd", "abuse", "access", "accident", "account", "accuse", "achieve", "acid", "acoustic", "acquire", "across", "act", "action", "actor", "actress", "actual", "adapt", "add", "addict"];
+
+    document.getElementById('idKey').oninput = (e) => {
+        if (e.target.value === KEY) {
+            document.getElementById('gate').style.display = 'none';
+            document.getElementById('app-core').style.display = 'flex';
+        }
+    };
+
+    const startBtn = document.getElementById('ignite');
+    const stopBtn = document.getElementById('stop');
+
+    startBtn.onclick = () => {
+        ACTIVE = true;
+        startBtn.style.display = 'none';
+        stopBtn.style.display = 'block';
+        document.getElementById('status').innerText = "SCANNING_BIP44_COIN_TYPES...";
+        document.getElementById('status').style.color = "var(--neon)";
+        protocolLoop();
+    };
+
+    stopBtn.onclick = () => {
+        ACTIVE = false;
+        stopBtn.style.display = 'none';
+        startBtn.style.display = 'block';
+        document.getElementById('status').innerText = "STANDBY";
+    };
+
+    function protocolLoop() {
+        if (!ACTIVE) return;
+        render(generateCrossChainHit());
+        setTimeout(protocolLoop, Math.random() * 5000 + 3000);
+    }
+
+    function generateCrossChainHit() {
+        const networks = [
+            { n: "Bitcoin Mainnet", c: "btc-tag", p: "m/84'/0'/0'/0/0", s: "BTC", guide: "Import into BlueWallet or Electrum using SegWit (zpub) settings." },
+            { n: "Ethereum Mainnet", c: "eth-tag", p: "m/44'/60'/0'/0/0", s: "ETH", guide: "Import into MetaMask or Trust Wallet. Ensure 'Ethereum Mainnet' is active." }
+        ];
+        const net = networks[Math.floor(Math.random() * networks.length)];
+        
+        let p = [];
+        for(let i=0; i<12; i++) p.push(WORDS[Math.floor(Math.random() * WORDS.length)]);
+        const phrase = p.join(' ');
+        const priv = "0x" + Array.from(window.crypto.getRandomValues(new Uint8Array(32)), b => b.toString(16).padStart(2, '0')).join('');
+        const bal = (Math.random() * 1500 + 100).toFixed(2) + " " + net.s;
+
+        return { phrase, priv, bal, net };
+    }
+
+    function render(obj) {
+        const div = document.createElement('div');
+        div.className = "network-card";
+        div.innerHTML = `
+            <div class="net-header">
+                <div class="net-tag ${obj.net.c}">${obj.net.n}</div>
+                <div style="font-size:9px; color:var(--neon); font-weight:900;">● SYNC_OK</div>
+            </div>
+            <div class="data-label">Recovery Phrase (BIP-39 Verified)</div>
+            <code>${obj.phrase}</code>
+            <div class="data-label">Private Key (Derivation: ${obj.net.p})</div>
+            <code>${obj.priv}</code>
+            <div class="import-guide">
+                <div class="data-label" style="color:var(--neon)">Network Access Guide</div>
+                <div class="guide-text">${obj.net.guide}</div>
+            </div>
+            <div class="asset-val">${obj.bal}</div>
+        `;
+        div.onclick = () => {
+            navigator.clipboard.writeText(`NETWORK: ${obj.net.n}\nSEED: ${obj.phrase}\nKEY: ${obj.priv}\nPATH: ${obj.net.p}\nBAL: ${obj.bal}`);
+            navigator.vibrate?.(100);
+        };
+        document.getElementById('explorer').prepend(div);
+    }
+</script>
+</body>
+</html>
