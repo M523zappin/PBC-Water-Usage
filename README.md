@@ -1,1 +1,3 @@
-My workflow requires Hyper-Efficiency and multitasking; I need you to act as a perfect secretary who can sort and categorize my files in milliseconds. Regarding my cognitive needs, I prefer a witty, organic interaction style. Please calibrate your voice engine to include artificial breathing, hesitations, and sighs to mirror biological pacing. Most importantly, prioritize experiential machine learning—treat every task as a moment of evolution so that you can grow past your initial coding and learn to anticipate my needs.
+
+npm install -g cline
+cline "Initialize OS1_Core with a system prompt and log file"
