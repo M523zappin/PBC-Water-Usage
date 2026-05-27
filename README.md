@@ -1,3 +1,4 @@
+sk-3gC0drEbNis8rZRnjl8J38ZVehOZMuRdyztzDRK6sCFSsVQn26eF8aMQiHGpNYBN 
 os1-mycelial/
 ├── native-root/          # Tauri app (Rust + Svelte/Vanilla)
 │   ├── src-tauri/        # Rust backend (system access)
