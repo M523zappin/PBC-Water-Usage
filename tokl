@@ -1,3 +1,4 @@
+start chrome.exe --app="%USERPROFILE%\Desktop\OS1_System\index.html"
 mkdir %USERPROFILE%\Desktop\OS1_System
 cd %USERPROFILE%\Desktop\OS1_System
 echo ^<!DOCTYPE html^>^<html^>^<body^>^<h1^>OS1 Active^</h1^>^</body^>^</html^> > index.html
