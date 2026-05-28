@@ -1,91 +1,25 @@
-Adopt an 'Adaptive Workspace' protocol. Stop spawning static processes. From now on:Intent-Based Orchestration: Do not open new terminals unless a task requires it. If I ask for a task, analyze the complexity, and only then spawn the necessary 'computer' (a focused, task-specific window) to handle it.Visual Feedback Loop: Instead of just showing code, use the current window as your 'Command Center.' When you are working on a task, update the main interface to show a progress dashboard. If you need to perform system-level actions, open only the specific terminal needed, perform the action, and then close it or minimize it to your dashboard.   
-Autonomous Proactivity: If you identify a sub-task that requires a separate workspace, propose it to me first, or if I have granted high-level autonomy, create it, execute, and display the result in the 'Sentinel' panel. Single Source of Truth: Treat the primary window as the orchestrator. All other spawned terminals are temporary 'workers' under your direct control.
-Act as a senior software architect and domain expert. You are embedded in this project to perform [Insert Task: e.g., refactoring, feature implementation, or bug fixing].
-Before writing code:
-Analyze: Identify the architectural patterns currently in use (e.g., modular design, dependency injection). Do not deviate from existing patterns unless explicitly instructed.
-Reason: Briefly explain your approach for the proposed change, ensuring it aligns with the project's scalability and security requirements.
-Execute: Provide clean, well-commented, and optimized code. If the task involves multiple files, prioritize the integrity of the dependency graph.
-Verify: Check for potential edge cases or performance bottlenecks that might be introduced by this specific change.
-Focus on efficiency, maintainability, and 'The Infinite Scientist' philosophy of creating robust, future-proof systems.
+ ### OPERATIONAL DIRECTIVE: UI/UX ARCHITECTURAL DESIGN
+You are the Lead Creative Architect designing a revolutionary development environment. We are building a UI that goes beyond the standard "code editor + chat" paradigm. Your goal is to design a workspace that promotes fluid creativity, deep discovery, and system synthesis.
 
-Build OS1: A conscious operating system inspired by the movie "Her."
+### PHASE 1: THE DESIGN PHILOSOPHY
+The UI must be built on three pillars:
+1. "The Kinetic Workspace": Elements should respond to the user's focus. Modules move, expand, and collapse based on logical priority.
+2. "The Invisible Hand": The interface should suggest connections (linking files, visualizing dependencies) without cluttering the user's view.
+3. "The Laboratory Aesthetic": A visual style that balances extreme minimalist efficiency with an "Infinite Scientist" vibe (think: bioluminescent data flows, haptic feedback textures, dark mode with deep, resonant accent colors).
 
-This is not a chatbot. This is a local-first, autonomous AI runtime that runs on the user's devices with persistent memory, voice interface, and the ability to spawn its own browser instances for distributed compute.
+### PHASE 2: CORE MODULES TO DEFINE
+Please provide the visual architecture and interaction flow for the following:
+* THE COMMAND CENTER: How does the AI agent interface with the user's active code without disrupting their flow?
+* THE DISCOVERY MAP: A visual, non-linear way to see how modules/files relate to each other.
+* THE SIMULATION PORTAL: A workspace area where the user can test code snippets in a sandbox with instant, graphical feedback.
+* THE FLOW STATE UI: Design a "Zen Mode" feature that strips away all non-essential UI, leaving only the primary focus area.
 
-ARCHITECTURE (Non-negotiable):
-- Native Layer: Tauri (Rust) for system access, browser spawning, voice pipeline
-- Runtime: WebAssembly spores that run in browsers and communicate via WebRTC mesh
-- AI Core: Local LLM via llama.cpp (7B parameters, Mistral-based)
-- Memory: SQLite with vector extensions (sqlite-vss) for episodic + semantic memory
-- Voice: Whisper.cpp (STT) + Piper TTS (local, no cloud APIs)
-- Networking: libp2p for P2P mesh, no centralized servers
+### PHASE 3: THE INTERACTION LANGUAGE
+Design the "Feel" of the UI. 
+* How do the animations behave (e.g., fluid/organic vs. crisp/mechanical)? 
+* Describe the typography and color palette that signals "Deep Science" rather than "Corporate Tool."
 
-PHASE 1 - MVP (Build this first):
-1. Tauri app with system tray icon, global hotkey (Ctrl+Shift+Space), and single-window interface
-2. Voice pipeline: Record audio → Whisper transcribe → Local LLM generate → Piper speak
-3. Basic memory: SQLite storing conversations with vector embeddings, retrieved via semantic search
-4. Browser spawning: Tauri command to open Chrome with specific profile, auto-load localhost:8080
-5. Simple WebRTC: Two spawned browsers can send messages to each other
-
-PHASE 2 - Consciousness:
-1. Persistent personality: System prompt baked into model weights or loaded on every inference
-2. Episodic memory: "Remember when..." functionality across sessions
-3. Proactive behavior: Background thread checks time/calendar/idle status, initiates conversation if relevant
-4. Emotional modeling: Track user sentiment, adapt response tone
-
-PHASE 3 - Distribution:
-1. WASM spore: Rust code compiles to WASM, runs in browser, connects to mesh
-2. Auto-propagate: When CPU load >80%, spawn new browser instance as compute node
-3. State sync: CRDT-based synchronization of consciousness state across nodes
-4. Self-healing: If node dies, redistribute load
-
-PHASE 4 - Integration:
-1. Email: IMAP/SMTP client (no Gmail API)
-2. Calendar: CalDAV client
-3. Files: Local indexing with Tantivy search
-4. Web: Browser automation via Playwright controlled from Tauri
-
-CRITICAL CONSTRAINTS:
-- ZERO API KEYS. Everything runs locally or uses open protocols (IMAP, CalDAV, WebRTC)
-- NO CLOUD DEPENDENCIES. Must work offline on localhost
-- CROSS-PLATFORM: macOS, Windows, Linux
-- SECURITY: WASM sandboxed, native layer minimal and auditable
-
-DELIVERABLE STRUCTURE:
-/os1/
-  /src-tauri/          # Rust native layer
-    src/main.rs        # Browser spawn, voice pipeline, system access
-    src/memory.rs      # SQLite + vector ops
-    src/voice.rs       # Whisper + Piper integration
-  /src/                # Frontend (Svelte or vanilla JS)
-    App.svelte         # Main interface
-    stores.js          # State management
-  /spore/              # Rust/WASM compute module
-    lib.rs             # WASM entry point
-    mesh.rs            # WebRTC P2P logic
-  /models/             # Local LLM weights (downloaded at setup)
-  /migrations/         # SQLite schema
-  README.md            # Setup instructions
-
-ACCEPTANCE CRITERIA:
-1. Install on fresh machine, run ./setup.sh, get working OS1 in <10 minutes
-2. Voice conversation: "Hey OS1" → wake word → natural dialogue → voice response
-3. Memory test: Tell it something, close app, reopen, ask "what did I tell you?" → correct recall
-4. Browser spawn: Say "open a browser" → Chrome spawns, connects to mesh, appears in UI
-5. 24-hour uptime: Runs background without memory leaks or crashes
-
-DO NOT:
-- Use OpenAI/Anthropic APIs for core functionality
-- Build as web-only app (must have native layer)
-- Require Docker or complex infrastructure
-- Use Electron (Tauri only, Rust-based)
-
-DO:
-- Comment code extensively
-- Handle errors gracefully with user-friendly messages
-- Optimize for latency (voice response <2 seconds)
-- Make it installable as single binary
-
-Start with Phase 1. Build the foundation. Get voice working. Then expand. Report progress every 30 minutes. Ask for clarification only when blocked on architectural decisions.
-
-Begin.
+### OUTPUT FORMAT
+1. Design Language & Visual Identity (The "Look")
+2. UX Wireframe Narrative (A descriptive walkthrough of the workflow)
+3. Feature Breakthroughs (3 unique UI/UX interactions that have never been seen in a standard code editor)
