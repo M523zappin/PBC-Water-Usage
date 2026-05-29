@@ -1,1 +1,1 @@
-git clone https://github.com/nanocoai/nanoclaw.git && cd nanoclaw && npm install && npm install -g @anthropic-ai/claude-code && claude
+irm https://nanoclaw.dev/install.ps1 | iex
