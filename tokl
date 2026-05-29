@@ -1,1 +1,6 @@
-[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $Url = (Invoke-RestMethod -Uri "https://api.github.com/repos/madebyaris/native-cli-ai/releases/latest").assets | Where-Object { $_.name -like "*windows*.zip" -or $_.name -like "*win-x64*.zip" } | Select-Object -ExpandProperty browser_download_url; Invoke-WebRequest -Uri $Url -OutFile "$env:USERPROFILE\nca.zip"; Expand-Archive -Path "$env:USERPROFILE\nca.zip" -DestinationPath "$env:USERPROFILE\nca-agent" -Force; cd "$env:USERPROFILE\nca-agent"; .\nca --provider openai --base-url "http://localhost:11434/v1" --model "llama3.2"
+I want to build 'Curse', a persistent, autonomous TUI platform.
+Infrastructure: Create a background daemon (the 'Curse Gateway') that manages execution and maintains a .curse/logs directory for state persistence.
+Dashboard: Use the Charm/Bubble Tea stack to build a TUI dashboard that features a 'Mission Queue' and a 'Live Reasoning' stream.
+Governance: Initialize a CONSTITUTION.md file that the agent must parse before every action.
+Safety: Implement a 'checkpoint' mechanism where the agent writes its task status to session.json every 5 steps, allowing for crash recovery.
+Start by defining the state machine that allows the agent to recover its progress from the event log.
