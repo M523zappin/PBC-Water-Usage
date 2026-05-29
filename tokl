@@ -1,1 +1,1 @@
-mkdir C:\openmono; cd C:\openmono; [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; Invoke-WebRequest -Uri "https://github.com/StartupHakk/OpenMonoAgent.ai/archive/refs/heads/main.zip" -OutFile "openmono.zip"; Expand-Archive -Path "openmono.zip" -DestinationPath "." -Force; cd OpenMonoAgent.ai-main
+docker compose up -d; docker exec -it openmono-agent openmono agent
