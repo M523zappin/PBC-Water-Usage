@@ -1,1 +1,1 @@
-cd C:\openmono\OpenMonoAgent.ai-main; dotnet run --project src/OpenMono.Agent.CLI -- agent
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; Invoke-WebRequest -Uri "https://github.com/StartupHakk/OpenMonoAgent.ai/releases/latest/download/openmono-windows-x64.zip" -OutFile "openmono-binary.zip"; Expand-Archive -Path "openmono-binary.zip" -DestinationPath "C:\openmono-app" -Force; cd C:\openmono-app; .\openmono.exe agent
