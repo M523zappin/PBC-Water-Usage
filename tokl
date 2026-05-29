@@ -1,1 +1,1 @@
-mkdir C:\openmono-workspace; cd C:\openmono-workspace
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/StartupHakk/OpenMonoAgent.ai/main/get-openmono.ps1" -OutFile "install.ps1"; .\install.ps1
