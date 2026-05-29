@@ -1,10 +1,5 @@
-I want to initialize 'Curse', a persistent, autonomous TUI orchestration platform. Please set up the following infrastructure:
-State-Log Persistence: Initialize a .curse/ directory. Implement a state-logging mechanism that records every tool call, reasoning step, and file edit to a local event.log. The agent must check this log on start-up to resume interrupted tasks without losing context.
-Mission Control TUI: Using the Bubble Tea framework (Go), scaffold a TUI dashboard with:
-A 'Mission Queue' (Kanban view for tasks).
-A 'Reasoning Trace' panel (real-time stream of the agent's internal logic).
-A 'System Status' widget (showing background process health).
-Governance via Constitution: Create a CONSTITUTION.md file in the root. This file will serve as the 'Hard-Coded Standards' (e.g., strict type enforcement, security linting). Every action the agent takes must be verified against this file by a 'Reviewer' sub-agent.
-Adversarial Evaluation: Implement a harness.py that runs binary (pass/fail) checks on any code generated. If the code fails a security assertion or standard test, the agent must treat the error stack trace as feedback to autonomously iterate on its own solution.
-Execution Safety: Ensure all file writes are staged in a draft state (or git worktree) for manual approval before finalizing.
-Start by analyzing the directory and proposing the initial TUI layout and state machine architecture.
+Yes, proceed with implementation. Prioritize step 3 (the state machine) and step 7 (draft staging/sandbox) as the absolute foundations
+State Machine First: I need the persistent state machine built so that every action is logged and recoverable before we build the actual tool execution logic.
+Safety Layer: Implement the internal/sandbox/ (draft staging/git worktree) immediately after the state machine. I want to see the 'dry-run' mechanism for file edits before any code is actually executed.
+Validation: Ensure that 'harness.py' is integrated into the state machine loop—it should be impossible for the state machine to transition to 'Complete' without a passing result from the harness.
+Let's go. Start with the state machine scaffolding.
