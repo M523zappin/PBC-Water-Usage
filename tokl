@@ -1,7 +1,7 @@
-We are moving from a local-only prototype to an 'Autonomous GitHub-Native' platform. Execute the following:
-Repository Initialization: Using the GitHub CLI (gh), create a new repository under my account M523zappin named Curse-Core. Initialize it, commit the current build, and push it to main.
-GitHub-Integrated Lifecycle: Configure the 'Gateway' to treat the repository as its primary persistent store. This means every state change, log, and constitution update must be synced to the repo.
-The 'Launch' Command Standard: Implement a curse-init CLI command. This command should clone Curse-Core, set up the local .env and models.json scaffolding, and prepare the TUI for immediate execution.
-Self-Updating Architecture: Implement a 'Sync' state in the state machine. When triggered, the agent must pull the latest version of its own 'Constitution' from the GitHub repo to ensure it is always running the latest governance rules
-Competitive Edge: Unlike other agents that are dependent on cloud infrastructure, 'Curse' must be entirely self-contained. The repo should host the binary distribution, allowing any user to clone and launch the entire 'Mission Control' stack without any external dependencies other than a local model server.
-Initiate the GitHub repository creation now and push the current build.
+Evolve 'Curse' into an Autonomous Computer Operator. I am extending the architecture to include a 'Computer Controller' layer. Implement the following:
+Computer Use Interface (CUI): Integrate the browser-use framework as a native tool in our library. This allows the agent to navigate, click, scroll, and interact with the web as a human would, rather than just raw scraping.
+Desktop OS Interaction: Integrate Playwright and Puppeteer wrappers to allow the agent to launch, control, and interact with local desktop applications (like your browser, file manager, and terminal).
+The 'Computer-Use' Harness: Extend harness.py to validate 'Visual Clicks.' Before the agent performs a mouse-click or keyboard input, it must pass a 'Safety Check' where it takes a screenshot, identifies the UI element, and requests a confirmation-loop if the action is destructive.
+Persistent 'Vision' State: Add a screenshot_buffer to your event.log. Every critical UI action must be logged with a timestamp and a screenshot, ensuring that you can 'replay' the agent's screen history if a task goes wrong.
+Human-in-the-Loop Mode: Implement a 'Review Mode.' If the agent attempts a download or a web transaction that touches your personal data or GitHub repo, it must pause and present the action in the TUI for my physical Ctrl+S confirmation.
+Start by adding 'browser-use' and 'desktop-control' as registered tools in the Gateway's AdapterFactory.
