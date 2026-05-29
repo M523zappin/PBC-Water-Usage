@@ -1,1 +1,2 @@
-Stop-Process -Name "node" -Force -ErrorAction SilentlyContinue
+Set-ExecutionPolicy Bypass -Scope Process -Force
+
