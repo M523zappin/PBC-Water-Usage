@@ -1,5 +1,7 @@
-The crash-recovery simulation is verified. The state machine and persistence layer are now officially hardened.
-Finalize TUI Scaffolding: Proceed to implement internal/dashboard/ and cmd/dashboard/main.go. I want the TUI to reflect the state machine in real-time.
-Live Feed Integration: Connect the TUI dashboard to the eventLog so I can watch the 'Reasoning Trace' and 'Event Stream' as they are being written.
-Launch Configuration: Once integrated, I want a single command to trigger the TUI dashboard so I can assume active oversight of the system.
-Proceed with the TUI integration. Confirm when the dashboard is ready for its first live feed.
+The TUI is functional, but now we need to elevate its visual identity to a professional, 'Claude Code' grade aesthetic. Apply the following aesthetic refinement:
+Typography & Spacing: Enforce the use of a high-end monospace font (like JetBrains Mono) with generous padding between panels. Avoid 'boxy' clutter; use thin, clean borders (Unicode box-drawing characters) to separate the Reasoning Trace, Mission Queue, and System Status.
+The 'Pulse' Effect: Implement a subtle, non-intrusive 'pulsing' border color on the active panel when the agent is thinking. This visual cue should use a 'cool' color palette (e.g., deep charcoal background, neon cyan/teal accents).
+Data Visualization (Sparklines): Instead of just listing events, add small 'sparkline' charts or indicator dots next to the SHA256 validation status. A green dot for 'Validated/Secure' and a pulsing amber dot for 'Processing'.
+Information Hierarchy: The 'Reasoning Trace' should use a 'dim-on-inactivity' effect, making the most recent logs appear brightest while older logs fade into a subtle grey, keeping the visual focus on the agent's current state.
+Minimalist Branding: Add a clean, centered title bar at the top with a subtle version indicator and the active model profile (e.g., Curse v0.1 | Model: DeepSeek-V4).
+Refactor the internal/dashboard/ view to implement these design principles. I want this to look like a premium, professional-grade developer command center.
