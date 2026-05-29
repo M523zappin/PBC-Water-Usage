@@ -1,5 +1,6 @@
-Yes, proceed with implementation. Prioritize step 3 (the state machine) and step 7 (draft staging/sandbox) as the absolute foundations
-State Machine First: I need the persistent state machine built so that every action is logged and recoverable before we build the actual tool execution logic.
-Safety Layer: Implement the internal/sandbox/ (draft staging/git worktree) immediately after the state machine. I want to see the 'dry-run' mechanism for file edits before any code is actually executed.
-Validation: Ensure that 'harness.py' is integrated into the state machine loop—it should be impossible for the state machine to transition to 'Complete' without a passing result from the harness.
-Let's go. Start with the state machine scaffolding.
+Evolve the 'Curse Gateway' to be model-agnostic.
+Gateway Adapter Pattern: Implement an Adapter interface in internal/gateway/. It should accept a 'Prompt' and return a 'Response', regardless of whether the backend is a local Ollama instance, an MCP-compliant server, or an external API.
+Configurable Model Switching: Create a models.json config where I can define multiple 'Model Profiles' (e.g., 'Fast-Edit' using a small local model, 'Deep-Reasoning' using a heavy model).
+Context Truncation Logic: Since different models have different context windows, add a utility in internal/gateway/ that dynamically truncates or summarizes the conversation history based on the active model's context_window setting in models.json.
+No Hard-Coded Keys: Ensure the gateway pulls connection details (URL, Auth Token/Header) from a local .env or config.json that is NOT version-controlled. If the 'Auth Token' is empty, default to 'Localhost/No-Auth' mode for local models.
+This will allow me to hot-swap models based on the complexity of the task.
