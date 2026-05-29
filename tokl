@@ -1,1 +1,1 @@
-Remove-Item -Path "C:\Users\hellr\nanoclaw-v2" -Recurse -Force
+git clone https://github.com/nanocoai/nanoclaw.git && cd nanoclaw && npm install && npm install -g @anthropic-ai/claude-code && claude
