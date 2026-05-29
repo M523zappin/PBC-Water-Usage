@@ -1,6 +1,5 @@
-This will allow me to hot-swap models based on the complexity of the task.
-Strict adherence to the State Machine: Every operation must be logged in the .curse/event.log before it is finalized. If a step fails, the system must trigger a 'recover' state rather than force-executing.
-Constitution Enforcement: Before writing any code to the disk, the 'Reviewer' sub-agent must perform a diff against CONSTITUTION.md. If the output violates these principles, block the write and auto-refactor the output until it is compliant.
-TUI-First: Any interaction requested by the agent should be surfaced via the TUI dashboard you are building. Do not dump logs into the raw terminal; populate the 'Reasoning Trace' panel instead.
-No Assumptions: If you encounter an ambiguity in the implementation, stop execution and present the options in the TUI for my approval. Do not guess.
-Proceed with building the state machine and dashboard scaffolding. Report back only when the directory structure is established and the Constitution is successfully parsed.
+The architectural foundation is verified. Now, simulate a 'Live Fire' test:
+Start a non-trivial task (e.g., refactoring a module or adding a new feature).
+Once the event.log has recorded 3 steps, simulate a process crash (force-kill the agent process).
+Restart the agent and confirm it performs the 'SHA256 chain' validation and resumes exactly from the last checkpoint without duplication or error.
+Report back on the 'State-Recovery Latency' (how long it took to get back to full context).
