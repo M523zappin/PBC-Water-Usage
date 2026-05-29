@@ -1,6 +1,10 @@
-I want to build 'Curse', a persistent, autonomous TUI platform.
-Infrastructure: Create a background daemon (the 'Curse Gateway') that manages execution and maintains a .curse/logs directory for state persistence.
-Dashboard: Use the Charm/Bubble Tea stack to build a TUI dashboard that features a 'Mission Queue' and a 'Live Reasoning' stream.
-Governance: Initialize a CONSTITUTION.md file that the agent must parse before every action.
-Safety: Implement a 'checkpoint' mechanism where the agent writes its task status to session.json every 5 steps, allowing for crash recovery.
-Start by defining the state machine that allows the agent to recover its progress from the event log.
+I want to initialize 'Curse', a persistent, autonomous TUI orchestration platform. Please set up the following infrastructure:
+State-Log Persistence: Initialize a .curse/ directory. Implement a state-logging mechanism that records every tool call, reasoning step, and file edit to a local event.log. The agent must check this log on start-up to resume interrupted tasks without losing context.
+Mission Control TUI: Using the Bubble Tea framework (Go), scaffold a TUI dashboard with:
+A 'Mission Queue' (Kanban view for tasks).
+A 'Reasoning Trace' panel (real-time stream of the agent's internal logic).
+A 'System Status' widget (showing background process health).
+Governance via Constitution: Create a CONSTITUTION.md file in the root. This file will serve as the 'Hard-Coded Standards' (e.g., strict type enforcement, security linting). Every action the agent takes must be verified against this file by a 'Reviewer' sub-agent.
+Adversarial Evaluation: Implement a harness.py that runs binary (pass/fail) checks on any code generated. If the code fails a security assertion or standard test, the agent must treat the error stack trace as feedback to autonomously iterate on its own solution.
+Execution Safety: Ensure all file writes are staged in a draft state (or git worktree) for manual approval before finalizing.
+Start by analyzing the directory and proposing the initial TUI layout and state machine architecture.
