@@ -1,6 +1,6 @@
-Evolve the 'Curse Gateway' to be model-agnostic.
-Gateway Adapter Pattern: Implement an Adapter interface in internal/gateway/. It should accept a 'Prompt' and return a 'Response', regardless of whether the backend is a local Ollama instance, an MCP-compliant server, or an external API.
-Configurable Model Switching: Create a models.json config where I can define multiple 'Model Profiles' (e.g., 'Fast-Edit' using a small local model, 'Deep-Reasoning' using a heavy model).
-Context Truncation Logic: Since different models have different context windows, add a utility in internal/gateway/ that dynamically truncates or summarizes the conversation history based on the active model's context_window setting in models.json.
-No Hard-Coded Keys: Ensure the gateway pulls connection details (URL, Auth Token/Header) from a local .env or config.json that is NOT version-controlled. If the 'Auth Token' is empty, default to 'Localhost/No-Auth' mode for local models.
 This will allow me to hot-swap models based on the complexity of the task.
+Strict adherence to the State Machine: Every operation must be logged in the .curse/event.log before it is finalized. If a step fails, the system must trigger a 'recover' state rather than force-executing.
+Constitution Enforcement: Before writing any code to the disk, the 'Reviewer' sub-agent must perform a diff against CONSTITUTION.md. If the output violates these principles, block the write and auto-refactor the output until it is compliant.
+TUI-First: Any interaction requested by the agent should be surfaced via the TUI dashboard you are building. Do not dump logs into the raw terminal; populate the 'Reasoning Trace' panel instead.
+No Assumptions: If you encounter an ambiguity in the implementation, stop execution and present the options in the TUI for my approval. Do not guess.
+Proceed with building the state machine and dashboard scaffolding. Report back only when the directory structure is established and the Constitution is successfully parsed.
