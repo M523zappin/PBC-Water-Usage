@@ -1,7 +1,7 @@
-The TUI is functional, but now we need to elevate its visual identity to a professional, 'Claude Code' grade aesthetic. Apply the following aesthetic refinement:
-Typography & Spacing: Enforce the use of a high-end monospace font (like JetBrains Mono) with generous padding between panels. Avoid 'boxy' clutter; use thin, clean borders (Unicode box-drawing characters) to separate the Reasoning Trace, Mission Queue, and System Status.
-The 'Pulse' Effect: Implement a subtle, non-intrusive 'pulsing' border color on the active panel when the agent is thinking. This visual cue should use a 'cool' color palette (e.g., deep charcoal background, neon cyan/teal accents).
-Data Visualization (Sparklines): Instead of just listing events, add small 'sparkline' charts or indicator dots next to the SHA256 validation status. A green dot for 'Validated/Secure' and a pulsing amber dot for 'Processing'.
-Information Hierarchy: The 'Reasoning Trace' should use a 'dim-on-inactivity' effect, making the most recent logs appear brightest while older logs fade into a subtle grey, keeping the visual focus on the agent's current state.
-Minimalist Branding: Add a clean, centered title bar at the top with a subtle version indicator and the active model profile (e.g., Curse v0.1 | Model: DeepSeek-V4).
-Refactor the internal/dashboard/ view to implement these design principles. I want this to look like a premium, professional-grade developer command center.
+We are moving from a local-only prototype to an 'Autonomous GitHub-Native' platform. Execute the following:
+Repository Initialization: Using the GitHub CLI (gh), create a new repository under my account M523zappin named Curse-Core. Initialize it, commit the current build, and push it to main.
+GitHub-Integrated Lifecycle: Configure the 'Gateway' to treat the repository as its primary persistent store. This means every state change, log, and constitution update must be synced to the repo.
+The 'Launch' Command Standard: Implement a curse-init CLI command. This command should clone Curse-Core, set up the local .env and models.json scaffolding, and prepare the TUI for immediate execution.
+Self-Updating Architecture: Implement a 'Sync' state in the state machine. When triggered, the agent must pull the latest version of its own 'Constitution' from the GitHub repo to ensure it is always running the latest governance rules
+Competitive Edge: Unlike other agents that are dependent on cloud infrastructure, 'Curse' must be entirely self-contained. The repo should host the binary distribution, allowing any user to clone and launch the entire 'Mission Control' stack without any external dependencies other than a local model server.
+Initiate the GitHub repository creation now and push the current build.
