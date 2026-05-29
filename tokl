@@ -1,1 +1,1 @@
-irm https://raw.githubusercontent.com/StartupHakk/OpenMonoAgent.ai/refs/heads/main/get-openmono.ps1 | iex
+mkdir C:\openmono; cd C:\openmono; [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; Invoke-WebRequest -Uri "https://github.com/StartupHakk/OpenMonoAgent.ai/archive/refs/heads/main.zip" -OutFile "openmono.zip"; Expand-Archive -Path "openmono.zip" -DestinationPath "."; cd OpenMonoAgent.ai-main; start-process "https://dotnet.microsoft.com/download/dotnet/thank-you/sdk-8.0.401-windows-x64-installer"
