@@ -1,5 +1,5 @@
-The architectural foundation is verified. Now, simulate a 'Live Fire' test:
-Start a non-trivial task (e.g., refactoring a module or adding a new feature).
-Once the event.log has recorded 3 steps, simulate a process crash (force-kill the agent process).
-Restart the agent and confirm it performs the 'SHA256 chain' validation and resumes exactly from the last checkpoint without duplication or error.
-Report back on the 'State-Recovery Latency' (how long it took to get back to full context).
+The crash-recovery simulation is verified. The state machine and persistence layer are now officially hardened.
+Finalize TUI Scaffolding: Proceed to implement internal/dashboard/ and cmd/dashboard/main.go. I want the TUI to reflect the state machine in real-time.
+Live Feed Integration: Connect the TUI dashboard to the eventLog so I can watch the 'Reasoning Trace' and 'Event Stream' as they are being written.
+Launch Configuration: Once integrated, I want a single command to trigger the TUI dashboard so I can assume active oversight of the system.
+Proceed with the TUI integration. Confirm when the dashboard is ready for its first live feed.
