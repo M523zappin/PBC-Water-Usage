@@ -1,1 +1,1 @@
-docker compose up -d; docker exec -it openmono-agent openmono agent
+irm https://openagents.org/install.ps1 | iex
