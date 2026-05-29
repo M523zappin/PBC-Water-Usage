@@ -1,1 +1,1 @@
-.\claurst --provider ollama --model llama3.2
+$env:CLAUDE_CODE_USE_OPENAI="1"; $env:OPENAI_BASE_URL="http://localhost:11434/v1"; $env:OPENAI_MODEL="llama3.2"; openclaude
