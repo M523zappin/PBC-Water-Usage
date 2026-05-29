@@ -1,1 +1,1 @@
-irm https://github.com/kuberwastaken/claurst/releases/latest/download/install.ps1 | iex
+.\claurst --provider ollama --model llama3.2
