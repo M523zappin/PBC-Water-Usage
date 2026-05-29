@@ -1,1 +1,1 @@
-bash <(curl -fsSL https://raw.githubusercontent.com/StartupHakk/OpenMonoAgent.ai/refs/heads/main/get-openmono.sh)
+mkdir C:\openmono-workspace; cd C:\openmono-workspace
