@@ -1,1 +1,1 @@
-[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $u = (Invoke-RestMethod -Uri "https://api.github.com/repos/janhq/jan/releases/latest").assets | Where-Object { $_.name -like "*_x64-setup.exe" } | Select-Object -ExpandProperty browser_download_url; Invoke-WebRequest -Uri $u -OutFile "$env:USERPROFILE\Desktop\JanSetup.exe"; & "$env:USERPROFILE\Desktop\JanSetup.exe"
+irm https://github.com/kuberwastaken/claurst/releases/latest/download/install.ps1 | iex
