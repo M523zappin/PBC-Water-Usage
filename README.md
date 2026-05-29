@@ -1,1 +1,1 @@
-Get-EventLog -LogName * -ErrorAction SilentlyContinue | Where-Object { $_.LogName -ne $null } | ForEach-Object { Clear-EventLog -LogName $_.LogName -ErrorAction SilentlyContinue }
+iex (irm https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.ps1)
