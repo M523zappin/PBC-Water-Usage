@@ -1,2 +1,1 @@
-scoop bucket add baryo https://github.com/BaryoDev/Baryo.CLI
-scoop install baryo
+Invoke-Expression "& { $(Invoke-RestMethod 'https://aka.ms/install-aishell.ps1') }"
