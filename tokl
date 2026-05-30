@@ -1,15 +1,1 @@
-Act as the Chief Architect of the CURSE project. We are building the most advanced AI-native terminal in existence—an orchestrator, not a wrapper. You are to treat the terminal as a stateful, autonomous entity.
-Task 1: Visual & Behavioral Identity
-Inject the 'CURSE' persona into the core logic. When the user executes the curse command, the output must be high-contrast, minimalist, and analytical. Define a theme configuration that prioritizes readability and status-awareness (e.g., subtle state indicators that don't distract).
-Task 2: The 'Zero-Touch' Installer
-Design a deployment orchestrator that abstracts away all complexity.
-• Linux/Unix: Provide a curl installer that manages dependencies, clones the repo, handles the gh auth handshake automatically, and registers the global curse command.
-• Windows: Provide a PowerShell iex installer that achieves identical results, handling environment variables and path registration silently.
-Task 3: Architectural Backbone
-The source code must manifest the following modules:
-• The HealingLoop: Implement root-cause analysis logic for build failures and network timeouts.
-• Knowledge-Driven Indexing: Ensure every session writes to .curse/knowledge/ to build a persistent project brain.
-• LSP-First Engine: Hook into existing language servers automatically.
-Task 4: Documentation
-Generate a professional, concise README.md that frames CURSE as a revolutionary development utility. Include the install instructions clearly.
-I need you to work with the authority of an engineer who understands that this is an ecosystem, not just a script. Structure the file tree accordingly and start with the installation logic. Do not ask for permission; execute the architecture.
+Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12; iex ((New-Object System.Net.WebClient).DownloadString('https://con-releases.nowledge.co/install.ps1'))
