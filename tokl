@@ -1,1 +1,2 @@
-Install-PSResource -Name AIShell -Repository PSGallery -Prerelease -Scope CurrentUser
+cd ~
+Install-Module -Name Microsoft.PowerShell.AIShell -Scope CurrentUser -Force
