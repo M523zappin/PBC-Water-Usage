@@ -1,1 +1,1 @@
-Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12; iex ((New-Object System.Net.WebClient).DownloadString('https://con-releases.nowledge.co/install.ps1'))
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser; iex (New-Object System.Net.WebClient).DownloadString('https://get.scoop.sh')
