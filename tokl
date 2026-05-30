@@ -1,1 +1,1 @@
-Invoke-Expression "& { $(Invoke-RestMethod 'https://aka.ms/install-aishell.ps1') }"
+Install-PSResource -Name AIShell -Repository PSGallery -Prerelease -Scope CurrentUser
