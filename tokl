@@ -1,1 +1,2 @@
-Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser; iex (New-Object System.Net.WebClient).DownloadString('https://get.scoop.sh')
+scoop bucket add baryo https://github.com/BaryoDev/Baryo.CLI
+scoop install baryo
