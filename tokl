@@ -1,1 +1,1 @@
-& "$env:LOCALAPPDATA\Programs\AIShell\aish.exe"
+& "$env:LOCALAPPDATA\Programs\AIShell\aish.exe" -a ollama
