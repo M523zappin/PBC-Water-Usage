@@ -1,1 +1,1 @@
-& "$env:LOCALAPPDATA\Programs\AIShell\aish.exe" -a ollama
+C:\Users\$env:USERNAME\AppData\Local\Programs\Python\Python312\Scripts\pip.exe install gpt4all
