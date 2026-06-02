@@ -1,1 +1,11 @@
-C:\Users\$env:USERNAME\AppData\Local\Programs\Python\Python312\Scripts\pip.exe install gpt4all
+# 1. Download the official installer directly from Ollama
+Invoke-WebRequest -Uri "https://ollama.com/download/OllamaSetup.exe" -OutFile "$env:USERPROFILE\Downloads\OllamaSetup.exe"
+
+# 2. Run the installer silently
+Start-Process -FilePath "$env:USERPROFILE\Downloads\OllamaSetup.exe" -ArgumentList "/silent" -Wait
+
+# 3. Start the local server in the background
+Start-Process -FilePath "ollama" -ArgumentList "serve" -NoNewWindow -AsJob
+
+# 4. Pull the unlimited, fast coding model
+ollama run qwen2.5-coder:7b
