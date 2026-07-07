@@ -1,11 +1,13 @@
-I'll take the single-record CLI + manual-driven curl approach.
+The script is done. Now we lock it down.
 
-Build the CLI tool that:
-1. Takes one Owner Name as input
-2. Runs one search against the Unclaimed Property database
-3. Applies the bank-holder filter (American Savings Bank, Bank of Hawaii, First Hawaiian Bank, Hawaii State FCU, Hawaii Central CU, Hawaii County Employees FCU, Hawaiian Tel FCU, Hickam FCU, North Hawaii Community FCU, Kahului FCU, Maui County Employees FCU, Ewa FCU, Board of Water Supply FCU, Hawaii Stevedores/Castle & Cooke HI FCU, Medicredit FCU)
-4. Prints the result if it matches a target bank
+I need three things before I run it:
 
-Output: A working Python script that does this for one name at a time. I'll handle the manual iteration.
+1. **Endpoint resolution** – The site redirects between /lilo/property-search.html and /lilo/new-property-search.html. Update the script to detect the redirect dynamically and use the final URL for all subsequent requests. No hardcoded URLs.
 
-Execute now.
+2. **Smoke test** – Run a single test search against the live site using the script's current logic. Don't run the full list—just one name (e.g., "Smith"). Capture the raw HTML response and the extracted output. Show me both so I can verify the parser works.
+
+3. **Error hardening** – Add retry logic with exponential backoff. If the site returns 429, 500, or times out, retry up to 3 times with increasing delays. Log every failure so I can see what broke.
+
+Output the updated script with these three changes. No explanations. No fluff. Just the code.
+
+Then tell me the exact command to run it on my machine.
