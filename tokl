@@ -1,6 +1,11 @@
-Now adapt the pipeline to target the Hawaii Unclaimed Property database:
-- URL: https://unclaimedproperty.ehawaii.gov/lilo/property-search.html
-- Search by owner name
-- Extract: Owner Name, Address, Holder Institution
-- Only keep records where Holder matches one of these banks: American Savings Bank, Bank of Hawaii, First Hawaiian Bank, Hawaii State FCU, Hawaii Central CU, Hawaii County Employees FCU, Hawaiian Tel FCU, Hickam FCU, North Hawaii Community FCU, Kahului FCU, Maui County Employees FCU, Ewa FCU, Board of Water Supply FCU, Hawaii Stevedores/Castle & Cooke HI FCU, Medicredit FCU
-- Output CSV: Full Name, Address, Bank Name
+I'll take the single-record CLI + manual-driven curl approach.
+
+Build the CLI tool that:
+1. Takes one Owner Name as input
+2. Runs one search against the Unclaimed Property database
+3. Applies the bank-holder filter (American Savings Bank, Bank of Hawaii, First Hawaiian Bank, Hawaii State FCU, Hawaii Central CU, Hawaii County Employees FCU, Hawaiian Tel FCU, Hickam FCU, North Hawaii Community FCU, Kahului FCU, Maui County Employees FCU, Ewa FCU, Board of Water Supply FCU, Hawaii Stevedores/Castle & Cooke HI FCU, Medicredit FCU)
+4. Prints the result if it matches a target bank
+
+Output: A working Python script that does this for one name at a time. I'll handle the manual iteration.
+
+Execute now.
