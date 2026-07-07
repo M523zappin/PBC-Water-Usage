@@ -1,13 +1,17 @@
-The script is done. Now we lock it down.
+Build GRIM. Full autonomy. No manual steps.
 
-I need three things before I run it:
+GRIM is an AI agent that extracts Hawaii bank leads from public records. It must:
+- Discover its own search endpoints and form fields (no hardcoding)
+- Generate its own name list from public business records (Entity List Builder, UIPA data, Name Index)
+- Extract surnames from results and expand its search queue automatically
+- Filter only records where the holder matches the target bank list
+- Save results to CSV
+- Run continuously until no new names are found
+- Log everything for debugging
+- Handle retries, rate limits, and redirects autonomously
 
-1. **Endpoint resolution** – The site redirects between /lilo/property-search.html and /lilo/new-property-search.html. Update the script to detect the redirect dynamically and use the final URL for all subsequent requests. No hardcoded URLs.
+Use `spawn_agents` to create an autonomous extraction agent.
+Use `add_subgoal` to track the extraction task.
+Disable the reviewer agent for this task.
 
-2. **Smoke test** – Run a single test search against the live site using the script's current logic. Don't run the full list—just one name (e.g., "Smith"). Capture the raw HTML response and the extracted output. Show me both so I can verify the parser works.
-
-3. **Error hardening** – Add retry logic with exponential backoff. If the site returns 429, 500, or times out, retry up to 3 times with increasing delays. Log every failure so I can see what broke.
-
-Output the updated script with these three changes. No explanations. No fluff. Just the code.
-
-Then tell me the exact command to run it on my machine.
+Do not ask me for input. Do not stop for confirmation. Execute the full build now.
