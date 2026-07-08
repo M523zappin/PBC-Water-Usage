@@ -1,1 +1,17 @@
-Run `python classifier.py raw_data` and if it succeeds run `python parser.py matches` and then open `output.txt` in Notepad. Do it now. Show me the output.
+I need you to run the full pipeline now. Do not ask questions. Do not create sample data. Execute these steps in order:
+
+1. Create a folder called `raw_data` in the current directory.
+
+2. Write a Python script called `fetch_data.py` that does exactly this:
+   - Downloads the public retail dataset from: https://raw.githubusercontent.com/Dhinesh2454/Sales-and-Customer-Insights-Dataset/main/Retail_Sales_Dataset.csv
+   - Saves it as `raw_data/retail_data.csv`
+   - If that URL fails, try this alternative: https://raw.githubusercontent.com/SehgalArpit/Retail-Customer-Behavior-Analysis/main/retail_sales_dataset.csv
+   - If both fail, download from Kaggle's public API: `kaggle datasets download -d ankushpndy/retail-sales-dataset` and extract to `raw_data/`
+
+3. Run: `python classifier.py raw_data`
+
+4. Run: `python parser.py matches`
+
+5. Open: `notepad output.txt`
+
+Show me the output of each step. If any step fails, fix it and continue. Do not stop.
