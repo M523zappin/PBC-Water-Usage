@@ -1,11 +1,32 @@
-Write a Python script called `dorker.py` that does the following:
+Write a Python script called `classifier.py` that does the following:
 
-1. Prints a list of 30 Google dorks that find publicly accessible CSV, TXT, SQL, and LOG files containing transaction‑like data patterns (e.g., "order", "payment", "transaction", "customer", "invoice", "export").
-2. The dorks must be generic — they must NOT target any specific bank, company, or PII term.
-3. After printing the dorks, the script should, for each dork, use `requests` and `BeautifulSoup` to fetch the first 10 Google search results and extract any direct file download links (`.csv`, `.txt`, `.sql`, `.log`).
-4. Save all found URLs to `urls.txt`.
-5. The script must use only public, free sources — no API keys, no authentication.
-6. Handle rate limiting with a 2‑second delay between requests.
-7. Output progress to the console.
+**Input:** A directory path provided as a command-line argument (e.g., `python classifier.py /path/to/folder`).
 
-Include all dependencies in a `requirements.txt` file. Write the full code. Output only the code and a brief "how to run" instruction.
+**Recursive scan:** Recursively scan all files inside that directory (including subdirectories) that have extensions `.txt`, `.csv`, `.log`, `.sql`, or no extension at all. Skip files larger than 50 MB. Skip binary files (detect null bytes or control characters).
+
+**Pattern detection:** For each file, read it as text (handle UTF‑8 and Latin‑1 encodings) and check if it contains at least one match from each of the following categories (using regex):
+
+- **Name pattern:** Two or more capitalized words (e.g., `[A-Z][a-z]+ [A-Z][a-z]+`)
+- **Address pattern:** Number + street name (e.g., `\d+\s+[A-Za-z]+\s+(Street|St|Avenue|Ave|Road|Rd|Drive|Dr|Lane|Ln|Boulevard|Blvd)`)
+- **Phone pattern:** US phone number formats (e.g., `\d{3}[-.]?\d{3}[-.]?\d{4}` or `\(\d{3}\)\s*\d{3}[-.]?\d{4}`)
+- **Email pattern:** Standard email regex (e.g., `[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}`)
+- **ZIP pattern:** 5-digit ZIP code (e.g., `\b\d{5}\b`)
+- **Card brand pattern:** Visa, Mastercard, American Express, Discover, etc.
+- **Bank pattern:** Common bank names (e.g., PNC, Chase, Wells Fargo, Bank of America)
+
+**Classification rule:** If a file contains matches for **at least 3 of the 7 categories**, consider it a "match." Otherwise, "non‑match."
+
+**Actions:**
+- For each match, copy the file to a subfolder called `./matches/` (preserve original filename).
+- For each non‑match, copy it to `./non_matches/` (optional; you can skip this to save space).
+- Output a summary report `summary.txt` in the current directory with:
+  - Total files scanned
+  - Number of matches
+  - Number of non‑matches
+  - The top 3 most frequent patterns found (e.g., "email" appeared in 80% of matches)
+
+**Performance:** Use `re` with compiled patterns. Read files in chunks to avoid memory issues. Handle encoding errors gracefully.
+
+**Dependencies:** Use only Python standard library (os, sys, re, shutil, codecs, etc.). No external packages required.
+
+Write the full code and a brief "how to run" instruction. Output only the code and the instruction.
