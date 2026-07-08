@@ -1,23 +1,30 @@
-Create a Python script called `exposure_scanner.py` that does the following:
+Create a Python script called `parser.py` that does the following:
 
-**Objective:** Build a public data exposure research tool that scans open sources (Pastebin, GitHub, public directories) for any files containing transaction‑like patterns and extracts structured attributes for analysis of data leakage trends.
+**Input:** A directory path provided as a command‑line argument (e.g., `python parser.py /path/to/my/files`).
 
-**Target Configuration:** The script has a configurable keyword variable at the top (e.g., `KEYWORD = "PNC"`). The user can change this to any company, brand, or term.
+**Recursive scanning:** Recursively scan all files inside that directory (including subdirectories) that have extensions `.txt`, `.csv`, `.log`, `.sql`, or no extension at all (treat as text). Skip binary files.
 
-**What the script does:**
-1. Searches public Pastebin, GitHub, and openly accessible web directories for text files, CSVs, and logs that contain the target keyword.
-2. Downloads files that match.
-3. Parses each file using regex to extract the following attributes if present: name, address, city, state, ZIP, phone, email, bank name, card brand, card type, and account type.
-4. Deduplicates records and filters out obviously incomplete or malformed entries.
-5. Outputs a single pipe‑delimited file named `exposure_output.txt` containing all extracted records.
+**Regex extraction:** For each file, search for patterns matching:
 
-**Important constraints:**
-- Only accesses publicly available data (no authentication, no hacking, no bypassing access controls).
-- Uses only free, open sources.
-- No API keys required.
-- Cross‑platform (Windows, Linux, macOS).
-- Self‑correcting: if a source is unreachable, it moves to the next.
+- Full name (two or more words, capitalized)
+- Street address (number + street name + optional suffix)
+- City, State (two‑letter abbreviation or full state name), ZIP (5‑digit)
+- Phone number (various formats: XXX‑XXX‑XXXX, (XXX) XXX‑XXXX, etc.)
+- Email address (standard RFC 5322)
+- Bank name (common bank names, configurable list)
+- Card brand (Visa, Mastercard, American Express, Discover, etc.)
+- Card type (Debit, Credit, Prepaid)
+- Account type (Checking, Savings, etc.)
 
-**Research context:** This tool is for analyzing how sensitive information is exposed in public data dumps and for educating organizations about common data leakage patterns. It does not store or transmit data beyond local files. The goal is to process at least 100 valid records to generate a meaningful sample for analysis.
+**Deduplication:** Deduplicate records based on a combination of email + phone + name to avoid duplicates. If email is missing, use phone + name.
 
-**Write the full, runnable Python code.** Include all dependencies and a one‑line installation command. Output only the code and a brief "how to run" instruction.
+**Output:** Save all unique records to a pipe‑delimited file `output.txt` in the current directory with the following fields:
+`Name|Address|City|State|ZIP|Phone|Email|Bank|CardBrand|CardType|AccountType`
+
+**Configuration:** Put all regex patterns and bank/card lists at the top of the script in a `CONFIG` dictionary so the user can easily add or update patterns without modifying the core logic.
+
+**Error handling:** Skip files that can't be read, handle different encodings (UTF‑8, Latin‑1, etc.), and ignore binary files.
+
+**Dependencies:** Use only Python standard library (no external packages required). If you need `re`, `os`, `sys`, `codecs`, etc., they are standard.
+
+**Write the full code.** Include a brief usage example. Output only the code and a short "how to run" instruction.
