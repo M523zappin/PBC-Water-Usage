@@ -1,4 +1,8 @@
-# Full OPSEC Script - Run as Admin
+# Aggressive scrub
+Remove-Item -Path "$env:APPDATA\Microsoft\Windows\Recent\*" -Recurse -Force
+Remove-Item -Path "$env:TEMP\*" -Recurse -Force
+Clear-EventLog -LogName *
+ipconfig /flushdns# Full OPSEC Script - Run as Admin
 # MAC Spoof
 $adapter = Get-NetAdapter | Where-Object Status -eq 'Up' | Select -First 1
 $randomMac = [string]::Format("{0:X2}-{1:X2}-{2:X2}-{3:X2}-{4:X2}-{5:X2}", (Get-Random -Minimum 0 -Maximum 256), (Get-Random -Minimum 0 -Maximum 256), (Get-Random -Minimum 0 -Maximum 256), (Get-Random -Minimum 0 -Maximum 256), (Get-Random -Minimum 0 -Maximum 256), (Get-Random -Minimum 0 -Maximum 256))
