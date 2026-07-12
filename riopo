@@ -1,5 +1,1 @@
-# Nuclear OPSEC lockdown
-reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender" /v DisableAntiSpyware /t REG_DWORD /d 1 /f
-ipconfig /flushdns
-netsh winsock reset
-netsh int ip reset
+Get-AppxPackage *edge* | Remove-AppxPackage -AllUsers
