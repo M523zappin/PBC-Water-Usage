@@ -1,20 +1,17 @@
-# 1. Deep Windows Cleanup
-cleanmgr /sagerun:1
+# Aggressive temp & log purge
+Remove-Item -Path "C:\Windows\Logs\*" -Recurse -Force -ErrorAction SilentlyContinue
+Remove-Item -Path "C:\Windows\ServiceProfiles\NetworkService\AppData\Local\Temp\*" -Recurse -Force -ErrorAction SilentlyContinue
+Remove-Item -Path "C:\ProgramData\Microsoft\Windows\WER\*" -Recurse -Force -ErrorAction SilentlyContinue
 
-# 2. Remove more AppX bloat (keep going)
-Get-AppxPackage *xbox* | Remove-AppxPackage -AllUsers -ErrorAction SilentlyContinue
-Get-AppxPackage *solitaire* | Remove-AppxPackage -AllUsers -ErrorAction SilentlyContinue
-Get-AppxPackage *microsoft.office* | Remove-AppxPackage -AllUsers -ErrorAction SilentlyContinue
-Get-AppxPackage *bing* | Remove-AppxPackage -AllUsers -ErrorAction SilentlyContinue
+# Clear Windows Update cache more brutally
+Stop-Service -Name wuauserv -Force
+Remove-Item -Path "C:\Windows\SoftwareDistribution\*" -Recurse -Force -ErrorAction SilentlyContinue
+Start-Service wuauserv
 
-# 3. Clear temp, prefetch, and Windows Update junk
-Remove-Item -Path "C:\Windows\Temp\*" -Recurse -Force -ErrorAction SilentlyContinue
-Remove-Item -Path "$env:TEMP\*" -Recurse -Force -ErrorAction SilentlyContinue
-Remove-Item -Path "C:\Windows\Prefetch\*" -Recurse -Force -ErrorAction SilentlyContinue
-Remove-Item -Path "C:\Windows\SoftwareDistribution\Download\*" -Recurse -Force -ErrorAction SilentlyContinue
+# Remove OneDrive, Teams, and other Microsoft fat
+Get-AppxPackage *OneDrive* | Remove-AppxPackage -AllUsers -ErrorAction SilentlyContinue
+Get-AppxPackage *Teams* | Remove-AppxPackage -AllUsers -ErrorAction SilentlyContinue
+Get-AppxPackage *Microsoft.549981C3F5F10* | Remove-AppxPackage -AllUsers -ErrorAction SilentlyContinue  # Cortana
 
-# 4. Compact OS + extra free space
-dism /online /Cleanup-Image /StartComponentCleanup /ResetBase
-
-# 5. Check free space after
+# Check space again
 Get-PSDrive C
