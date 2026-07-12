@@ -1,2 +1,2 @@
-Get-AppxPackage *edge* | Stop-Process -Force -ErrorAction SilentlyContinue
-Get-AppxPackage *edge* | Remove-AppxPackage -AllUsers -ErrorAction SilentlyContinue
+taskkill /F /IM msedge.exe
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge" /v "EdgeEnabled" /t REG_DWORD /d 0 /f
