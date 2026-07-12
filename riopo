@@ -1,12 +1,29 @@
-# Find largest folders (top 20)
-Get-ChildItem C:\ -Recurse -ErrorAction SilentlyContinue | 
-  Where-Object { $_.PSIsContainer } | 
-  ForEach-Object { 
-    $size = (Get-ChildItem $_.FullName -Recurse -ErrorAction SilentlyContinue | Measure-Object -Property Length -Sum).Sum 
-    [PSCustomObject]@{ Folder = $_.FullName; SizeGB = [math]::Round($size / 1GB, 2) } 
-  } | Sort-Object SizeGB -Descending | Select-Object -First 20 | Format-Table -AutoSize
+# Autonomous Deep Cleanup Script - Run as Administrator
+Write-Host "Starting autonomous space liberation..." -ForegroundColor Red
 
-# Also top large files
-Get-ChildItem C:\ -Recurse -File -ErrorAction SilentlyContinue | 
-  Sort-Object Length -Descending | 
-  Select-Object FullName, @{Name="SizeGB"; Expression={[math]::Round($_.Length / 1GB, 2)}} -First 15 | Format-Table -AutoSize
+# 1. Clear all temp locations
+Remove-Item -Path "C:\Windows\Temp\*", "$env:TEMP\*", "$env:LOCALAPPDATA\Temp\*" -Recurse -Force -ErrorAction SilentlyContinue
+
+# 2. Clean Windows Update, Logs, Prefetch
+Stop-Service -Name wuauserv, bits -Force -ErrorAction SilentlyContinue
+Remove-Item -Path "C:\Windows\SoftwareDistribution\*" -Recurse -Force -ErrorAction SilentlyContinue
+Remove-Item -Path "C:\Windows\Logs\*", "C:\Windows\Prefetch\*" -Recurse -Force -ErrorAction SilentlyContinue
+Start-Service wuauserv, bits
+
+# 3. Remove common bloat AppX
+$ bloat = "*xbox*", "*solitaire*", "*bing*", "*OneDrive*", "*Teams*", "*Cortana*", "*Microsoft.Office*"
+Get-AppxPackage $bloat | Remove-AppxPackage -AllUsers -ErrorAction SilentlyContinue
+
+# 4. DISM deep clean
+dism /online /Cleanup-Image /StartComponentCleanup /ResetBase
+
+# 5. Find and list largest folders for manual review (won't auto-delete big ones)
+Write-Host "`nTop space hogs (review before deleting):" -ForegroundColor Yellow
+Get-ChildItem C:\ -Recurse -Directory -ErrorAction SilentlyContinue | 
+  ForEach-Object { 
+    $size = (Get-ChildItem $_.FullName -Recurse -File -ErrorAction SilentlyContinue | Measure-Object Length -Sum).Sum 
+    [PSCustomObject]@{Path=$_.FullName; SizeGB=[math]::Round($size/1GB,2)} 
+  } | Sort-Object SizeGB -Descending | Select-Object -First 10 | Format-Table
+
+Write-Host "`nCleanup complete. Check free space:" -ForegroundColor Green
+Get-PSDrive C | Format-Table
