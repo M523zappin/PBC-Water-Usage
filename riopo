@@ -1,29 +1,23 @@
-# Autonomous Deep Cleanup Script - Run as Administrator
-Write-Host "Starting autonomous space liberation..." -ForegroundColor Red
+Write-Host "Nuclear space liberation activated - Targeting 20GB+" -ForegroundColor Red
 
-# 1. Clear all temp locations
-Remove-Item -Path "C:\Windows\Temp\*", "$env:TEMP\*", "$env:LOCALAPPDATA\Temp\*" -Recurse -Force -ErrorAction SilentlyContinue
+# Disable hibernation to free huge file
+powercfg /hibernate off
 
-# 2. Clean Windows Update, Logs, Prefetch
-Stop-Service -Name wuauserv, bits -Force -ErrorAction SilentlyContinue
-Remove-Item -Path "C:\Windows\SoftwareDistribution\*" -Recurse -Force -ErrorAction SilentlyContinue
-Remove-Item -Path "C:\Windows\Logs\*", "C:\Windows\Prefetch\*" -Recurse -Force -ErrorAction SilentlyContinue
-Start-Service wuauserv, bits
+# Massive temp & cache purge
+Remove-Item -Path "C:\Windows\Temp\*", "$env:TEMP\*", "$env:LOCALAPPDATA\Temp\*", "C:\Windows\SoftwareDistribution\Download\*" -Recurse -Force -ErrorAction SilentlyContinue
 
-# 3. Remove common bloat AppX
-$ bloat = "*xbox*", "*solitaire*", "*bing*", "*OneDrive*", "*Teams*", "*Cortana*", "*Microsoft.Office*"
-Get-AppxPackage $bloat | Remove-AppxPackage -AllUsers -ErrorAction SilentlyContinue
+# Clear Windows.old if exists (biggest hog)
+Remove-Item -Path "C:\Windows.old" -Recurse -Force -ErrorAction SilentlyContinue
 
-# 4. DISM deep clean
+# Clear Delivery Optimization & update caches
+Remove-Item -Path "C:\Windows\ServiceProfiles\NetworkService\AppData\Local\Microsoft\Windows\DeliveryOptimization\Cache\*" -Recurse -Force -ErrorAction SilentlyContinue
+
+# Aggressive DISM
 dism /online /Cleanup-Image /StartComponentCleanup /ResetBase
 
-# 5. Find and list largest folders for manual review (won't auto-delete big ones)
-Write-Host "`nTop space hogs (review before deleting):" -ForegroundColor Yellow
-Get-ChildItem C:\ -Recurse -Directory -ErrorAction SilentlyContinue | 
-  ForEach-Object { 
-    $size = (Get-ChildItem $_.FullName -Recurse -File -ErrorAction SilentlyContinue | Measure-Object Length -Sum).Sum 
-    [PSCustomObject]@{Path=$_.FullName; SizeGB=[math]::Round($size/1GB,2)} 
-  } | Sort-Object SizeGB -Descending | Select-Object -First 10 | Format-Table
+# Remove large unnecessary features if present
+Get-WindowsOptionalFeature -Online | Where-Object {$_.State -eq "Enabled" -and $_.FeatureName -like "*Media*" -or $_.FeatureName -like "*Workload*"} | Disable-WindowsOptionalFeature -Online -NoRestart -ErrorAction SilentlyContinue
 
-Write-Host "`nCleanup complete. Check free space:" -ForegroundColor Green
+# Final check
 Get-PSDrive C | Format-Table
+Write-Host "Check if you gained ~20GB. Reboot recommended." -ForegroundColor Green
