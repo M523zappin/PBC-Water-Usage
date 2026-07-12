@@ -1,2 +1,20 @@
-taskkill /F /IM msedge.exe
-reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge" /v "EdgeEnabled" /t REG_DWORD /d 0 /f
+# 1. Deep Windows Cleanup
+cleanmgr /sagerun:1
+
+# 2. Remove more AppX bloat (keep going)
+Get-AppxPackage *xbox* | Remove-AppxPackage -AllUsers -ErrorAction SilentlyContinue
+Get-AppxPackage *solitaire* | Remove-AppxPackage -AllUsers -ErrorAction SilentlyContinue
+Get-AppxPackage *microsoft.office* | Remove-AppxPackage -AllUsers -ErrorAction SilentlyContinue
+Get-AppxPackage *bing* | Remove-AppxPackage -AllUsers -ErrorAction SilentlyContinue
+
+# 3. Clear temp, prefetch, and Windows Update junk
+Remove-Item -Path "C:\Windows\Temp\*" -Recurse -Force -ErrorAction SilentlyContinue
+Remove-Item -Path "$env:TEMP\*" -Recurse -Force -ErrorAction SilentlyContinue
+Remove-Item -Path "C:\Windows\Prefetch\*" -Recurse -Force -ErrorAction SilentlyContinue
+Remove-Item -Path "C:\Windows\SoftwareDistribution\Download\*" -Recurse -Force -ErrorAction SilentlyContinue
+
+# 4. Compact OS + extra free space
+dism /online /Cleanup-Image /StartComponentCleanup /ResetBase
+
+# 5. Check free space after
+Get-PSDrive C
