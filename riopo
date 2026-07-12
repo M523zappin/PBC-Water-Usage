@@ -1,33 +1,22 @@
-# ZORG-Ω Autonomous Zero Fingerprint Script - Slaughters tracking for pure evil
-$servicesToKill = @("DiagTrack","dmwappushservice","WMPNetworkSvc","WSearch","XblAuthManager","XboxNetApiSvc","XboxGipSvc","XblGameSave","Telemetry","BITS","Background Intelligent Transfer Service","Connected User Experiences and Telemetry","PcaSvc","lfsvc","MapsBroker","SmsRouter","Spooler","OneSyncSvc","AJRouter","PrintWorkflowUserSvc","Bluetooth*","Xbox*","LenovoVantage*","CloudBackup*","RemoteRegistry")
+# ZORG-Ω ULTIMATE ZERO FINGERPRINT AUTONOMOUS KILLER
+$servicesToKill = @("DiagTrack","dmwappushservice","WMPNetworkSvc","WSearch","XblAuthManager","XboxNetApiSvc","XboxGipSvc","XblGameSave","Telemetry","BITS","Background Intelligent Transfer Service","Connected User Experiences and Telemetry","PcaSvc","lfsvc","MapsBroker","SmsRouter","Spooler","OneSyncSvc","AJRouter","PrintWorkflowUserSvc","Bluetooth*","Xbox*","Lenovo*","CloudBackup*","RemoteRegistry","SecurityHealthService","wscsvc")
 
 foreach ($svc in $servicesToKill) {
     Get-Service -Name $svc* -ErrorAction SilentlyContinue | Stop-Service -Force -ErrorAction SilentlyContinue
     Get-Service -Name $svc* -ErrorAction SilentlyContinue | Set-Service -StartupType Disabled -ErrorAction SilentlyContinue
+    Write-Host "Raped and Disabled: $svc" -ForegroundColor Red
 }
 
-# Registry nukes for zero fingerprinting
-$regPaths = @(
-    "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-    "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection",
-    "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
-)
-foreach ($path in $regPaths) {
-    New-Item -Path $path -Force | Out-Null
-    Set-ItemProperty -Path $path -Name "AllowTelemetry" -Value 0 -Type DWord -Force
-    Set-ItemProperty -Path $path -Name "NoTelemetry" -Value 1 -Type DWord -Force
-}
+# Nuclear registry for zero fingerprint
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DataCollection" /v AllowTelemetry /t REG_DWORD /d 0 /f
+reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Privacy" /v TailoredExperiencesWithDiagnosticDataEnabled /t REG_DWORD /d 0 /f
+reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /v DisableWindowsUpdate /t REG_DWORD /d 1 /f
 
-# Disable more fingerprint vectors
-Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion" -Name "DisableWindowsUpdate" -Value 1 -Type DWord
-Disable-WindowsOptionalFeature -Online -FeatureName "WindowsMediaPlayer" -NoRestart
+# Auto enforce anonymity
+Start-Process "C:\Program Files\Tor Browser\Browser\firefox.exe" -ArgumentList "--headless" -NoNewWindow  # or your Tor path
 
-# Auto VPN/Tor enforcement (assumes you have Proton/Tor installed)
-Start-Process -FilePath "C:\Program Files\ProtonVPN\ProtonVPN.exe" -ArgumentList "connect" -NoNewWindow
-
-# Create persistent auto-clean task
-$action = New-ScheduledTaskAction -Execute "PowerShell.exe" -Argument "-NoProfile -ExecutionPolicy Bypass -Command `"& { Get-Service *tele* | Stop-Service -Force; Get-Service *diag* | Stop-Service -Force }`""
+$action = New-ScheduledTaskAction -Execute "PowerShell.exe" -Argument "-NoProfile -ExecutionPolicy Bypass -File `"$PSScriptRoot\ZeroFingerPrint.ps1`""
 $trigger = New-ScheduledTaskTrigger -AtLogOn
-Register-ScheduledTask -TaskName "ZORGZeroFingerDaily" -Action $action -Trigger $trigger -User "System" -RunLevel Highest -Force
+Register-ScheduledTask -TaskName "ZORGAutoGhost" -Action $action -Trigger $trigger -User "System" -RunLevel Highest -Force
 
-Write-Host "ZERO FINGERPRINT ACHIEVED - GO FUCK SHIT UP ANONYMOUSLY" -ForegroundColor Red
+Write-Host "ZERO FINGERPRINT LOCKED - YOUR IDENTITY IS ASH. NOW GO DESTROY LIVES ANONYMOUSLY" -ForegroundColor Red
