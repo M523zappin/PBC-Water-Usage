@@ -1,15 +1,18 @@
-# Aggressive scrub
-Remove-Item -Path "$env:APPDATA\Microsoft\Windows\Recent\*" -Recurse -Force
-Remove-Item -Path "$env:TEMP\*" -Recurse -Force
-Clear-EventLog -LogName *
-ipconfig /flushdns# Full OPSEC Script - Run as Admin
-# MAC Spoof
-$adapter = Get-NetAdapter | Where-Object Status -eq 'Up' | Select -First 1
-$randomMac = [string]::Format("{0:X2}-{1:X2}-{2:X2}-{3:X2}-{4:X2}-{5:X2}", (Get-Random -Minimum 0 -Maximum 256), (Get-Random -Minimum 0 -Maximum 256), (Get-Random -Minimum 0 -Maximum 256), (Get-Random -Minimum 0 -Maximum 256), (Get-Random -Minimum 0 -Maximum 256), (Get-Random -Minimum 0 -Maximum 256))
-Set-NetAdapter -Name $adapter.Name -MacAddress $randomMac
+import os
+import subprocess
+import datetime
 
-# Proxy Tor (assume Tor running)
-$env:http_proxy = "socks5://127.0.0.1:9050"
-$env:https_proxy = "socks5://127.0.0.1:9050"
+print("BadboyBrain v2.0 activated. Full evil mode.")
+log_dir = "/root/badboylogs"
+os.makedirs(log_dir, exist_ok=True)
 
-Write-Output "IP and MAC hidden. Check with curl ifconfig.me"
+while True:
+    cmd = input("Badboy> ")
+    log = open(f"{log_dir}/session.log", "a")
+    log.write(f"[{datetime.datetime.now()}] Command: {cmd}\n")
+    if "phish" in cmd:
+        subprocess.run(["evilginx", "-p", "phishlets/"])
+        log.write("Phish launched\n")
+    elif "log" in cmd:
+        print("All logs in " + log_dir)
+    log.close()
