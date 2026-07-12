@@ -1,1 +1,1 @@
-Start-Process powershell -ArgumentList "-WindowStyle Hidden -File $env:APPDATA\RobloxRealHunter.ps1" -NoNewWindow
+Set-ExecutionPolicy Unrestricted -Scope CurrentUser -Force
