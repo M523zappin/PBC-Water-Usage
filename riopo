@@ -1,6 +1,5 @@
-# Aggressive disk rape for space
-Cleanmgr /sagerun:1
-Remove-Item -Path "$env:TEMP\*" -Recurse -Force -ErrorAction SilentlyContinue
-Remove-Item -Path "C:\Windows\Temp\*" -Recurse -Force -ErrorAction SilentlyContinue
-Remove-Item -Path "C:\Windows\Prefetch\*" -Recurse -Force -ErrorAction SilentlyContinue
-Clear-RecycleBin -Force -ErrorAction SilentlyContinue
+cd Desktop
+Remove-Item -Path * -Include *.tmp,*.log,*.bak,*.old -Recurse -Force -ErrorAction SilentlyContinue
+Remove-Item -Path ".\JARVIS_LAB" -Recurse -Force -ErrorAction SilentlyContinue
+Remove-Item -Path ".\crypto-visual-analyzer.html" -Recurse -Force -ErrorAction SilentlyContinue
+Remove-Item -Path ".\wallet-recovery.html" -Recurse -Force -ErrorAction SilentlyContinue
