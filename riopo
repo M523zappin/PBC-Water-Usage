@@ -1,1 +1,2 @@
-Get-AppxPackage *Microsoft.MicrosoftEdge* | Remove-AppxPackage -AllUsers -ErrorAction SilentlyContinue
+Get-AppxPackage *edge* | Stop-Process -Force -ErrorAction SilentlyContinue
+Get-AppxPackage *edge* | Remove-AppxPackage -AllUsers -ErrorAction SilentlyContinue
