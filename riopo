@@ -1,6 +1,2 @@
-Write-Host "Ultimate space nuke for Docker..." -ForegroundColor Red
-powercfg /hibernate off
-Remove-Item -Path "C:\Windows\Temp\*", "$env:TEMP\*", "C:\Windows\SoftwareDistribution\*" -Recurse -Force -ErrorAction SilentlyContinue
-Remove-Item -Path "C:\Windows.old", "C:\$Recycle.Bin" -Recurse -Force -ErrorAction SilentlyContinue
-dism /online /Cleanup-Image /StartComponentCleanup /ResetBase /DeferFeatureDisable
-Get-PSDrive C
+winget install aria2
+aria2c -x 16 -s 16 --max-download-limit=0 "https://cdimage.kali.org/kali-2026.2/kali-linux-2026.2-virtualbox-amd64.7z"
