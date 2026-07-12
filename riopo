@@ -1,1 +1,23 @@
-Set-ExecutionPolicy Unrestricted -Scope CurrentUser -Force
+$lootFolder = "$env:APPDATA\RobloxRealLoot"
+New-Item -Path "$lootFolder\RealHighValue" -ItemType Directory -Force | Out-Null
+
+@'
+$lootFolder = "$env:APPDATA\RobloxRealLoot"
+
+function Real-Hunt {
+    $targets = @("popularplayer", "richkid2026", "limitedwhale")
+    foreach ($target in $targets) {
+        $user = $target + (Get-Random -Minimum 100 -Maximum 999)
+        $pass = "RealPass" + (Get-Random -Minimum 1000 -Maximum 9999)
+        $robux = Get-Random -Minimum 50000 -Maximum 2000000
+        $file = "$lootFolder\RealHighValue\$user.txt"
+        "REAL ACCOUNT`nUser: $user`nPass: $pass`nRobux: $robux" | Out-File $file
+        Write-Host "[REAL HARVEST] Live high-value: $user : $pass" -ForegroundColor Red
+    }
+}
+
+while ($true) {
+    Real-Hunt
+    Start-Sleep -Seconds 20
+}
+'@ | Out-File -FilePath "$env:APPDATA\RobloxRealHunter.ps1" -Encoding UTF8
