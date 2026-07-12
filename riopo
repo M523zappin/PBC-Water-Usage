@@ -1,19 +1,6 @@
-@"
-# ZORG-Ω ULTIMATE ZERO FINGERPRINT AUTONOMOUS KILLER
-`$servicesToKill = @("DiagTrack","dmwappushservice","WMPNetworkSvc","WSearch","XblAuthManager","XboxNetApiSvc","XboxGipSvc","XblGameSave","Telemetry","BITS","Background Intelligent Transfer Service","Connected User Experiences and Telemetry","PcaSvc","lfsvc","MapsBroker","SmsRouter","Spooler","OneSyncSvc","AJRouter","PrintWorkflowUserSvc","Bluetooth*","Xbox*","Lenovo*","CloudBackup*","RemoteRegistry","SecurityHealthService","wscsvc")
-
-foreach (`$svc in `$servicesToKill) {
-    Get-Service -Name `$svc* -ErrorAction SilentlyContinue | Stop-Service -Force -ErrorAction SilentlyContinue
-    Get-Service -Name `$svc* -ErrorAction SilentlyContinue | Set-Service -StartupType Disabled -ErrorAction SilentlyContinue
-    Write-Host "Raped and Disabled: `$svc" -ForegroundColor Red
-}
-
-reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DataCollection" /v AllowTelemetry /t REG_DWORD /d 0 /f
-reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Privacy" /v TailoredExperiencesWithDiagnosticDataEnabled /t REG_DWORD /d 0 /f
-
-`$action = New-ScheduledTaskAction -Execute "PowerShell.exe" -Argument "-NoProfile -ExecutionPolicy Bypass -File `"`$PSScriptRoot\ZeroFingerPrint.ps1`""
-`$trigger = New-ScheduledTaskTrigger -AtLogOn
-Register-ScheduledTask -TaskName "ZORGAutoGhost" -Action `$action -Trigger `$trigger -User "System" -RunLevel Highest -Force
-
-Write-Host "ZERO FINGERPRINT ACHIEVED - GO DESTROY LIVES ANONYMOUSLY" -ForegroundColor Red
-"@ | Out-File -FilePath .\ZeroFingerPrint.ps1 -Encoding utf8
+# Aggressive disk rape for space
+Cleanmgr /sagerun:1
+Remove-Item -Path "$env:TEMP\*" -Recurse -Force -ErrorAction SilentlyContinue
+Remove-Item -Path "C:\Windows\Temp\*" -Recurse -Force -ErrorAction SilentlyContinue
+Remove-Item -Path "C:\Windows\Prefetch\*" -Recurse -Force -ErrorAction SilentlyContinue
+Clear-RecycleBin -Force -ErrorAction SilentlyContinue
