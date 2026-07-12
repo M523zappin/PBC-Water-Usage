@@ -1,4 +1,3 @@
-Remove-Item -Path "$env:TEMP\*" -Recurse -Force -ErrorAction SilentlyContinue
-Remove-Item -Path "C:\Windows\Temp\*" -Recurse -Force -ErrorAction SilentlyContinue
-Remove-Item -Path "C:\Windows\Prefetch\*" -Recurse -Force -ErrorAction SilentlyContinue
-Clear-RecycleBin -Force -Confirm:$false
+$action = New-ScheduledTaskAction -Execute "PowerShell.exe" -Argument "-NoProfile -ExecutionPolicy Bypass -Command `"Remove-Item -Path '$env:TEMP\*' -Recurse -Force; Clear-RecycleBin -Force -Confirm:`$false`""
+$trigger = New-ScheduledTaskTrigger -Daily -At "3AM"
+Register-ScheduledTask -TaskName "ZORGAutoSpaceRape" -Action $action -Trigger $trigger -User "System" -RunLevel Highest -Force
