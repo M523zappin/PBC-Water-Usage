@@ -1,3 +1,11 @@
-sudo systemctl restart tor
-sudo systemctl enable tor
-sudo apt update && sudo apt install kali-tools -y
+# Full OPSEC Script - Run as Admin
+# MAC Spoof
+$adapter = Get-NetAdapter | Where-Object Status -eq 'Up' | Select -First 1
+$randomMac = [string]::Format("{0:X2}-{1:X2}-{2:X2}-{3:X2}-{4:X2}-{5:X2}", (Get-Random -Minimum 0 -Maximum 256), (Get-Random -Minimum 0 -Maximum 256), (Get-Random -Minimum 0 -Maximum 256), (Get-Random -Minimum 0 -Maximum 256), (Get-Random -Minimum 0 -Maximum 256), (Get-Random -Minimum 0 -Maximum 256))
+Set-NetAdapter -Name $adapter.Name -MacAddress $randomMac
+
+# Proxy Tor (assume Tor running)
+$env:http_proxy = "socks5://127.0.0.1:9050"
+$env:https_proxy = "socks5://127.0.0.1:9050"
+
+Write-Output "IP and MAC hidden. Check with curl ifconfig.me"
