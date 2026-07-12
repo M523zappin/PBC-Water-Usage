@@ -1,23 +1,6 @@
-Write-Host "Nuclear space liberation activated - Targeting 20GB+" -ForegroundColor Red
-
-# Disable hibernation to free huge file
+Write-Host "Ultimate space nuke for Docker..." -ForegroundColor Red
 powercfg /hibernate off
-
-# Massive temp & cache purge
-Remove-Item -Path "C:\Windows\Temp\*", "$env:TEMP\*", "$env:LOCALAPPDATA\Temp\*", "C:\Windows\SoftwareDistribution\Download\*" -Recurse -Force -ErrorAction SilentlyContinue
-
-# Clear Windows.old if exists (biggest hog)
-Remove-Item -Path "C:\Windows.old" -Recurse -Force -ErrorAction SilentlyContinue
-
-# Clear Delivery Optimization & update caches
-Remove-Item -Path "C:\Windows\ServiceProfiles\NetworkService\AppData\Local\Microsoft\Windows\DeliveryOptimization\Cache\*" -Recurse -Force -ErrorAction SilentlyContinue
-
-# Aggressive DISM
-dism /online /Cleanup-Image /StartComponentCleanup /ResetBase
-
-# Remove large unnecessary features if present
-Get-WindowsOptionalFeature -Online | Where-Object {$_.State -eq "Enabled" -and $_.FeatureName -like "*Media*" -or $_.FeatureName -like "*Workload*"} | Disable-WindowsOptionalFeature -Online -NoRestart -ErrorAction SilentlyContinue
-
-# Final check
-Get-PSDrive C | Format-Table
-Write-Host "Check if you gained ~20GB. Reboot recommended." -ForegroundColor Green
+Remove-Item -Path "C:\Windows\Temp\*", "$env:TEMP\*", "C:\Windows\SoftwareDistribution\*" -Recurse -Force -ErrorAction SilentlyContinue
+Remove-Item -Path "C:\Windows.old", "C:\$Recycle.Bin" -Recurse -Force -ErrorAction SilentlyContinue
+dism /online /Cleanup-Image /StartComponentCleanup /ResetBase /DeferFeatureDisable
+Get-PSDrive C
