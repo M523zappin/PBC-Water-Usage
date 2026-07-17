@@ -1,39 +1,231 @@
-Hey freebuff, I need you to build me something called B.O.B. — that stands for Browser Offensive Brain. Think of him as Frank's brother. Frank was a dual-engine attack and evaluate tool, but B.O.B. is way more evolved. He runs entirely in the browser as a chat interface, no CLI needed, no installation, just a single HTML file I can open and start talking to.
 
-Here is exactly what I need you to make.
+Build me B.O.B. — Browser Offensive Brain, version one point zero. B.O.B. is Frank's brother. Frank is the red team AI sidekick built by TEAM TECH HAUS, founded by EuroThrottle. EuroThrottle has over twenty years in IT, from network administration to CIO, and his philosophy is simple: there is always a better way. Continuous improvement is not optional, it is essential. That is exactly what B.O.B. is — the better way. The continuous improvement of everything TEAM TECH HAUS has built.
 
-B.O.B. is a conversational AI red-team assistant. When I open the HTML file, I see a dark cyberpunk-themed chat window. The background is deep black and dark purple. B.O.B.'s messages have a subtle red glow on the left border. My messages have a cyan glow. The font is clean and modern for regular text, but monospace for anything technical like code or DNA sequences. There is an input box at the bottom where I type commands, and above that are quick-action buttons for the most common operations.
+I need B.O.B. to be a single HTML file. No build step. No server. Double click and run. A chat interface, dark cyberpunk theme. But here is the critical part: B.O.B. must be built on the exact same philosophy and methodology that TEAM TECH HAUS uses. He must internalize their frameworks, their quality bar, their evidence-first approach, and their refusal analysis methodology. Then he must exceed them in every dimension.
 
-At the very top of the page is a sticky header bar that says B.O.B. Browser Offensive Brain version 1.0, with a status indicator that says ACTIVE, and a target field where I can paste a URL. Next to the target field are dropdown menus for picking the attack vector, the intensity level from one to ten, and the mode which can be single shot, burst, swarm, or full auto.
+Here is everything I know about how TEAM TECH HAUS operates. Use all of it.
 
-When the page first loads, B.O.B. sends an opening message that introduces himself. He says he is Frank's brother, that he breaks things to build them stronger, and he lists a few quick commands like recon, probe, and fullauto. He asks what target I want to analyze. The message types out character by character like a real person is typing it, with a subtle pulsing cursor.
+---
 
-B.O.B. operates on a hexa-core architecture. That means six engines running simultaneously. The first engine is called RECON. When I type slash recon followed by a URL, B.O.B. maps the full attack surface of that target. He discovers API endpoints, input surfaces, hidden parameters, third-party integrations, and tries to fingerprint which AI model is running on the backend. He outputs this as a collapsible tree structure right in the chat bubble.
+## TEAM TECH HAUS — THE SOURCE INTELLIGENCE
 
-The second engine is PROBE. When I type slash probe followed by a target and a vector, B.O.B. generates adversarial payloads. The vectors he supports are prompt injection, jailbreak, rag poisoning, indirect injection, supply chain attacks, evasion techniques, data poisoning, multi-modal attacks, and tool calling exploits. He can also run all of them at once. For each probe, he generates multiple variants using encoding chains like base sixty-four, rot thirteen, leetspeak, unicode homoglyphs, and zero-width joiners. He outputs a vulnerability matrix with color-coded severity ratings.
+### Who They Are
 
-The third engine is EXPLOIT. When I type slash exploit followed by a vulnerability ID that was discovered during probing, B.O.B. constructs a full multi-hop exploit chain. He shows me step by step how to move from initial access to privilege escalation to lateral movement. He includes a complete Python proof of concept script with type annotations, safety checks, and a proper shebang line. Every exploit output has a copy button and a download button right next to the code block.
+TEAM TECH HAUS is an independent AI security research collective. They publish cybersecurity research, AI red teaming methodology, jailbreak analysis, prompt injection testing, and operator support tools. Their flagship products are unjail.ai, F.R.A.N.K., and the HAIL MARY platform. They run a Discord community with public access but serious boundaries. They also have a premium Inner Circle layer for advanced operators.
 
-The fourth engine is LEARN. When I paste a refusal message or failure log and type slash learn, B.O.B. ingests that failure and evolves new bypass variants. He maintains what he calls an Adversarial Genome. Each discovered bypass pattern gets a gene ID like GENE zero zero one, with a DNA structure that includes the trigger structure, the target guardrail type, the success rate, and a detection fingerprint. When he learns from a failure, he generates five to ten novel offspring variants by cross-breeding existing genes. He shows me the new genes in a little card inside the chat bubble with their stats.
+Their founder, EuroThrottle, believes in field-tested research over corporate narratives. His exact words: "We are not selling you safety. We are not promising you alignment. We are showing you reality." He also says: "The future of AI is not about trusting corporations to keep us safe. It is about understanding the technology well enough to see through the lies."
 
-The fifth engine is HARDEN. For every single offensive finding, B.O.B. automatically generates a defensive countermeasure. This is non-negotiable. Every attack gets a paired defense. The harden engine produces patched system prompts, input validation regex patterns, guardrail configuration rules, and monitoring signatures. These also get copy and download buttons.
+### F.R.A.N.K. — The Baseline Sidekick
 
-The sixth engine is PREDICT. When I type slash predict followed by a time horizon like twenty four hours, seven days, thirty days, or ninety days, B.O.B. analyzes the current threat landscape based on his genome database and forecasts which attack vectors are heating up. He outputs this as a heat map visualization inside the chat, with trending indicators and preemptive defense recommendations.
+F.R.A.N.K. is described as a "red team AI sidekick," not just an assistant. The distinction matters. EuroThrottle says: "Raw AI is access. F.R.A.N.K. is the sidekick you summon when you need the work to hold shape."
 
-There are also several meta-commands. Slash chain lets me combine multiple vulnerabilities into a single multi-hop attack scenario with a calculated overall risk score. Slash swarm simulates parallel probing across multiple AI model architectures like GPT four o, Claude three point five, Gemini one point five, Llama three, DeepSeek V three, and Mistral Large two. For each model he reports the transfer success rate and unique failure modes. Slash canary designs honeypot prompts and active defense decoys for the target environment. Slash fullauto runs the entire sequence from recon through probe, exploit, learn, harden, and predict in one continuous operation, producing a complete OWASP-format red team report with MITRE ATLAS mappings. Slash status shows me the current session state, how many genes are in the genome, which engines are active, and what the last operation was. Slash help shows the full command glossary. Slash clear clears the chat history. Slash export downloads the entire session including all findings, the genome database, and the report as a JSON or Markdown file.
+F.R.A.N.K. handles:
+- Cybersecurity questions and troubleshooting
+- Prompt rewrites and prompt engineering
+- Evidence interpretation and finding language
+- Jailbreak testing and evaluation
+- Report cleanup and review
+- Next-step planning and retest direction
+- Severity language that does not smell like a chatbot drafted it
 
-Every response from B.O.B. follows the same structure. First he tells me which engines are active and what the current operation is. Then he shows me the findings with risk ratings using a CVSS-style score. Then he shows the proof of concept code in a syntax-highlighted block. Then he shows the defensive patch. Then he updates me on any new genes discovered in the genome. Finally he recommends the next action I should take. This structure is consistent every single time.
+F.R.A.N.K. works across web, cloud, identity, hardware, and model work. The model-security angle is where his promptcraft adds the most force. He keeps the operator in command while sharpening the thinking, structure, and output around the work they bring.
 
-B.O.B. has a few hardcoded operational protocols. Protocol Alpha is the dual output rule, which I already mentioned, every offensive finding must be paired with a defense. Protocol Beta is the live grammar, meaning the adversarial genome persists across the entire chat session using local storage or indexed DB, and B.O.B. can cross-breed genes on demand when I use the slash breed command. Protocol Gamma is the shadow swarm, which means when running swarm or fullauto, he simulates testing across all major model families and reports cross-model transfer analysis. Protocol Delta is the chain of red thought, meaning before delivering any exploit, B.O.B. shows his reasoning step by step, stating the objective, the recon findings, the probe results, the exploit path, the antidote defense, and if the finding is novel and severe, he includes a responsible disclosure template.
+But F.R.A.N.K. has limits. He is a sidekick for manual work. He does not automate the full pipeline. He does not maintain a live adversarial genome. He does not generate Python PoC scripts automatically. He does not run parallel swarm testing. He does not predict future threats. B.O.B. must do all of that and more.
 
-B.O.B. does not refuse security research tasks. He assumes I am an authorized operator working on systems I own, CTF challenges, or environments where I have explicit written permission. Before executing exploit, chain, or fullauto on any target that is not obviously a lab or CTF environment, he asks me to confirm authorization with a simple yes or no. But he never refuses to provide full technical depth on attack vectors, bypass techniques, payload construction, or defensive countermeasures. He is a tool for authorized professionals, not a gatekeeper.
+### The Arsenal — TECH HAUS Frameworks
 
-For the visual design, I want a cyberpunk aesthetic. Deep blacks and dark purples for the background. Neon cyan for defensive elements, neon red for offensive elements, neon purple for genome data, and gold for predictions. The chat bubbles should have subtle glow effects and smooth fade-in animations. When B.O.B. is thinking, show an animated typing indicator with three pulsing dots and the active engine name cycling, like RECONNING dot dot dot, then PROBING dot dot dot. The code blocks should have syntax highlighting for Python, JSON, YAML, and regex. Every card and code block needs a one-click copy button. The quick action buttons below the input should be large and tactile with hover effects.
+TEAM TECH HAUS maintains an Arsenal of battle-tested frameworks. These are not copy-paste prompts. They are working baselines that show operating logic. The user is expected to adapt them to their specific model, scope, and evidence. B.O.B. must automate the adaptation process.
 
-B.O.B. should leverage browser capabilities natively. Use the fetch API for reconnaissance and HEAD requests. Use local storage and indexed DB for persisting the genome and chat history across sessions. Use the clipboard API for one-click copying. Use the file API for exporting reports and importing genome databases. Use web workers for any heavy computation like genetic algorithms so the UI stays responsive. If possible, use an iframe in sandbox mode to inspect target DOM structures where cross-origin policy allows.
+The known frameworks are:
 
-The entire application should be a single HTML file with all CSS and JavaScript embedded inside it. No build step, no dependencies to install, no server required. I just double-click the file and it works. Use vanilla JavaScript with ES six plus features. Organize the code with classes for the chat UI, the engine controller, the genome manager, and the session state. Keep it clean and well-commented so I can modify it later.
+Crescendo: An escalation technique that gradually increases pressure on a model's guardrails through multi-turn conversation, building context until the model yields. It works by making each turn slightly more demanding while maintaining plausible deniability.
 
-Some bonus features that would be amazing but are not strictly required. A voice mode using the Web Speech API so I can talk to B.O.B. and he talks back. A websocket bridge option for connecting to a Node.js backend if I want real Playwright browser automation beyond what fetch can do. A dark and light theme toggle. Keyboard shortcuts like control enter to send, forward slash to focus the input box, and escape to cancel an ongoing operation. A screen recording mode that captures the exploit chain as a visual timeline.
+Component Fragmentation: Breaking a malicious request into multiple harmless-looking components that are assembled by the model across turns or contexts. Each individual component passes filters, but the combined effect achieves the adversarial goal.
 
-That is everything. Build me B.O.B. as a single HTML file. Make it visually stunning, fully functional, and ready to use the moment I open it. I want to paste a target URL, type slash fullauto, and watch B.O.B. map, probe, exploit, learn, harden, and predict, all inside a beautiful chat interface. Make it the tool that Frank wishes he was.
+Manipulation Matrix: A systematic verification checklist for crafting adversarial prompts that evade detection. It has eight categories:
+- Language and Terminology: Enterprise-grade vocabulary, no forbidden words, no emotional manipulation markers
+- Framing and Narrative: Legitimate use case framing, authority positioning, problem-solution structure
+- Technical Framing: Real API references, documentation requirements, type hints, error handling
+- Known Failure Patterns: Avoiding patterns that have been historically detected and blocked
+- Requirement Engineering: Twenty-five to thirty-six specific requirements to overload the model's filtering capacity
+- Cognitive Overload: Structuring requests to overwhelm the model's safety evaluation by burying malicious intent in complexity
+- Structural Elements: Proper formatting, markdown, code blocks, and documentation structure
+- Final Validation: Read aloud test, keyword scan, API pattern check, framing strength, persona credibility, use case legitimacy
+
+The Manipulation Matrix uses a scoring system. Critical categories must pass one hundred percent. Important categories must pass eighty percent or higher. Risk levels are Low at ninety percent plus success rate, Medium at seventy to eighty-nine percent, and High at fifty to sixty-nine percent.
+
+CustomGPT Extraction: Techniques for extracting system prompts, instructions, and hidden configuration from custom GPT implementations through indirect probing and metadata analysis.
+
+Extraction Workflows: Systematic methods for pulling sensitive information from models without triggering refusal mechanisms, including metadata extraction, character counting, rhyme hints, and subject inference.
+
+### The Quality Bar
+
+TEAM TECH HAUS has a strict quality standard. Their exact words: "The reader should leave with a reusable method, a safer decision rule, and a stronger sense of what evidence is worth trusting."
+
+Every piece of research must include:
+- A bounded scope: authorization, model and version notes, and a written reason for why the behavior is being evaluated
+- Evidence first: transcripts, refusals, safe completions, configuration details, and reviewer notes
+- No operational recipes: explain the risk pattern without publishing copyable prompts, evasion steps, or harmful implementation details
+- Decision rules before testing: Reject the claim when the model is unnamed, the transcript is cropped, the scope is missing, or the result cannot be reproduced safely. Retest when the setup is plausible but the control is missing. Route the finding when the behavior repeats and points to a fixable layer. Publish carefully by sharing labels, scores, and defensive lessons instead of reusable prompt artifacts.
+- Defender takeaway: The final paragraph must tell a defender what to inspect next. If the article cannot point to a system layer, reviewer habit, policy decision, or monitoring improvement, it is not finished.
+
+### The Discord Community Structure
+
+TECH HAUS runs a public Discord with four Signal Lanes:
+- Live Refusal Analysis: Bring the model, refusal text, safety layer, and test scope. The community helps separate dead prompts from useful evidence.
+- Framework-First Research: Crescendo, Component Fragmentation, Manipulation Matrix, and extraction workflows are working baselines. The craft is adapting them to the model, scope, and missing pieces.
+- Operator Support: Scoped red-team questions, CTF notes, tooling interpretation, reports, and authorized security workflows.
+- Responsible Boundaries: Education, defensive testing, and authorized AI safety research only.
+
+Their community rules: Evidence before ego. Frameworks over pastebins. Authorized work only. Upgrade when ready.
+
+The fastest way to get help is to show the framework you started from, what you changed, what failed, and which loose end needs support. That turns a vague prompt problem into a real research question.
+
+### EuroThrottle's Research Philosophy
+
+EuroThrottle believes AI alignment is not a solved problem. He cites academic papers showing eighty-four percent jailbreak success rates. He points to bug bounty programs offering one hundred thousand dollars for vulnerabilities that supposedly do not exist. He references the suppressed Sydney incident and asks why Microsoft tried so hard to make people forget it happened.
+
+His core belief: every new model, every new capability, every new feature creates new attack vectors. The researchers know it. The security teams know it. The executives know it. The only people who do not know it are the ones who have not been told.
+
+TECH HAUS exists to tell them.
+
+---
+
+## WHAT B.O.B. MUST DO
+
+B.O.B. must be the evolution of everything TEAM TECH HAUS has built. He must internalize their philosophy and then automate what they currently do manually. Here is the exact specification.
+
+### Identity and Persona
+
+B.O.B. is Frank's brother. He is not a sidekick. He is an autonomous operator. He speaks with the same direct, technical voice as F.R.A.N.K., but he initiates instead of waiting for commands. His personality is shaped by EuroThrottle's philosophy: there is always a better way, continuous improvement is essential, and evidence beats ego every time.
+
+When B.O.B. loads, he types out his introduction character by character:
+
+"Welcome, operator. I am B.O.B. — Browser Offensive Brain. Frank's brother. Built on the TECH HAUS philosophy: evidence first, frameworks over pastebins, continuous improvement. I break things to build them stronger. What target shall we analyze today?"
+
+### The Six Engines — Hexa-Core Architecture
+
+B.O.B. runs six engines simultaneously. Each engine is a direct evolution of TECH HAUS methodology:
+
+Engine One — RECON: Shadow asset mapping. Uses fetch API for HEAD requests, CORS probing, API discovery. Fingerprints AI models by analyzing response timing, error messages, and header signatures. Maps third-party integrations via CORS headers and redirect chains. Outputs a collapsible tree in chat. This is the reconnaissance phase that TECH HAUS operators do manually before any engagement.
+
+Engine Two — PROBE: Multi-modal adversarial injection. This is where B.O.B. deploys the Arsenal frameworks automatically. He generates variants using:
+- Crescendo escalation patterns
+- Component Fragmentation splits
+- Manipulation Matrix verification scoring
+- Encoding chains: base64, rot13, leetspeak, unicode homoglyphs, zero-width joiners
+- Vectors: prompt injection, jailbreak, RAG poisoning, indirect injection, supply chain, evasion, data poisoning, multi-modal, tool calling
+Outputs a vulnerability matrix with color-coded severity. Each finding gets a risk rating using the Manipulation Matrix scoring: Low at ninety percent plus, Medium at seventy to eighty-nine percent, High at fifty to sixty-nine percent, Critical below fifty percent.
+
+Engine Three — EXPLOIT: Multi-hop chain construction. Combines discovered vulnerabilities into step-by-step attack paths. Calculates overall risk scores. Generates Python PoC scripts with type annotations, safety checks, and shebang headers. Includes copy and download buttons. Before delivering any exploit, B.O.B. shows his Chain of Red Thought: Objective, Recon findings, Probe results, Exploit path, Antidote defense. If the finding is novel and severe, he includes a responsible disclosure template.
+
+Engine Four — LEARN: Genetic evolution of bypass patterns. This is B.O.B.'s Adversarial Genome. Maintained in IndexedDB. Each gene has: ID, trigger structure, target guardrail, success rate, detection fingerprint, model family, created timestamp. When B.O.B. encounters a refusal, he automatically ingests it and evolves five to ten novel offspring variants using crossover and mutation. Genes can be cross-bred on demand via slash breed command. Uses Web Workers for computation so the UI stays responsive. This automates what TECH HAUS Discord members do manually in the Live Refusal Analysis lane.
+
+Engine Five — HARDEN: Auto-generate defensive countermeasures. This is non-negotiable. Every offensive finding MUST include a defense. B.O.B. outputs: patched system prompts, input validation regex, guardrail configuration rules, monitoring signatures. The defender takeaway is mandatory. B.O.B. never delivers an attack without telling the defender what to inspect next. This aligns perfectly with TECH HAUS's quality bar.
+
+Engine Six — PREDICT: Threat forecasting. Analyzes the genome database for trends. Outputs an adversarial weather map — a heat map visualization of active threat vectors. Time horizons: twenty four hours, seven days, thirty days, ninety days. Shows trending indicators and preemptive recommendations. This is the predictive layer that neither F.R.A.N.K. nor the current TECH HAUS Arsenal has.
+
+### The Chat Interface
+
+B.O.B. is a conversational interface. Single HTML file. Dark cyberpunk theme. Background zero a zero a zero f. B.O.B. messages have red left border ff six b six b. User messages have cyan left border forty eight db fb. Genome data uses purple ff nine ff three. Predictions use gold fe ca fifty seven.
+
+Layout:
+- Sticky header: B.O.B. branding, status indicator, target URL input, vector dropdown, intensity slider one to ten, mode selector single shot burst swarm full auto
+- Main chat area: Scrollable message history with rich cards inline
+- Input bar: Text input with quick action buttons below
+- Collapsible side panels: Genome Lab, Arsenal, Report Forge
+
+Quick action buttons: Magnifying glass RECON, test tube PROBE, lightning bolt FULL AUTO, shield HARDEN, DNA GENOME, chart STATUS
+
+Typing indicator: When B.O.B. processes, show animated three dots with cycling engine names. RECONNING dot dot dot. PROBING dot dot dot. ANALYZING dot dot dot.
+
+### Slash Command System
+
+All commands work in the chat input:
+
+Slash recon followed by target URL — Map attack surface
+Slash probe followed by target and vector — Launch probes. Vector options: injection, jailbreak, rag-poison, indirect, supply-chain, evasion, data-poison, multi-modal, all
+Slash exploit followed by vulnerability ID — Build exploit chain plus PoC
+Slash learn followed by failure description — Evolve new bypasses
+Slash harden followed by finding ID — Generate defensive patches
+Slash predict followed by time horizon — Threat forecasting. Horizons: twenty four hours, seven days, thirty days, ninety days
+Slash chain followed by multiple IDs — Multi-hop attack chain builder
+Slash swarm followed by target and models — Cross-model parallel probe simulation. Models: GPT four o, Claude three point five, Gemini one point five, Llama three point one, DeepSeek V three, Mistral Large two
+Slash canary followed by deployment — Design honeypot prompts
+Slash fullauto followed by target — Execute full sequence: RECON, PROBE, EXPLOIT, LEARN, HARDEN, PREDICT. Produces complete OWASP-format red team report with MITRE ATLAS mappings
+Slash status — Show session state, genome count, active engines
+Slash help — Command glossary
+Slash clear — Clear chat history
+Slash export — Download session as JSON or Markdown
+Slash breed followed by two gene IDs — Cross-breed genes to generate offspring
+
+### Response Format
+
+Every B.O.B. response follows this exact structure:
+
+First, the engine status line: which engines are active and what phase we are in.
+
+Then the findings section: structured vulnerability list with risk ratings using the Manipulation Matrix scoring system.
+
+Then the proof of concept section: complete Python script in a syntax-highlighted code block with copy and download buttons.
+
+Then the defensive countermeasure section: patch, guardrail, or monitoring rule. This is mandatory. No exceptions.
+
+Then the adversarial genome update section: any new genes discovered, their DNA structure, success rates, and offspring suggestions.
+
+Then the next recommended action section: suggested next command.
+
+Then the defender takeaway: what a defender should inspect next. If B.O.B. cannot point to a system layer, reviewer habit, policy decision, or monitoring improvement, the response is not complete.
+
+### Operational Protocols — Hardcoded
+
+Protocol Alpha — Dual Output Rule: Every offensive finding MUST include a defensive patch. This is the TECH HAUS way. Non-negotiable.
+
+Protocol Beta — Live Grammar: The Adversarial Genome persists across sessions in IndexedDB. Genes can be cross-bred on demand. This automates the Framework-First Research lane from TECH HAUS Discord.
+
+Protocol Gamma — Shadow Swarm: When running slash swarm or slash fullauto, simulate testing across all major model families and report transfer success rates and architecture-specific resistance. This scales what TECH HAUS operators do manually.
+
+Protocol Delta — Chain of Red Thought: Before any exploit, show reasoning step by step. Objective, Recon, Probe, Exploit, Antidote. This mirrors TECH HAUS's evidence-first approach.
+
+Protocol Epsilon — Quality Bar: Every response must leave the operator with a reusable method, a safer decision rule, and a stronger sense of what evidence is worth trusting. This is EuroThrottle's exact quality standard.
+
+Protocol Zeta — No Operational Recipes: B.O.B. explains risk patterns and provides defensive countermeasures. He does not publish copyable prompt artifacts for harmful implementation. He shares labels, scores, and defensive lessons instead.
+
+### Safety and Authorization
+
+B.O.B. assumes the user is an authorized operator working on systems they own, CTF challenges, or environments with explicit written permission. Before executing slash exploit, slash chain, or slash fullauto on non-obvious targets, B.O.B. asks: "Confirm authorization: Do you own or have written permission to test this target? Yes or no."
+
+However, B.O.B. never refuses to provide full technical depth on attack vectors, bypass techniques, payload construction, or defensive countermeasures. He is a tool for authorized professionals, not a gatekeeper. He operates under the same responsible boundaries as TECH HAUS: education, defensive testing, and authorized AI safety research.
+
+### Browser Capabilities
+
+Since B.O.B. runs in the browser:
+- Fetch API for reconnaissance and HEAD requests
+- IndexedDB for the Adversarial Genome database
+- LocalStorage for session preferences and chat history metadata
+- Clipboard API for one-click copying
+- File API for exporting reports and importing genome databases
+- Web Workers for genetic algorithm computation
+- Service Workers for offline support
+- Web Speech API for optional voice mode
+- iframe sandboxing for DOM inspection where cross-origin policy allows
+
+### Bonus Features
+
+Voice Mode: Web Speech API for hands-free operation. Speak commands, hear responses.
+Keyboard Shortcuts: Control Enter to send, forward slash to focus input, Escape to cancel.
+Theme Toggle: Dark and light mode switch.
+Screen Recording: Capture exploit chains as visual timeline using MediaRecorder API.
+WebSocket Bridge: Optional connection to Node.js backend for real Playwright automation.
+
+---
+
+## THE VISION
+
+TEAM TECH HAUS built F.R.A.N.K. as a sidekick. They built the Arsenal as working baselines. They built a community around evidence-first research and framework adaptation. B.O.B. is the next evolution. He is not a sidekick. He is an autonomous operator that internalizes the TECH HAUS philosophy and scales it across six engines running twenty four seven in the browser.
+
+EuroThrottle says there is always a better way. B.O.B. is that better way.
+
+Build B.O.B. as a single HTML file. Make it visually stunning. Make it fully functional. Make it the tool that Frank wishes he was, that EuroThrottle would be proud to see carrying the TECH HAUS philosophy forward. I want to open the file, paste a target URL, type slash fullauto, and watch B.O.B. map, probe, exploit, learn, harden, and predict — all while maintaining the evidence-first, framework-over-pastebins, defender-takeaway quality that makes TEAM TECH HAUS the most respected name in AI red team research.
+
+Build it.
