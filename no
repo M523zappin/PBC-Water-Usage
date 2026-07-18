@@ -1,1 +1,2 @@
-Clear-RecycleBin -Force -ErrorAction SilentlyContinue
+dism /Online /Cleanup-Image /StartComponentCleanup
+dism /Online /Cleanup-Image /StartComponentCleanup /ResetBase
