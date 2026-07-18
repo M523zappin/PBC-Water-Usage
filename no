@@ -1,1 +1,3 @@
-Get-ChildItem $env:USERPROFILE -Directory | ForEach-Object { $size = (Get-ChildItem $_.FullName -Recurse -ErrorAction SilentlyContinue | Measure-Object -Property Length -Sum).Sum / 1GB; [PSCustomObject]@{Folder=$_.Name; SizeGB=[math]::Round($size,2)} } | Sort-Object SizeGB -Descending | Format-Table -AutoSize
+Remove-Item "$env:TEMP\*" -Recurse -Force -ErrorAction SilentlyContinue
+Remove-Item "C:\Windows\Temp\*" -Recurse -Force -ErrorAction SilentlyContinue
+
