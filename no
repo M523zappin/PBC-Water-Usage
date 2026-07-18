@@ -1,2 +1,2 @@
-dism /Online /Cleanup-Image /StartComponentCleanup
-dism /Online /Cleanup-Image /StartComponentCleanup /ResetBase
+cleanmgr /sageset:65535
+cleanmgr /sagerun:65535
