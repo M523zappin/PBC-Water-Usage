@@ -1,2 +1,2 @@
-cleanmgr /sageset:65535
-cleanmgr /sagerun:65535
+Remove-Item "$env:USERPROFILE\.codex\auth.json" -Force -ErrorAction SilentlyContinue
+Remove-Item "$env:USERPROFILE\.codex" -Recurse -Force -ErrorAction SilentlyContinue
