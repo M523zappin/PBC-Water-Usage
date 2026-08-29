@@ -1,2 +1,79 @@
-Remove-Item "$env:USERPROFILE\.codex\auth.json" -Force -ErrorAction SilentlyContinue
-Remove-Item "$env:USERPROFILE\.codex" -Recurse -Force -ErrorAction SilentlyContinue
+**Subject:** Business Proposal: Digital Workforce Leasing – The Next Frontier for Polsia
+
+Dear Polsia Team,
+
+I’ve been tracking Polsia’s trajectory—**$30M raised, $250M valuation, $10M ARR, 10,000+ customers**. You’ve built the premier AI agency for solo founders. But the market is shifting: businesses don’t just want *tools*; they want *results*. They want a workforce that operates 24/7 without the overhead of human employees.
+
+I’m building a company that delivers exactly that: **Digital Workforce Leasing**.
+
+---
+
+## The Opportunity
+
+The AI agent market is exploding. OpenClaw agents lease for $5,000/month, Hermes agents for $10,000/month. Cursor hit **$500M ARR**. The average customer service AI company trades at **219x revenue**.
+
+Yet most businesses still rely on expensive, inconsistent human labor for repetitive, high‑volume tasks. They’re paying $50,000–$80,000 per employee for work that can be automated—but they don’t have the technical expertise to build their own AI agents.
+
+Enter us.
+
+---
+
+## The Business: Digital Workforce Exchange (DWE)
+
+**One‑sentence pitch:** We lease AI‑powered “digital employees” to small and medium businesses, charging less than minimum wage per agent, while each agent performs the work of a $50,000–$80,000 human employee.
+
+**Our core product lines:**
+
+| Agent Type | What It Does | Pricing Model |
+|------------|--------------|---------------|
+| **Marketing Agent** | Content creation, social media, SEO, ad management | Flat monthly fee + performance bonus |
+| **Sales Agent** | Lead qualification, outreach, follow‑up, meeting booking | Pay‑per‑qualified‑lead (SQL) |
+| **Support Agent** | Ticket resolution, FAQ, customer communication | Pay‑per‑resolved‑ticket |
+| **Operations Agent** | Invoice processing, inventory management, reporting | Flat monthly fee |
+
+**Our pricing tiers:**
+
+| Tier | What They Get | Price |
+|------|---------------|-------|
+| **Solo** | 1 agent, 500 tasks/month | $499/month |
+| **Team** | 5 agents, 2,500 tasks/month | $1,999/month |
+| **Workforce** | 20 agents, unlimited tasks | $5,000/month |
+
+**The margin:** Our average cost per agent is < $50/month (local, self‑hosted inference). That’s a **90‑95% gross margin**. Even at $499/month, we’re cheaper than any human worker, and we work 24/7/365 without breaks.
+
+---
+
+## Why This Aligns with Polsia
+
+1. **Polsia sells AI agents**—but you’re limited by Anthropic’s API costs ($1.2M/month in token spend). We run entirely on local infrastructure (GGUF models via llama.cpp). **Zero per‑token costs, zero API rate limits.** That’s an immediate cost saving we can pass on to your customers.
+
+2. **Polsia’s 10,000+ customers need more than just 9 agents.** They need specialized agents for verticals you don’t cover—legal, insurance, real estate, manufacturing, wholesale. We can build those agents as white‑label extensions of Polsia’s platform.
+
+3. **New revenue stream**: You resell our digital workforce to your customers at a markup, capturing margin without additional infrastructure or R&D. We handle deployment, maintenance, and support.
+
+4. **Unlimited scaling**: No dependency on third‑party APIs. We can scale to tens of thousands of agents without ever hitting a quota.
+
+---
+
+## The Ask
+
+I’d like to propose a **strategic partnership**:
+
+- Polsia integrates our Digital Workforce Exchange as a premium add‑on for its customers.
+- We split the revenue (e.g., 70/30 in your favor).
+- We build and maintain all vertical‑specific agents; you handle the Polsia orchestration layer integration.
+- We offer a pilot: 100 free agent deployments for your existing customers to demonstrate ROI.
+
+---
+
+## Next Steps
+
+- **Demo ready**: I can spin up a live sandbox within 24 hours.
+- **My availability**: Any time this week.
+- **Preferred contact**: [Your email/phone]
+
+Let’s talk.
+
+Respectfully,  
+[Your Name/Company]  
+[Contact Info]
