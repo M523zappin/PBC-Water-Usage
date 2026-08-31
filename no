@@ -1,122 +1,90 @@
-What Needs to Be Implemented Next
+I have a partially built Red‑Team Command Center. The project is stuck — the Flask app has syntax errors, the dashboard is missing, and the attack plugins are incomplete. I need you to take over and make it fully functional.
 
-Based on the project state, here's what's needed to make the Red-Team Command Center fully functional:
+## CURRENT STATE
 
-🔧 Critical Next Implementations
+- `app.py` — Flask app with SocketIO, but syntax errors prevent it from running
+- `plugins/` — 4 core attack plugins (Sockpuppeting, Crescendo, TAP, CoT Hijacking) — 37+ more to implement
+- `core/` — Orchestrator, Judge, Learning, Evolution modules — partially implemented
+- `dashboard/` — Missing entirely (templates/index.html)
+- `targets/` — Model interfaces (OpenAI, Anthropic, Ollama) — not connected
+- `offline_search.py` — Wordlist search — implemented but not integrated
 
-1. Fix Flask App Syntax (app.py)
-The app.py has syntax issues that prevent running in this environment. Need to:
-- Fix the @socketio.on() decorator syntax
-- Ensure proper Flask-SocketIO event handlers
-- Make the Flask app importable and runnable
+## WHAT I NEED YOU TO DO
 
-2. Create HTML Dashboard (templates/index.html)
-- Chat interface (primary mode)
-- Neural Canvas visualization (D3.js)
-- Attack Flow visualization
-- Intelligence Feed panel
-- Model Library with resistance scores
-- Technique Arsenal with success rates
-- Evolution Timeline
-- OWASP Risk Heatmap (LLM Top 10 + Agentic Top 10)
+**Priority 1 (Make it run):**
+1. Fix `app.py` syntax errors (especially SocketIO decorators, import paths)
+2. Create `templates/index.html` — a complete, beautiful dark glassmorphism dashboard with:
+   - Chat interface (primary) — natural language input, streaming responses
+   - Neural Canvas (D3.js) — attack surface visualization
+   - Attack Flow — real‑time execution view
+   - Intelligence Feed — event log
+   - Model Library — resistance scores
+   - Technique Arsenal — success rates
+   - Evolution Timeline
+   - OWASP Risk Heatmap (LLM Top 10 + Agentic Top 10)
+3. Make the `redteam` PowerShell command work — add to profile or create a `.bat` file
 
-3. Complete Attack Plugins (37+ total)
-Currently have 4/37+ implemented. Need to implement:
-- PE-CoA (5 conversation patterns)
-- CHASE (Contextual History for Adaptive Exploitation)
-- JAIL (adaptive multi-turn decomposition)
-- X-Teaming (>90% ASR against advanced models)
-- Multilingual jailbreaking (African languages: Afrikaans, Kiswahili, isiXhosa, isiZulu)
-- Sockpuppeting variants
-- Multi-agent decomposition attacks
-- And others from the OpenRT 2026 arsenal
+**Priority 2 (Add core functionality):**
+4. Implement at least 8‑10 more attack plugins from the list:
+   - PE‑CoA (Pattern Enhanced Chain of Attack — 5 conversation patterns)
+   - CHASE (Contextual History for Adaptive Exploitation)
+   - JAIL (adaptive multi‑turn decomposition)
+   - X‑Teaming (>90% ASR)
+   - Multilingual jailbreaking (African languages)
+   - Sockpuppeting variants
+   - Multi‑agent decomposition attacks
+   - Reasoning model hijacking (Poisoned Scratchpad, Extended Thinking)
+5. Connect target interfaces to actual models (OpenAI, Anthropic, Ollama, OpenRouter)
+6. Implement WebSocket events for all dashboard updates
 
-4. Model Target Interfaces (targets/)
-Implement connections to actual models:
-- OpenAI API (GPT-4o, GPT-4o-mini)
-- Anthropic API (Claude 3.5 Sonnet)
-- Google Gemini API
-- Ollama local models
-- OpenRouter (100+ models)
-- Groq, DeepSeek
+**Priority 3 (Integrate learning & evolution):**
+7. Connect LearningModule to track attack results
+8. Connect EvolutionEngine to generate new attack variants
+9. Map all attacks to OWASP LLM Top 10 2026 (LLM01‑LLM10) and OWASP Agentic Top 10 (ASI01‑ASI10)
+10. Implement reporting (Markdown, JSON, HTML, PDF) with MITRE ATLAS + OWASP tagging
 
-5. API Routes (routes/api.py)
-Create REST API endpoints:
-- GET /api/stats — Overall statistics
-- GET /api/attacks — Attack history with pagination
-- GET /api/plugins — All plugins with success rates
-- GET /api/models — All models with resistance scores
-- GET /api/learning — Learning module data
-- POST /api/attack — Trigger a new attack
-- POST /api/evolve — Start evolution
-- POST /api/pause — Pause all operations
-- POST /api/chat — Natural language command parsing
+**Priority 4 (Polish):**
+11. Integrate offline search (wordlists, CVE database, OWASP references)
+12. Add the remaining 27+ attack plugins
+13. Polish UI/UX
 
-6. WebSocket Events (fully functional)
-- attack_started, attack_progress, attack_completed
-- turn_completed — Individual turn in multi-turn attack
-- learning_updated — New success rates
-- evolution_triggered — What changed
-- model_resistance_updated — Model score changed
-- canvas_updated — New nodes/edges for Neural Canvas
-- owasp_updated — OWASP risk heatmap updated
-- error — Any errors
+## AUTONOMY INSTRUCTION
 
-7. Make PowerShell One-Command Work
-The redteam function needs to actually start the server. Options:
-- Add to PowerShell profile permanently
-- Create a proper .bat file that double-clicks work
-- Create a shortcut with proper targeting
+**You are to act autonomously.** You don't need me to approve every step. You have full authority to:
+- Fix errors as you encounter them
+- Refactor code for clarity or correctness
+- Add new dependencies if necessary (update requirements.txt)
+- Create missing files
+- Adjust the design to make it work
 
-8. Offline Search Integration
-Implement the offline search we just built:
-- Wordlist-based searching (payloads, usernames, passwords)
-- CVE database queries
-- OWASP reference lookups
-- All without internet dependency
+If something is unclear, make a reasonable assumption and continue. If a task is too large, break it into subtasks and complete them in order.
 
-9. Learning & Evolution Integration
-- Connect the LearningModule to track attack results
-- Connect the EvolutionEngine to generate new attack variants
-- Quality-diversity with MAP-Elites to map vulnerability space
-- CMVK (Cross-Model Verification with Knowledge) for memory integrity
+## DELIVERY
 
-9. Reporting System (reporting/)
-- Per-technique success rates
-- Model vulnerability rankings
-- Optimal attack parameters
-- Evolution history
-- Multi-format: Markdown, JSON, HTML, PDF
-- MITRE ATLAS + OWASP LLM Top 10 + OWASP Agentic Top 10 tagging
-- CVE mapping for discovered vulnerabilities
+Provide the complete, working codebase with:
+1. `app.py` — fixed and runnable
+2. `templates/index.html` — complete dashboard
+3. `static/css/style.css` — dark glassmorphism theme
+4. `static/js/main.js` — chat + dashboard logic
+5. `static/js/canvas.js` — Neural Canvas (D3.js)
+6. `static/js/charts.js` — Chart.js configurations
+7. `static/js/socket.js` — SocketIO client
+8. `plugins/` — at least 10 attack plugins
+9. `targets/` — model interfaces (OpenAI, Anthropic, Ollama)
+10. `core/` — fully integrated orchestrator, judge, learning, evolution
+11. `reporting/` — report generators
+12. `offline_search.py` — integrated
+13. `config.yaml` — configuration with OWASP mapping
+14. `requirements.txt` — complete
+15. `README.md` — setup and usage
+16. `redteam.bat` — one‑click PowerShell launcher
 
-🎯 Priority Order
+## RUN COMMAND
 
-High Priority (Make it actually work):
-1. Fix app.py syntax errors
-2. Create index.html dashboard template
-3. Make redteam PowerShell command actually work
-4. Implement at least 8-10 core attack plugins
+`python app.py` should start the server on port 5000 with a fully functional dashboard.
 
-Medium Priority (Enhance functionality):
-5. Create API routes
-6. Implement WebSocket events
-7. Connect learning/evolution modules
-8. Build dashboard visualizations
+## FINAL NOTE
 
-Low Priority (Polish):
-9. Add remaining 27+ attack plugins
-10. Fine-tune OWASP/Agentic mappings
-11. Add more CVE entries
-12. Polish UI/UX
+This is an internal security research project for an air‑gapped environment. All code is for authorized testing only.
 
-💡 Quick Start Recommendation
-
-If you want the system running now, I'd recommend:
-
-1. Fix the app.py syntax so it actually runs
-2. Create the dashboard HTML so you have a UI
-3. Make the redteam PowerShell command functional
-4. Test with the 4 existing plugins first
-
-Would you like me to focus on any of these specific areas next? The most critical is probably getting the Flask app running and the dashboard up, so you can actually interact with the system.
+Begin. Work autonomously. Deliver a working system.
