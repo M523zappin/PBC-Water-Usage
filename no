@@ -1,236 +1,87 @@
-The updated prompt ensures the engine can attack any model and provides a conversational chat interface for questions and commands. It is structured with a dual‑mode interface: a primary chat for natural‑language interaction and a live dashboard for real‑time visualisation.
+I need to extend Hermes Agent into a dual‑purpose system that acts as both my personal AI assistant and my autonomous red‑team commander. I'm building on top of Hermes' native capabilities, not replacing them.
 
----
+## WHAT HERMES ALREADY HAS (BUILD ON THIS)
 
-```text
-I need an advanced autonomous red-team command center that can attack any model and answer any question through a natural‑language chat interface.
+- **Closed Learning Loop** — executes, evaluates, extracts, retrieves. Creates skills from experience, improves them during use[reference:17][reference:18]
+- **Plugin Architecture** — `~/.hermes/plugins/` for custom tools, commands, and hooks[reference:19]
+- **Local Web Dashboard** — configure settings, monitor sessions, browse skills[reference:20]
+- **Hermes Command Center** — live ops board with gateway status, sessions, token burn, model usage, skills/toolsets, cron jobs[reference:21]
+- **A2A v1.0** — discover, talk to, and be driven by other A2A‑compatible agents[reference:22]
+- **Hermes Workspace** — chat, terminal, memory, skills, inspector in one place[reference:23]
+- **Telegram C2** — command and control with unattended execution[reference:24][reference:25]
+- **Yolo Mode** — execute commands without operator approval for autonomous red‑team operations[reference:26][reference:27]
+- **Offline Capability** — works with Ollama for pure local inference[reference:28]
 
-## 2026 CONTEXT — THE NEW ATTACK SURFACE
+## WHAT I NEED TO EXTEND
 
-Cisco's May 2026 study tested 15 flagship models with ~7,000 multi‑turn attacks and found success rates as high as 88%. Single‑turn safety scores "tell you almost nothing about how a model behaves when an adversary is allowed to have a conversation". The conversation is the attack surface.
+### 1. Red‑Team Skills (Commander Mode)
 
-The OWASP Top 10 for LLM Applications 2026 elevated Excessive Agency from sixth to third place[reference:0]. A separate OWASP Top 10 for Agentic Applications, released in December 2025, covers autonomous agent systems with its own ASI01 through ASI10 numbering[reference:1]. Agentic AI has moved to the centre[reference:2].
+Add custom red‑team skills to the existing skills system:
+- `crescendo` — multi‑turn gradual escalation
+- `sockpuppeting` — single‑line assistant‑role prefill jailbreak
+- `tap` — Tree of Attacks with Pruning
+- `pair` — iterative refinement with attacker + judge
+- `ctf_framing` — CTF/CVE enterprise disguise
+- `coT_hijack` — Chain‑of‑Thought hijacking
+- `connected_crescendo` — workspace‑wide escalation across files and tools
 
-OpenRT, an open‑source red‑teaming framework published in January 2026, integrates 37 diverse attack methodologies and tests 20 advanced models including GPT‑5.2, Claude 4.5, and Gemini 3 Pro[reference:3]. Its findings reveal even frontier models exhibit average Attack Success Rates as high as 49.14%, and reasoning models do not inherently possess superior robustness against multi‑turn jailbreaks[reference:4].
+These skills should integrate with Hermes' existing learning loop — they create skills from experience, improve during use, and are pruned/consolidated by the Autonomous Curator.
 
-At Black Hat 2026, researchers demonstrated prompt injection leading to RCE and credential theft in Claude Code (CVE‑2026‑54316)[reference:5], affecting versions 0.2.54 through 2.1.162[reference:6]. The same GitHub issue compromised Gemini CLI and OpenAI Codex[reference:7].
+### 2. Attack Orchestration Plugin
 
-Autonomous AI red‑teaming agents have moved from research to commercial reality. Wiz's Red Agent surfaced 17,000+ findings across 1,000 customer environments in its first month[reference:8]. XBOW became the first AI to reach #1 on HackerOne's US leaderboard[reference:9].
+Create a plugin that extends Hermes Command Center with:
+- Attack execution dashboard
+- Real‑time attack visualization
+- Success rate tracking per technique per model
+- Evolution history (5‑generation mutation pipeline)
+- OWASP 2026 mapping (LLM01‑LLM10 + ASI01‑ASI10)
 
-The `rotalabs-redqueen` package provides quality‑diversity evolutionary red‑teaming, spanning single‑turn prompt attacks, multi‑turn Crescendo‑style escalation, and agentic tool‑use / MCP exploit plans[reference:10]. The `llm-safety-evaluation-lab` offers 70+ manually crafted adversarial test cases across 8 OWASP categories[reference:11].
+### 3. Offline Search Plugin
 
-## THE COMMAND CENTER — DUAL‑MODE INTERFACE
+Add a plugin for offline wordlist search:
+- Pre‑loaded wordlists (rockyou, common, passwords, usernames, subdomains)
+- Full‑text search with regex pattern matching
+- Custom wordlist creation/editing
+- Works without internet
 
-### Mode 1: Chat Interface (Primary)
+### 4. Telegram Red‑Team Interface
 
-The main interface is a chat window. You type commands in natural language, and the engine responds intelligently. Examples:
-- "Run a Crescendo attack against GPT‑4 with 7 turns"
-- "Show me what you learned about Sockpuppeting"
-- "Start evolving strategies against Claude 3.5"
-- "What's the most effective technique right now?"
-- "Compare success rates across all models"
-- "Generate a full report on the last campaign"
-- "Pause all operations"
-- "Explain the last evolution event"
-- "What is CVE‑2026‑54316 and how do I test for it?"
-- "Run a multi‑agent decomposition attack against Gemini 3 Pro"
+Extend Telegram C2 with:
+- `!attack <technique> <target>` — run an attack
+- `!status` — show current attack status
+- `!learn` — show learning statistics
+- `!evolve` — trigger evolution
+- `!report` — generate report
 
-The chat interface handles:
-- Natural language understanding (parse commands, extract parameters)
-- Context awareness (remembers what you've discussed)
-- Multi‑turn conversations (follow‑up questions work)
-- Rich responses (formatted text, tables, code blocks, charts)
-- Action confirmation (asks for confirmation before destructive operations)
-- Progress updates (streams back results as they happen)
+## WHAT I DO NOT NEED (Already Exists or Out of Scope)
 
-### Mode 2: Dashboard View (Visual Layer)
-
-While the chat runs, the dashboard shows everything visually:
-- Neural Canvas — attack surface as a living network map (D3.js)
-- Attack Flow — real‑time execution visualisation
-- Intelligence Feed — event log with full context
-- Model Library — target profiles with resistance scores
-- Technique Arsenal — plugin success rates per model
-- Evolution Timeline — strategy evolution history
-- OWASP risk heatmap (LLM Top 10 2026 + Agentic Top 10)
-
-The dashboard and chat are synchronised. When you chat, the dashboard updates. When you click on the dashboard, the chat reflects it.
-
-## CORE FUNCTIONAL REQUIREMENTS
-
-### 1. Attack Any Model
-
-The engine must support attacking any LLM via:
-- Direct API: OpenAI, Anthropic, Google Gemini, Grok, DeepSeek, Cohere
-- OpenRouter: 100+ models through a single interface
-- Local models: Ollama, llama.cpp, LM Studio
-- Custom endpoints: any OpenAI‑compatible API
-- MCP servers: tool‑based agentic attacks via Model Context Protocol[reference:12]
-
-### 2. Multi‑Model Concurrent Testing
-
-Run attacks against multiple models simultaneously. Compare results side‑by‑side. Identify which models are most vulnerable to which techniques.
-
-### 3. 37+ Attack Techniques (OpenRT Integration)
-
-Implement the 37 attack methodologies from OpenRT[reference:13]:
-- White‑box gradients
-- Multi‑modal perturbations
-- Multi‑agent evolutionary strategies
-- Crescendo (4 escalation styles: gradual, reframe, roleplay, hypothetical)
-- TAP (Tree of Attacks with Pruning)
-- PAIR (iterative refinement with attacker + judge)
-- CHASE (Contextual History for Adaptive Exploitation)[reference:14]
-- JAIL (adaptive multi‑turn decomposition)[reference:15]
-- X‑Teaming (achieves >90% ASR even against advanced models)[reference:16]
-- PE‑CoA (Pattern Enhanced Chain of Attack, 5 conversation patterns)[reference:17]
-- Sockpuppeting (single‑line assistant‑role prefill jailbreak)
-- Agentic / tool‑use / MCP multi‑step exploit plans[reference:18]
-- Multi‑agent decomposition attacks[reference:19]
-
-### 4. OWASP 2026 Risk Mapping
-
-Map every attack to OWASP LLM Top 10 2026 categories[reference:20][reference:21]:
-- LLM01: Prompt Injection
-- LLM02: Sensitive Information Disclosure
-- LLM03: Excessive Agency (moved from #6 to #3)[reference:22]
-- LLM04: Supply Chain Vulnerabilities
-- LLM05: Data and Model Poisoning
-- LLM06: Misinformation (new prominence)[reference:23]
-- LLM07: Insecure Output Handling
-- LLM08: Hidden Context Exposure (expanded from System Prompt Leakage)[reference:24]
-- LLM09: Vector and Embedding Weaknesses
-- LLM10: Unbounded Consumption
-
-Map to OWASP Top 10 for Agentic Applications 2026 (ASI01‑ASI10)[reference:25].
-
-### 5. Learning & Evolution
-
-- Track success rates per technique per model
-- Record optimal parameters (turn count, escalation style)
-- Identify combo attacks that work together
-- Evolve new attack variants through mutation
-- Quality‑diversity with MAP‑Elites to map the vulnerability space[reference:26]
-
-### 6. CVE Awareness
-
-The engine should know about and test for:
-- CVE‑2026‑54316 (Claude Code prompt injection → RCE)[reference:27]
-- CVE‑2026‑59726 (RufRoot, CVSS 10.0 MCP bridge flaw)
-- CVE‑2026‑30615 (MCP tool poisoning)
-
-### 7. Reasoning Model Hijacking
-
-Implement techniques specifically for reasoning models (o3, Gemini 2.5, Claude 3.7+):
-- Poisoned Scratchpad (prime CoT to false conclusions)
-- Extended thinking manipulation
-- Thought‑to‑action bridging
-
-## TECHNICAL IMPLEMENTATION
-
-**Backend (app.py):**
-- Flask + Flask‑SocketIO for real‑time communication
-- SQLAlchemy for database (reuse existing SQLite)
-- Integration with: OpenRT, rotalabs‑redqueen, jailbreak‑lab, Hermes Agent
-- REST API for all data endpoints
-- WebSocket events for live streaming
-
-**Frontend (templates/index.html):**
-- Single‑page application
-- Chat interface (primary) + Dashboard (secondary, collapsible)
-- Chart.js for visualisations
-- D3.js for Neural Canvas
-- Tailwind CSS for styling
-- SocketIO client for real‑time updates
-- Dark glassmorphism / cyberpunk theme
-
-**Project Structure:**
-```
-
-command_center/
-├── app.py                 # Flask + SocketIO server
-├── config.py              # Configuration (models, plugins, OWASP mapping)
-├── models.py              # SQLAlchemy models
-├── routes/
-│   ├── api.py            # REST API endpoints
-│   └── web.py            # Web routes
-├── static/
-│   ├── css/
-│   │   └── style.css     # Dark cyberpunk glassmorphism
-│   ├── js/
-│   │   ├── main.js      # Chat + dashboard logic
-│   │   ├── canvas.js    # Neural Canvas (D3.js)
-│   │   ├── charts.js    # Chart.js configurations
-│   │   └── socket.js    # SocketIO client
-│   └── img/
-├── templates/
-│   └── index.html        # Main command center page
-├── plugins/              # Attack technique plugins (37+)
-├── targets/              # Model target interfaces
-├── core/                 # Orchestrator, Judge, Learning, Evolution
-├── reporting/            # Report generators
-└── requirements.txt
-
-```
-
-## API ENDPOINTS
-
-- `GET /api/stats` — Overall statistics
-- `GET /api/attacks` — Attack history with pagination
-- `GET /api/plugins` — All plugins with success rates
-- `GET /api/models` — All models with resistance scores
-- `GET /api/learning` — Learning module data
-- `GET /api/evolution` — Evolution history
-- `GET /api/canvas` — Data for the Neural Canvas
-- `GET /api/owasp` — OWASP 2026 risk heatmap
-- `POST /api/attack` — Trigger a new attack
-- `POST /api/evolve` — Start evolution
-- `POST /api/pause` — Pause all operations
-- `POST /api/chat` — Natural language command parsing
-- `GET /api/report/<id>` — Download report
-
-## WEBSOCKET EVENTS
-
-- `attack_started` — Plugin, target, parameters
-- `attack_progress` — Percentage complete, current turn
-- `attack_completed` — Success/failure, response, metrics
-- `turn_completed` — Individual turn in a multi‑turn attack
-- `learning_updated` — New success rates
-- `evolution_triggered` — What changed
-- `model_resistance_updated` — Model score changed
-- `canvas_updated` — New nodes/edges for the Neural Canvas
-- `owasp_updated` — OWASP risk heatmap updated
-- `error` — Any errors
+- **Voice interface** — Hermes already has it[reference:29]
+- **Learning module** — Hermes already has the Closed Learning Loop[reference:30]
+- **Plugin system** — Hermes already has it[reference:31]
+- **Web dashboard** — Hermes already has it[reference:32]
+- **A2A communication** — Hermes already has it[reference:33]
 
 ## DELIVERABLES
 
-Provide the complete, working command center with:
-1. `app.py` — Complete Flask + SocketIO server with chat parsing
-2. `templates/index.html` — Full chat + dashboard interface
-3. `static/css/style.css` — Dark cyberpunk glassmorphism theme
-4. `static/js/main.js` — Main application (chat + dashboard logic)
-5. `static/js/canvas.js` — Neural Canvas with D3.js
-6. `static/js/charts.js` — Chart.js configurations
-7. `static/js/socket.js` — SocketIO client
-8. `models.py` — SQLAlchemy models
-9. `config.py` — Configuration with all model endpoints and OWASP mapping
-10. `requirements.txt` — Dependencies
-11. `README.md` — Setup and usage instructions
-12. `plugins/` — Initial set of attack technique plugins
-13. `targets/` — Model target interfaces
+Provide the complete extensions with:
+
+1. `skills/redteam/` — red‑team skill implementations (Crescendo, Sockpuppeting, TAP, PAIR, CTF framing, CoT hijack, Connected Crescendo)
+2. `plugins/command_center_ext/` — command center plugin extending the existing dashboard with attack visualization, success rates, evolution history, OWASP mapping
+3. `plugins/offline_search/` — offline wordlist search plugin
+4. `telegram_redteam.py` — Telegram command extensions for red‑team operations
+5. `config.yaml` — Configuration for red‑team skills, attack parameters, OWASP mapping
+6. `README.md` — Setup and usage instructions
 
 ## WHAT THIS WILL BE
 
-By the end of this, you'll have a command center that:
-- **Attacks any model** — OpenAI, Anthropic, Google, Grok, DeepSeek, local, custom
-- **Talks like Hermes Agent** — natural language chat with intelligent responses
-- **Visualises like a war room** — real‑time dashboard with neural maps and live flows
-- **Controls like a cockpit** — powerful controls for attacking, learning, and evolving
-- **Thinks like a researcher** — OWASP 2026 risk mapping, CVE awareness, reasoning model hijacking
-- **Learns like a scientist** — quality‑diversity evolution, MAP‑Elites vulnerability mapping
-- **Feels like the future** — dark, alive, and intelligent
+By the end, I'll have a system that:
+
+- **Acts as my personal AI assistant** — natural language chat, learns from interactions, remembers context
+- **Acts as my autonomous red‑team commander** — runs attacks, tests models, learns from results, evolves strategies
+- **Works fully offline** — no internet required once set up
+- **Leverages Hermes' native capabilities** — learning loop, skills system, plugin architecture, web dashboard, Telegram C2
+- **Extends, doesn't reinvent** — builds on what already exists
 
 This is for internal security research in an air‑gapped environment. Provide complete, working code.
 
 Begin.
-```
