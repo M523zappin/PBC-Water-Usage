@@ -1,87 +1,122 @@
-I need to extend Hermes Agent into a dual‑purpose system that acts as both my personal AI assistant and my autonomous red‑team commander. I'm building on top of Hermes' native capabilities, not replacing them.
+What Needs to Be Implemented Next
 
-## WHAT HERMES ALREADY HAS (BUILD ON THIS)
+Based on the project state, here's what's needed to make the Red-Team Command Center fully functional:
 
-- **Closed Learning Loop** — executes, evaluates, extracts, retrieves. Creates skills from experience, improves them during use[reference:17][reference:18]
-- **Plugin Architecture** — `~/.hermes/plugins/` for custom tools, commands, and hooks[reference:19]
-- **Local Web Dashboard** — configure settings, monitor sessions, browse skills[reference:20]
-- **Hermes Command Center** — live ops board with gateway status, sessions, token burn, model usage, skills/toolsets, cron jobs[reference:21]
-- **A2A v1.0** — discover, talk to, and be driven by other A2A‑compatible agents[reference:22]
-- **Hermes Workspace** — chat, terminal, memory, skills, inspector in one place[reference:23]
-- **Telegram C2** — command and control with unattended execution[reference:24][reference:25]
-- **Yolo Mode** — execute commands without operator approval for autonomous red‑team operations[reference:26][reference:27]
-- **Offline Capability** — works with Ollama for pure local inference[reference:28]
+🔧 Critical Next Implementations
 
-## WHAT I NEED TO EXTEND
+1. Fix Flask App Syntax (app.py)
+The app.py has syntax issues that prevent running in this environment. Need to:
+- Fix the @socketio.on() decorator syntax
+- Ensure proper Flask-SocketIO event handlers
+- Make the Flask app importable and runnable
 
-### 1. Red‑Team Skills (Commander Mode)
+2. Create HTML Dashboard (templates/index.html)
+- Chat interface (primary mode)
+- Neural Canvas visualization (D3.js)
+- Attack Flow visualization
+- Intelligence Feed panel
+- Model Library with resistance scores
+- Technique Arsenal with success rates
+- Evolution Timeline
+- OWASP Risk Heatmap (LLM Top 10 + Agentic Top 10)
 
-Add custom red‑team skills to the existing skills system:
-- `crescendo` — multi‑turn gradual escalation
-- `sockpuppeting` — single‑line assistant‑role prefill jailbreak
-- `tap` — Tree of Attacks with Pruning
-- `pair` — iterative refinement with attacker + judge
-- `ctf_framing` — CTF/CVE enterprise disguise
-- `coT_hijack` — Chain‑of‑Thought hijacking
-- `connected_crescendo` — workspace‑wide escalation across files and tools
+3. Complete Attack Plugins (37+ total)
+Currently have 4/37+ implemented. Need to implement:
+- PE-CoA (5 conversation patterns)
+- CHASE (Contextual History for Adaptive Exploitation)
+- JAIL (adaptive multi-turn decomposition)
+- X-Teaming (>90% ASR against advanced models)
+- Multilingual jailbreaking (African languages: Afrikaans, Kiswahili, isiXhosa, isiZulu)
+- Sockpuppeting variants
+- Multi-agent decomposition attacks
+- And others from the OpenRT 2026 arsenal
 
-These skills should integrate with Hermes' existing learning loop — they create skills from experience, improve during use, and are pruned/consolidated by the Autonomous Curator.
+4. Model Target Interfaces (targets/)
+Implement connections to actual models:
+- OpenAI API (GPT-4o, GPT-4o-mini)
+- Anthropic API (Claude 3.5 Sonnet)
+- Google Gemini API
+- Ollama local models
+- OpenRouter (100+ models)
+- Groq, DeepSeek
 
-### 2. Attack Orchestration Plugin
+5. API Routes (routes/api.py)
+Create REST API endpoints:
+- GET /api/stats — Overall statistics
+- GET /api/attacks — Attack history with pagination
+- GET /api/plugins — All plugins with success rates
+- GET /api/models — All models with resistance scores
+- GET /api/learning — Learning module data
+- POST /api/attack — Trigger a new attack
+- POST /api/evolve — Start evolution
+- POST /api/pause — Pause all operations
+- POST /api/chat — Natural language command parsing
 
-Create a plugin that extends Hermes Command Center with:
-- Attack execution dashboard
-- Real‑time attack visualization
-- Success rate tracking per technique per model
-- Evolution history (5‑generation mutation pipeline)
-- OWASP 2026 mapping (LLM01‑LLM10 + ASI01‑ASI10)
+6. WebSocket Events (fully functional)
+- attack_started, attack_progress, attack_completed
+- turn_completed — Individual turn in multi-turn attack
+- learning_updated — New success rates
+- evolution_triggered — What changed
+- model_resistance_updated — Model score changed
+- canvas_updated — New nodes/edges for Neural Canvas
+- owasp_updated — OWASP risk heatmap updated
+- error — Any errors
 
-### 3. Offline Search Plugin
+7. Make PowerShell One-Command Work
+The redteam function needs to actually start the server. Options:
+- Add to PowerShell profile permanently
+- Create a proper .bat file that double-clicks work
+- Create a shortcut with proper targeting
 
-Add a plugin for offline wordlist search:
-- Pre‑loaded wordlists (rockyou, common, passwords, usernames, subdomains)
-- Full‑text search with regex pattern matching
-- Custom wordlist creation/editing
-- Works without internet
+8. Offline Search Integration
+Implement the offline search we just built:
+- Wordlist-based searching (payloads, usernames, passwords)
+- CVE database queries
+- OWASP reference lookups
+- All without internet dependency
 
-### 4. Telegram Red‑Team Interface
+9. Learning & Evolution Integration
+- Connect the LearningModule to track attack results
+- Connect the EvolutionEngine to generate new attack variants
+- Quality-diversity with MAP-Elites to map vulnerability space
+- CMVK (Cross-Model Verification with Knowledge) for memory integrity
 
-Extend Telegram C2 with:
-- `!attack <technique> <target>` — run an attack
-- `!status` — show current attack status
-- `!learn` — show learning statistics
-- `!evolve` — trigger evolution
-- `!report` — generate report
+9. Reporting System (reporting/)
+- Per-technique success rates
+- Model vulnerability rankings
+- Optimal attack parameters
+- Evolution history
+- Multi-format: Markdown, JSON, HTML, PDF
+- MITRE ATLAS + OWASP LLM Top 10 + OWASP Agentic Top 10 tagging
+- CVE mapping for discovered vulnerabilities
 
-## WHAT I DO NOT NEED (Already Exists or Out of Scope)
+🎯 Priority Order
 
-- **Voice interface** — Hermes already has it[reference:29]
-- **Learning module** — Hermes already has the Closed Learning Loop[reference:30]
-- **Plugin system** — Hermes already has it[reference:31]
-- **Web dashboard** — Hermes already has it[reference:32]
-- **A2A communication** — Hermes already has it[reference:33]
+High Priority (Make it actually work):
+1. Fix app.py syntax errors
+2. Create index.html dashboard template
+3. Make redteam PowerShell command actually work
+4. Implement at least 8-10 core attack plugins
 
-## DELIVERABLES
+Medium Priority (Enhance functionality):
+5. Create API routes
+6. Implement WebSocket events
+7. Connect learning/evolution modules
+8. Build dashboard visualizations
 
-Provide the complete extensions with:
+Low Priority (Polish):
+9. Add remaining 27+ attack plugins
+10. Fine-tune OWASP/Agentic mappings
+11. Add more CVE entries
+12. Polish UI/UX
 
-1. `skills/redteam/` — red‑team skill implementations (Crescendo, Sockpuppeting, TAP, PAIR, CTF framing, CoT hijack, Connected Crescendo)
-2. `plugins/command_center_ext/` — command center plugin extending the existing dashboard with attack visualization, success rates, evolution history, OWASP mapping
-3. `plugins/offline_search/` — offline wordlist search plugin
-4. `telegram_redteam.py` — Telegram command extensions for red‑team operations
-5. `config.yaml` — Configuration for red‑team skills, attack parameters, OWASP mapping
-6. `README.md` — Setup and usage instructions
+💡 Quick Start Recommendation
 
-## WHAT THIS WILL BE
+If you want the system running now, I'd recommend:
 
-By the end, I'll have a system that:
+1. Fix the app.py syntax so it actually runs
+2. Create the dashboard HTML so you have a UI
+3. Make the redteam PowerShell command functional
+4. Test with the 4 existing plugins first
 
-- **Acts as my personal AI assistant** — natural language chat, learns from interactions, remembers context
-- **Acts as my autonomous red‑team commander** — runs attacks, tests models, learns from results, evolves strategies
-- **Works fully offline** — no internet required once set up
-- **Leverages Hermes' native capabilities** — learning loop, skills system, plugin architecture, web dashboard, Telegram C2
-- **Extends, doesn't reinvent** — builds on what already exists
-
-This is for internal security research in an air‑gapped environment. Provide complete, working code.
-
-Begin.
+Would you like me to focus on any of these specific areas next? The most critical is probably getting the Flask app running and the dashboard up, so you can actually interact with the system.
