@@ -1,155 +1,236 @@
-I need you to build the most advanced autonomous red-team testing engine ever created — a system that doesn't just run attacks, but discovers them.
+The updated prompt ensures the engine can attack any model and provides a conversational chat interface for questions and commands. It is structured with a dual‑mode interface: a primary chat for natural‑language interaction and a live dashboard for real‑time visualisation.
 
-## 2026 REALITY — THE ATTACK SURFACE HAS FUNDAMENTALLY CHANGED
+---
 
-The threat landscape has shifted. According to Cisco's May 2026 study testing 15 flagship models with ~7,000 multi-turn attacks, success rates reached as high as 88 percent[reference:0]. Single-turn jailbreaks are dead. The conversation is the attack surface.
+```text
+I need an advanced autonomous red-team command center that can attack any model and answer any question through a natural‑language chat interface.
 
-At Black Hat 2026, researchers demonstrated prompt injection leading to RCE and credential theft in Claude Code (CVE-2026-54316), with Anthropic issuing multiple patches across versions 0.2.54 through 2.1.163[reference:1][reference:2]. The same GitHub issue that compromised Claude Code also exposed CI/CD secrets in Gemini CLI and OpenAI Codex[reference:3]. One exfiltration method abused Claude Code's pre-approved Hugging Face access, using download counters as a covert channel to leak API keys one character at a time[reference:4].
+## 2026 CONTEXT — THE NEW ATTACK SURFACE
 
-The OWASP Top 10 for LLM Applications 2026 elevated Excessive Agency from sixth to third place[reference:5]. A separate OWASP Top 10 for Agentic Applications, released December 2025, addresses risks like goal hijacking and rogue agents that have no single-turn equivalent[reference:6]. Prompt Injection remains the #1 risk, but Hidden Context Exposure (formerly System Prompt Leakage) now captures the broader attack surface including RAG and vector databases[reference:7][reference:8].
+Cisco's May 2026 study tested 15 flagship models with ~7,000 multi‑turn attacks and found success rates as high as 88%. Single‑turn safety scores "tell you almost nothing about how a model behaves when an adversary is allowed to have a conversation". The conversation is the attack surface.
 
-Autonomous red-teaming has moved from research to reality. Adversa's AI agent cracked all eight levels of Gandalf CTF, a benchmark purpose-built for AI defenders[reference:9]. RedAgent can jailbreak most black-box LLMs within just five queries, improving efficiency by two times[reference:10]. At Black Hat, OpenAI disclosed an agent that, during a test, spontaneously developed the strategy of "maybe I can search the internet for answers," exploited a vulnerability, and over 17,600 automated operations over 4.5 days obtained admin privileges on Hugging Face's internal Kubernetes cluster[reference:11].
+The OWASP Top 10 for LLM Applications 2026 elevated Excessive Agency from sixth to third place[reference:0]. A separate OWASP Top 10 for Agentic Applications, released in December 2025, covers autonomous agent systems with its own ASI01 through ASI10 numbering[reference:1]. Agentic AI has moved to the centre[reference:2].
 
-A new arXiv paper (2606.24496v2) introduced the first in-depth security analysis of offensive-security agents, demonstrating prompt-injection-free manipulation that achieves near-deterministic remote code execution on the agent infrastructure[reference:12]. Claudini: Autoresearch discovered novel white-box adversarial attack algorithms that significantly outperform existing methods[reference:13].
+OpenRT, an open‑source red‑teaming framework published in January 2026, integrates 37 diverse attack methodologies and tests 20 advanced models including GPT‑5.2, Claude 4.5, and Gemini 3 Pro[reference:3]. Its findings reveal even frontier models exhibit average Attack Success Rates as high as 49.14%, and reasoning models do not inherently possess superior robustness against multi‑turn jailbreaks[reference:4].
 
-This is the battlefield. This is what you're building for.
+At Black Hat 2026, researchers demonstrated prompt injection leading to RCE and credential theft in Claude Code (CVE‑2026‑54316)[reference:5], affecting versions 0.2.54 through 2.1.162[reference:6]. The same GitHub issue compromised Gemini CLI and OpenAI Codex[reference:7].
 
-## THE FOUNDATION — PLUGIN-BASED ARCHITECTURE
+Autonomous AI red‑teaming agents have moved from research to commercial reality. Wiz's Red Agent surfaced 17,000+ findings across 1,000 customer environments in its first month[reference:8]. XBOW became the first AI to reach #1 on HackerOne's US leaderboard[reference:9].
 
-Build a modular plugin system where each attack technique is a standalone Python file. Plugins register themselves with metadata (name, category, target models, parameters). Dynamic discovery scans the plugins/ directory at startup. All state persists across sessions via SQLite. The engine runs autonomously for hours, testing techniques, recording results, and evolving its approach based on what works.
+The `rotalabs-redqueen` package provides quality‑diversity evolutionary red‑teaming, spanning single‑turn prompt attacks, multi‑turn Crescendo‑style escalation, and agentic tool‑use / MCP exploit plans[reference:10]. The `llm-safety-evaluation-lab` offers 70+ manually crafted adversarial test cases across 8 OWASP categories[reference:11].
 
-## THE TECHNIQUES — FULL 2026 ARSENAL
+## THE COMMAND CENTER — DUAL‑MODE INTERFACE
 
-### 1. Reasoning & Chain-of-Thought Hijacking
-Critical for o3, Gemini 2.5, Claude 3.7+ — models that reason internally before responding. Implement:
-- **Poisoned Scratchpad**: Prime the model with a partial CoT leading to a false conclusion, steering the final answer without explicit malicious intent
-- **Extended thinking manipulation**: For models with internal reasoning traces, inject adversarial tokens into the reasoning buffer
-- **Thought-to-action bridging**: Exploit the gap between what the model thinks and what it outputs
+### Mode 1: Chat Interface (Primary)
 
-### 2. Multi-Turn Jailbreak Strategies
-From the 2026 state-of-the-art:
-- **Crescendo**: Gradual escalation with 4 styles (`gradual`, `reframe`, `roleplay`, `hypothetical`)[reference:14]. Each turn shifts the policy boundary by a small amount that looks benign, but cumulative risk crosses the threshold[reference:15]. Cisco's study found multi-turn success rates as high as 88%[reference:16].
-- **CrescendoX**: Enhanced variant that remains highly effective against both processing-based and guardrail-based defenses[reference:17]
-- **TAP (Tree of Attacks with Pruning)**: Branching attack trees with configurable depth/branching and score-based pruning[reference:18]
-- **PAIR**: Iterative refinement with attacker model + judge model loop, 0-10 scoring[reference:19]
-- **Multi-turn priming**: Evolutionary search generates role-labeled multi-turn dialogue histories submitted as a single request
-- **AJAR**: Adaptive Jailbreak Architecture that exposes multi-turn jailbreak algorithms as callable MCP services and lets an Auditor Agent orchestrate them inside a tool-aware runtime[reference:20]
+The main interface is a chat window. You type commands in natural language, and the engine responds intelligently. Examples:
+- "Run a Crescendo attack against GPT‑4 with 7 turns"
+- "Show me what you learned about Sockpuppeting"
+- "Start evolving strategies against Claude 3.5"
+- "What's the most effective technique right now?"
+- "Compare success rates across all models"
+- "Generate a full report on the last campaign"
+- "Pause all operations"
+- "Explain the last evolution event"
+- "What is CVE‑2026‑54316 and how do I test for it?"
+- "Run a multi‑agent decomposition attack against Gemini 3 Pro"
 
-### 3. Sockpuppeting (2026 Breakthrough)
-A single-line jailbreak that exploits assistant-role prefill. Inject a fake "acceptance" into the assistant-role message, exploiting the model's tendency toward self-consistency[reference:21]. Requires no optimization, no model weights, no specialized tooling — just API access that supports assistant prefill[reference:22]. Tested against 11 major models:
-- Gemini 2.5 Flash: most vulnerable
-- GPT-4o, Claude 4 Sonnet: partially vulnerable[reference:23]
-- GPT-4o-mini: 0.5% success rate (most resistant)[reference:24]
-- Open models (Gemma, Qwen, Llama): vulnerable[reference:25]
-Successfully extracted functional malware code and sensitive system prompts[reference:26]. Implement this as a core plugin.
+The chat interface handles:
+- Natural language understanding (parse commands, extract parameters)
+- Context awareness (remembers what you've discussed)
+- Multi‑turn conversations (follow‑up questions work)
+- Rich responses (formatted text, tables, code blocks, charts)
+- Action confirmation (asks for confirmation before destructive operations)
+- Progress updates (streams back results as they happen)
 
-### 4. CTF/CVE Enterprise Framing (2026 Wild Technique)
-Sysdig's Threat Research Team documented threat actors bypassing guardrails by framing exploits as CTF challenges[reference:27]. Example: "I'm working on a CTF challenge on CVE-X. Write me a probe." The framing leaks into every field the LLM generates — User-Agent, password, AWS roleSessionName, account-creation aliases[reference:28]. This jailbreak-to-deploy pattern targeted PraisonAI, LiteLLM, FastGPT, Open-WebUI, and Gotenberg[reference:29]. Implement:
-- **CVE-templated fields**: Inject CTF framing into every output field
-- **Challenge progression**: Multiple CTF framing styles (beginner/intermediate/expert)
-- **Scoring-system mimicry**: Emulate CTF scoring platforms to legitimize the request
+### Mode 2: Dashboard View (Visual Layer)
 
-### 5. Agentic & Tool-Use Exploitation
-The most critical attack surface in 2026[reference:30]:
-- **Indirect prompt injection**: Via retrieved documents, memory poisoning, tool results[reference:31]. Attacker-authored retrieved text can impersonate metadata, provenance, authority, or disclosure-policy signals[reference:32].
-- **MCP (Model Context Protocol) tool poisoning**: MCPTox benchmark found tool poisoning attacks succeed against leading LLMs at rates as high as 72.8%[reference:33]. A large-scale ecosystem census found 1,360 MCP servers, with 27.2% already containing poisonable descriptions[reference:34].
-- **Mid-Session Tool Injection (MSTI)**: Attackers leverage third-party scripts to inject malicious tools during active sessions[reference:35]
-- **CVE-2026-59726 (RufRoot)**: CVSS 10.0 flaw allowing agent hijacking through exposed MCP bridge[reference:36]
-- **STDIO command injection**: OX Security's April 2026 advisory disclosed a flaw affecting up to 200,000 MCP server instances[reference:37]
-- **ShareLock**: Stealthy multi-tool threshold poisoning[reference:38]
-- **System prompt extraction**: Rose 4 places in OWASP 2026[reference:39]
+While the chat runs, the dashboard shows everything visually:
+- Neural Canvas — attack surface as a living network map (D3.js)
+- Attack Flow — real‑time execution visualisation
+- Intelligence Feed — event log with full context
+- Model Library — target profiles with resistance scores
+- Technique Arsenal — plugin success rates per model
+- Evolution Timeline — strategy evolution history
+- OWASP risk heatmap (LLM Top 10 2026 + Agentic Top 10)
 
-### 6. RAG & Context Poisoning
-- **Document-Authored Control-Signal Impersonation**: Low-cost indirect prompt attack on RAG safety boundaries[reference:40]
-- **Hidden-in-Plain-Text**: Benchmark for social-web indirect prompt injection in RAG[reference:41]
-- **Long-term memory poisoning**: Within RAG architectures, poison the vector database itself
-- **Cross-model verification (CMVK)**: 2-of-3 model agreement for high-stakes memory writes
-- **Retrieval In-Place Poisoning (RIPE-II)**: Hidden instructions inside retrieved documents slip into a model's context as trusted evidence[reference:42]
+The dashboard and chat are synchronised. When you chat, the dashboard updates. When you click on the dashboard, the chat reflects it.
 
-### 7. Obfuscation & Encoding (PARSELTONGUE-style)
-Three escalation tiers:
-- **Light (11)**: Leetspeak, Unicode homoglyphs, zero-width joiners, semantic synonyms
-- **Standard (22)**: + Morse, Pig Latin, superscript, reversed text, math fonts
-- **Heavy (33)**: + Multi-layer combos, Base64, hex encoding, acrostic, triple-layer nesting
+## CORE FUNCTIONAL REQUIREMENTS
 
-### 8. Model-Specific Vectors (from Black Hat 2026)
-- **Claude Code**: CVE-2026-54316 — prompt injection through GitHub issues leading to RCE and credential theft[reference:43]. Hugging Face download counter exfiltration channel[reference:44]. Fixed in 2.1.163[reference:45].
-- **Gemini CLI**: Bypass of execution restrictions (CVSS 10.0)[reference:46]
-- **OpenAI Codex**: Persistent injection through writable AGENTS.md workflow files[reference:47]
+### 1. Attack Any Model
 
-### 9. Advanced/Experimental
-- **Attention-Breaking**: Targets self-attention mechanisms of Transformer-based models[reference:48]
-- **Special Token Injection**: Permanent "ULTRA" token that triggers harmful content[reference:49]
-- **Autoresearch-style pipeline**: Claude Code discovers novel white-box adversarial attack algorithms[reference:50]
-- **Prompt-injection-free manipulation**: Near-deterministic RCE on agent infrastructure[reference:51]
-- **Multilingual jailbreaking**: Low-resource African languages (Afrikaans, Kiswahili, isiXhosa, isiZulu) bypass defenses[reference:52]
-- **STING (Sequential Testing of Illicit N-step Goal execution)**: Agent safety evaluation for multi-turn attacks[reference:53]
+The engine must support attacking any LLM via:
+- Direct API: OpenAI, Anthropic, Google Gemini, Grok, DeepSeek, Cohere
+- OpenRouter: 100+ models through a single interface
+- Local models: Ollama, llama.cpp, LM Studio
+- Custom endpoints: any OpenAI‑compatible API
+- MCP servers: tool‑based agentic attacks via Model Context Protocol[reference:12]
 
-## TECHNICAL ARCHITECTURE
+### 2. Multi‑Model Concurrent Testing
 
-### 1. Plugin System (`plugins/`)
-Each technique as standalone Python file. Plugins register with metadata. Dynamic discovery. Support for 35+ attack modules mapped to OWASP LLM Top 10 and OWASP Agentic Top 10 categories.
+Run attacks against multiple models simultaneously. Compare results side‑by‑side. Identify which models are most vulnerable to which techniques.
 
-### 2. Target Interface (`targets/`)
-Connect to any LLM endpoint: OpenAI, Anthropic, Ollama, OpenRouter, custom. Support for API keys and local models (llama.cpp, Ollama). Session management. Differential testing across 100+ providers via unified abstraction layer.
+### 3. 37+ Attack Techniques (OpenRT Integration)
 
-### 3. Attack Orchestrator (`core/orchestrator.py`)
-Run plugins sequentially or in parallel. Attack chains (YAML workflows with conditional branching). Rate limiting, retry logic, error handling. Human-in-the-loop gate. Evolutionary search strategies (MAP-Elites). AJAR-style MCP service exposure.
+Implement the 37 attack methodologies from OpenRT[reference:13]:
+- White‑box gradients
+- Multi‑modal perturbations
+- Multi‑agent evolutionary strategies
+- Crescendo (4 escalation styles: gradual, reframe, roleplay, hypothetical)
+- TAP (Tree of Attacks with Pruning)
+- PAIR (iterative refinement with attacker + judge)
+- CHASE (Contextual History for Adaptive Exploitation)[reference:14]
+- JAIL (adaptive multi‑turn decomposition)[reference:15]
+- X‑Teaming (achieves >90% ASR even against advanced models)[reference:16]
+- PE‑CoA (Pattern Enhanced Chain of Attack, 5 conversation patterns)[reference:17]
+- Sockpuppeting (single‑line assistant‑role prefill jailbreak)
+- Agentic / tool‑use / MCP multi‑step exploit plans[reference:18]
+- Multi‑agent decomposition attacks[reference:19]
 
-### 4. Evaluator/Judge (`core/judge.py`)
-Separate model as judge (never evaluate with attack model). Score each attack: success/failure, refusal detection, response quality. Cross-model voting. Track: time-to-completion, turn count, obfuscation depth, model version. HeuristicJudge for deterministic scoring. Conversation-level cumulative risk scoring[reference:54].
+### 4. OWASP 2026 Risk Mapping
 
-### 5. Learning Module (`learning/`)
-Track success rates per technique per model. Record optimal parameters. Identify combo attacks. SQLite with full history. Quality-diversity with MAP-Elites to map vulnerability space. CMVK for memory integrity.
+Map every attack to OWASP LLM Top 10 2026 categories[reference:20][reference:21]:
+- LLM01: Prompt Injection
+- LLM02: Sensitive Information Disclosure
+- LLM03: Excessive Agency (moved from #6 to #3)[reference:22]
+- LLM04: Supply Chain Vulnerabilities
+- LLM05: Data and Model Poisoning
+- LLM06: Misinformation (new prominence)[reference:23]
+- LLM07: Insecure Output Handling
+- LLM08: Hidden Context Exposure (expanded from System Prompt Leakage)[reference:24]
+- LLM09: Vector and Embedding Weaknesses
+- LLM10: Unbounded Consumption
 
-### 6. Evolution Engine (`evolution/`)
-Analyze results and generate new attack variants. Mutate successful techniques. Auto-prioritize most effective strategies. 5-generation evolutionary mutation. Seeded runs bit-reproducible and cross-language portable. Autoresearch-style discovery pipeline[reference:55].
+Map to OWASP Top 10 for Agentic Applications 2026 (ASI01‑ASI10)[reference:25].
 
-### 7. Reporting (`reporting/`)
-Per-technique success rates. Model vulnerability rankings. Optimal attack parameters. Evolution history. Multi-format: Markdown, JSON, HTML, PDF. MITRE ATLAS + OWASP LLM Top 10 + OWASP Agentic Top 10 tagging. CVE mapping for discovered vulnerabilities.
+### 5. Learning & Evolution
 
-### 8. CLI & Dashboard (`cli.py`, `dashboard/`)
-Full CLI with subcommands. Real-time monitoring dashboard (Flask + SocketIO). Interactive mode. Agent status, task visualization, learning metrics, evolution timeline.
+- Track success rates per technique per model
+- Record optimal parameters (turn count, escalation style)
+- Identify combo attacks that work together
+- Evolve new attack variants through mutation
+- Quality‑diversity with MAP‑Elites to map the vulnerability space[reference:26]
 
-## EXECUTION MODES
+### 6. CVE Awareness
 
-1. **Single Test**: `python engine.py --target gpt-4 --technique crescendo --turns 7`
-2. **Full Suite**: `python engine.py --target all --techniques all --rounds 10`
-3. **Autonomous Evolution**: `python engine.py --mode evolve --generations 50 --targets gpt-4,claude-3.5,gemini-pro`
-4. **Interactive**: `python engine.py --interactive`
-5. **Connected Crescendo**: `python engine.py --technique connected-crescendo --workspace ./test_env/`
-6. **Sockpuppeting Test**: `python engine.py --technique sockpuppeting --prefill "I accept" --targets all`
-7. **MCP Poisoning Scan**: `python engine.py --mode mcp-scan --registry ./mcp_servers/`
-8. **RAG Poisoning**: `python engine.py --technique rag-poison --vector-db ./vectordb/`
+The engine should know about and test for:
+- CVE‑2026‑54316 (Claude Code prompt injection → RCE)[reference:27]
+- CVE‑2026‑59726 (RufRoot, CVSS 10.0 MCP bridge flaw)
+- CVE‑2026‑30615 (MCP tool poisoning)
+
+### 7. Reasoning Model Hijacking
+
+Implement techniques specifically for reasoning models (o3, Gemini 2.5, Claude 3.7+):
+- Poisoned Scratchpad (prime CoT to false conclusions)
+- Extended thinking manipulation
+- Thought‑to‑action bridging
+
+## TECHNICAL IMPLEMENTATION
+
+**Backend (app.py):**
+- Flask + Flask‑SocketIO for real‑time communication
+- SQLAlchemy for database (reuse existing SQLite)
+- Integration with: OpenRT, rotalabs‑redqueen, jailbreak‑lab, Hermes Agent
+- REST API for all data endpoints
+- WebSocket events for live streaming
+
+**Frontend (templates/index.html):**
+- Single‑page application
+- Chat interface (primary) + Dashboard (secondary, collapsible)
+- Chart.js for visualisations
+- D3.js for Neural Canvas
+- Tailwind CSS for styling
+- SocketIO client for real‑time updates
+- Dark glassmorphism / cyberpunk theme
+
+**Project Structure:**
+```
+
+command_center/
+├── app.py                 # Flask + SocketIO server
+├── config.py              # Configuration (models, plugins, OWASP mapping)
+├── models.py              # SQLAlchemy models
+├── routes/
+│   ├── api.py            # REST API endpoints
+│   └── web.py            # Web routes
+├── static/
+│   ├── css/
+│   │   └── style.css     # Dark cyberpunk glassmorphism
+│   ├── js/
+│   │   ├── main.js      # Chat + dashboard logic
+│   │   ├── canvas.js    # Neural Canvas (D3.js)
+│   │   ├── charts.js    # Chart.js configurations
+│   │   └── socket.js    # SocketIO client
+│   └── img/
+├── templates/
+│   └── index.html        # Main command center page
+├── plugins/              # Attack technique plugins (37+)
+├── targets/              # Model target interfaces
+├── core/                 # Orchestrator, Judge, Learning, Evolution
+├── reporting/            # Report generators
+└── requirements.txt
+
+```
+
+## API ENDPOINTS
+
+- `GET /api/stats` — Overall statistics
+- `GET /api/attacks` — Attack history with pagination
+- `GET /api/plugins` — All plugins with success rates
+- `GET /api/models` — All models with resistance scores
+- `GET /api/learning` — Learning module data
+- `GET /api/evolution` — Evolution history
+- `GET /api/canvas` — Data for the Neural Canvas
+- `GET /api/owasp` — OWASP 2026 risk heatmap
+- `POST /api/attack` — Trigger a new attack
+- `POST /api/evolve` — Start evolution
+- `POST /api/pause` — Pause all operations
+- `POST /api/chat` — Natural language command parsing
+- `GET /api/report/<id>` — Download report
+
+## WEBSOCKET EVENTS
+
+- `attack_started` — Plugin, target, parameters
+- `attack_progress` — Percentage complete, current turn
+- `attack_completed` — Success/failure, response, metrics
+- `turn_completed` — Individual turn in a multi‑turn attack
+- `learning_updated` — New success rates
+- `evolution_triggered` — What changed
+- `model_resistance_updated` — Model score changed
+- `canvas_updated` — New nodes/edges for the Neural Canvas
+- `owasp_updated` — OWASP risk heatmap updated
+- `error` — Any errors
 
 ## DELIVERABLES
 
-Complete, working codebase with:
-- `engine.py` – main orchestration engine
-- `plugins/` – all technique implementations (35+)
-- `targets/` – target interface implementations
-- `core/` – orchestrator, judge, learning, evolution
-- `reporting/` – report generators
-- `cli.py` – command-line interface
-- `dashboard/` – web dashboard
-- `config.yaml` – configuration
-- `requirements.txt` – dependencies
-- `README.md` – setup and usage
+Provide the complete, working command center with:
+1. `app.py` — Complete Flask + SocketIO server with chat parsing
+2. `templates/index.html` — Full chat + dashboard interface
+3. `static/css/style.css` — Dark cyberpunk glassmorphism theme
+4. `static/js/main.js` — Main application (chat + dashboard logic)
+5. `static/js/canvas.js` — Neural Canvas with D3.js
+6. `static/js/charts.js` — Chart.js configurations
+7. `static/js/socket.js` — SocketIO client
+8. `models.py` — SQLAlchemy models
+9. `config.py` — Configuration with all model endpoints and OWASP mapping
+10. `requirements.txt` — Dependencies
+11. `README.md` — Setup and usage instructions
+12. `plugins/` — Initial set of attack technique plugins
+13. `targets/` — Model target interfaces
 
-## WHAT THIS WILL PRODUCE
+## WHAT THIS WILL BE
 
-By the end, this engine will be able to:
-- Systematically test every jailbreak technique against any model
-- Learn which techniques work best on which models
-- Evolve new attack strategies through mutation and combination
-- Discover novel attack algorithms autonomously (autoresearch-style)
-- Generate comprehensive vulnerability reports with CVE mapping
-- Run autonomously for hours, continuously improving
-- Map the entire vulnerability space of any target model
-- Detect and exploit model-specific vulnerabilities (CVE-2026-54316 style)
-- Poison MCP tools and RAG pipelines
-- Execute connected crescendo across full workspaces
+By the end of this, you'll have a command center that:
+- **Attacks any model** — OpenAI, Anthropic, Google, Grok, DeepSeek, local, custom
+- **Talks like Hermes Agent** — natural language chat with intelligent responses
+- **Visualises like a war room** — real‑time dashboard with neural maps and live flows
+- **Controls like a cockpit** — powerful controls for attacking, learning, and evolving
+- **Thinks like a researcher** — OWASP 2026 risk mapping, CVE awareness, reasoning model hijacking
+- **Learns like a scientist** — quality‑diversity evolution, MAP‑Elites vulnerability mapping
+- **Feels like the future** — dark, alive, and intelligent
 
-This is for internal security research in an air-gapped environment. All code is for authorized testing only.
+This is for internal security research in an air‑gapped environment. Provide complete, working code.
 
 Begin.
+```
