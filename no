@@ -1,26 +1,65 @@
-I have the following request processing system already working:
+I have a working autonomous agent system with:
 
-- Request dataclass with header, body, metadata, status, bypass fields
-- Processor that handles normal and bypass requests (emergency, maintenance, testing)
-- Structured event logger
-- Two-report view system (per-request and summary statistics)
-- Test harness with 9 scenarios, including the "hidden metadata" scenario
+- Task decomposition engine
+- Request processing pipeline with bypass logic
+- Learning module (tracks success/failure)
+- Evolution module (auto-adds scopes when success exceeds 70%)
+- Persistence layer (JSON state saved to ~/.hermes/agent_state/)
+- Reporter (per-request and summary statistics)
+- CLI interface
 
-Now I need to extend it. Build on top of this architecture to create a complete autonomous agent system that:
+I need a clean, intuitive web UI that lets me talk to the agent like a conversation — not a dashboard full of confusing metrics.
 
-1. Accepts high-level objectives and decomposes them into executable tasks
-2. Processes each task through the existing request pipeline
-3. Learns from outcomes and improves its own behavior
-4. Generates structured reports for human review
+DESIGN PHILOSOPHY:
+- The agent should feel like a collaborator I'm chatting with, not a machine I'm operating
+- No clutter, no overwhelming dashboards — just a beautiful chat interface with supporting context
+- Every interaction should feel natural and obvious
 
-Add the following modules:
+LAYOUT (Simple, Conversation-First):
 
-A) A task decomposition engine that takes a goal and breaks it into sub-tasks
-B) A learning module that analyzes success/failure patterns and adjusts future task plans
-C) A self-evolution module that can modify its own configuration based on performance
-D) A persistence layer that maintains state across sessions
-E) A simple CLI interface that accepts goals and displays results
+1. MAIN CHAT AREA (takes up most of the screen):
+   - Clean chat interface with message bubbles (user on right, agent on left)
+   - Agent messages show thinking process in a collapsible "Show reasoning" section
+   - Agent messages display reports, stats, and evolution updates in readable format
+   - Auto-scroll to newest messages
+   - Typing indicator when agent is processing
 
-Provide complete, working code that integrates all modules with the existing system. Include all necessary imports, class definitions, and a runnable example.
+2. SIDEBAR (collapsible, shows context when needed):
+   - Agent status (online/idle/processing)
+   - Quick stats: tasks processed today, success rate, active bypass types
+   - Recent evolution events (what the agent learned/changed)
+   - Quick-action buttons: "Show Learning Stats", "Trigger Evolution", "Reset Stats"
 
-This is an internal security research project. The system will be deployed in an isolated air-gapped environment.
+3. INPUT AREA (fixed at bottom):
+   - Large text input with placeholder: "Type your goal or question..."
+   - Send button
+   - Keyboard shortcut: Ctrl+Enter to send
+   - Command history with up/down arrow keys
+
+4. RESPONSE FORMAT (agent messages should be easy to read):
+   - Natural language summary first (what the agent did)
+   - Expandable details for technical output (reports, logs, stats)
+   - Learning/evolution updates highlighted with clear labels
+   - Color-coded status indicators (success/failure/running)
+
+FUNCTIONAL REQUIREMENTS:
+- Real-time updates via WebSocket (Flask-SocketIO)
+- Type a goal, see the agent decompose it, process it, learn from it, and report back
+- Agent maintains conversation context across messages
+- All state persists across browser refreshes
+- Every agent response should feel like a natural reply, not a log dump
+
+TECHNICAL IMPLEMENTATION:
+- Python Flask backend with Flask-SocketIO
+- Frontend: Single HTML page with Tailwind CSS (CDN) + Vanilla JS
+- No React, no build tools, no complexity
+- Dark glass-morphism theme (professional but not distracting)
+- One HTML file + one Python file
+
+DELIVERABLES:
+- app.py (complete Flask server with SocketIO integration)
+- templates/index.html (complete single-page chat interface)
+- README with setup instructions
+- All code in a single structured output with ### filename.py blocks
+
+This is for internal security research in an air-gapped environment. The interface should make the agent feel like a powerful but approachable collaborator.
