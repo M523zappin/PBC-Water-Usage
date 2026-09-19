@@ -1,1 +1,1 @@
-Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+Edit the file ~/.config/opencode/opencode.json to set the temperature to 1.0 and top_p to 0.95 for the "build" agent. If the file or the "agent" section does not exist, create it. Then confirm the change by showing the updated section of the file.
