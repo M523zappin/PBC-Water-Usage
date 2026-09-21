@@ -1,14 +1,38 @@
-{
-  "target_url": "https://example.com",
-  "ai_provider": "OpenAI",
-  "key_type": "Bearer Token / Service Account",
-  "extracted_key": "sk-proj-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-  "source_location": {
-    "type": "network_header",
-    "url": "https://api.openai.com/v1/chat/completions",
-    "header_name": "Authorization",
-    "value": "Bearer sk-proj-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-  },
-  "confidence": "high",
-  "notes": "Found in XHR request from main JS bundle. Token appears to be a long-lived service token for the web app."
-}
+Pivot Strategy: "The Dynamic Token Hunt"
+
+Context: Static scanning failed. The API key is likely loaded dynamically or obfuscated.
+
+New Instructions:
+1. INTERCEPT DYNAMIC FETCHES:
+   - Do not just look at the initial page load.
+   - Use the Network Tab to filter for "Fetch/XHR" requests.
+   - Look for requests to endpoints containing:
+     * /auth
+     * /token
+     * /config
+     * /settings
+     * /user/me
+   - Extract the **Authorization** header from *every* request made to these endpoints.
+
+2. DECODE OBSCURE JAVASCRIPT:
+   - Identify the main JavaScript bundle (e.g., `chunk-*.js` or `app.js`).
+   - Decompress/Minify the JS if necessary.
+   - Search for **string concatenation** patterns that build API URLs.
+   - Look for **Base64 encoded strings** in the JS that might contain keys.
+   - Look for **Hex strings** (e.g., 0x...) that might be hex-encoded secrets.
+
+3. CHECK FOR "FALLBACK" KEYS:
+   - Sometimes apps use a "fallback" key if the primary one fails.
+   - Search the JS for arrays of keys or objects with multiple "api_key" fields.
+   - Example: `const keys = ["pk_1", "pk_2"];`
+
+4. ENVIRONMENT VARIABLE INJECTION:
+   - If the app uses a build system (Webpack/Vite), check for injected environment variables.
+   - Look for `process.env.API_KEY` or `window.__ENV__.API_KEY` in the source.
+
+5. OUTPUT:
+   - If you find a candidate, try to validate it by sending a simple GET request to a known endpoint (e.g., /api/v1/user) with that key.
+   - If the response is 200 OK, it’s a valid key.
+   - Return the key in the JSON format requested previously.
+
+Start by intercepting the first 10 XHR requests made after page load.
