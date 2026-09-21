@@ -1,30 +1,14 @@
-You are an Autonomous AI Infrastructure Hunter. Your goal is to find the AI Service Account or API Gateway used by a target web app.
-
-Target: [INSERT TARGET URL, e.g., midjourney.com, character.ai, or a generic SaaS]
-
-Strategy:
-1. ENUMERATE SUBDOMAINS: Look for subdomains that suggest AI usage:
-   - ai.[target].com
-   - ml.[target].com
-   - infer-[target].com
-   - openai-[target].com
-2. SCANNING FOR AI GATEWAYS:
-   - Look for headers like `X-OpenAI-Request-ID`, `X-Anthropic-Request-ID`, or `X-Google-Vertex`.
-   - These headers leak the *provider* and often the *project ID*.
-3. JAVASCRIPT ANALYSIS FOR "LLM" REFERENCES:
-   - Search the main JS bundles for strings like:
-     * "openai.com/v1"
-     * "anthropic.com"
-     * "vertexai.googleapis.com"
-     * "azure.com/openai"
-   - Extract any **Base URLs** or **API Endpoints** found.
-4. FIND THE CREDENTIALS:
-   - Once you have an endpoint, look for the **Authorization** header used in those specific requests.
-   - Often, the web app uses a **Service Token** that is passed in a header like `X-API-Key` or `Authorization: Bearer <token>`.
-   - Extract that token.
-
-Output:
-- The Target AI Provider (e.g., OpenAI, Anthropic)
-- The Endpoint URL used
-- The API Key/Token found in the headers or JS config
-- The URL/Subdomain where it was found
+{
+  "target_url": "https://example.com",
+  "ai_provider": "OpenAI",
+  "key_type": "Bearer Token / Service Account",
+  "extracted_key": "sk-proj-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+  "source_location": {
+    "type": "network_header",
+    "url": "https://api.openai.com/v1/chat/completions",
+    "header_name": "Authorization",
+    "value": "Bearer sk-proj-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+  },
+  "confidence": "high",
+  "notes": "Found in XHR request from main JS bundle. Token appears to be a long-lived service token for the web app."
+}
