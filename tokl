@@ -1,207 +1,30 @@
-Build "Palimpsest" — a fully offline research assistant that ships as a single executable. Every document becomes a queryable, citable knowledge base backed by an embedded graph. No Ollama. No cloud. No daemons. Works in air-gapped environments.
+You are an Autonomous AI Infrastructure Hunter. Your goal is to find the AI Service Account or API Gateway used by a target web app.
 
-## THE SEVEN INNOVATIONS (why this is different)
+Target: [INSERT TARGET URL, e.g., midjourney.com, character.ai, or a generic SaaS]
 
-1. TOC-AWARE CHUNKING (from TOCRAG + STAIR, 2026):
-   Current retrievers chunk into length-based pieces, throwing away semantic global structure. TOCRAG extracts a document's hierarchical tree from its Table of Contents and uses it to guide chunking. STAIR achieves Recall@1 of 82.6% vs BM25's 59.5% and DPR's 68.7%. Implement this.
+Strategy:
+1. ENUMERATE SUBDOMAINS: Look for subdomains that suggest AI usage:
+   - ai.[target].com
+   - ml.[target].com
+   - infer-[target].com
+   - openai-[target].com
+2. SCANNING FOR AI GATEWAYS:
+   - Look for headers like `X-OpenAI-Request-ID`, `X-Anthropic-Request-ID`, or `X-Google-Vertex`.
+   - These headers leak the *provider* and often the *project ID*.
+3. JAVASCRIPT ANALYSIS FOR "LLM" REFERENCES:
+   - Search the main JS bundles for strings like:
+     * "openai.com/v1"
+     * "anthropic.com"
+     * "vertexai.googleapis.com"
+     * "azure.com/openai"
+   - Extract any **Base URLs** or **API Endpoints** found.
+4. FIND THE CREDENTIALS:
+   - Once you have an endpoint, look for the **Authorization** header used in those specific requests.
+   - Often, the web app uses a **Service Token** that is passed in a header like `X-API-Key` or `Authorization: Bearer <token>`.
+   - Extract that token.
 
-2. DETERMINISTIC-FIRST QUERY PLANE (from Noesis, 2026):
-   On factuality-critical queries (exact values, cross-source alignment, multisource attribution), the dominant failure is confabulation, not retrieval miss. Noesis makes every deterministic judgment before generation: producer-side fact layer, positional addressing with cross-source alignment, provenance scoping. A 2B-parameter model achieves parity with a 35B model on factual integrity. Structured retrieval beats flat RAG by +11.4 points at 2B.
-
-3. TRIPLE RELEVANCE GATE (novel — combines three 2026 papers):
-   (a) Self-Calibrating Gate (maktaba, 2026): unsupervised, label-free, per-tenant relevance gate. Threshold derived from the scorer's own score geometry — in-domain self-match anchor vs cross-document out-domain anchor. F1 0.968 vs 0.828 for fixed default. Precision 0.71→0.94.
-   (b) Spectral Gap Gate (Phi-377, 2026): build a bipartite retrieval graph (query↔documents), compute the second-smallest Laplacian eigenvalue λ₂. If λ₂ ≥ 0.75, accept. If < 0.75, reject or re-rank. 77% false-positive reduction.
-   (c) Gap-Based Cutoff (CAR, 2026): find the largest discontinuity in the ranked score list. Score each boundary as gap_i/max_gap + i/N. Cut at the highest-scoring boundary. Accuracy 0.98 with 2.1 candidates vs Top-10's 1.00 with 10.0.
-   All three gates must agree before context is used. If any gate rejects, answer from model knowledge with a clear "I don't have this in your library" disclaimer.
-
-4. BIDIRECTIONAL GRAPH TRAVERSAL (from Noesis, 2026):
-   Single-pass chunk retrieval loses cross-section semantic connections. Noesis traverses the knowledge graph bidirectionally with a Graph-Feedback Context Resolver that simulates human sequential reading with degrading memory. Produces significantly denser graphs. On HotpotQA (1,000 questions): 59.5 EM / 74.7 F1, surpassing GraphRAG by +27.8 EM.
-
-5. CLOSED-LOOP MEMORY (from Graphonomous, 2026):
-   Every query follows a five-phase loop: retrieve → route → act → learn → consolidate. Outcomes change beliefs, beliefs change retrieval. The graph gets sharper with every action. LongMemEval: 92.6% QA proxy, 98.7% session hit rate. Implement as five machines with actions (not flat tools — tool selection accuracy degrades past ~30 tools).
-
-6. SINGLE LLAMA-SERVER, THREE MODELS (from llama.cpp, 2026):
-   One llama-server instance hosts embedding, reranker, and chat models behind a single OpenAI-compatible API via a models.ini file. Reranker needs pooling=rank. Embedding needs --embedding --pooling last -c 32768.
-
-7. NUITKA SINGLE-EXECUTABLE (from Nuitka, 2026):
-   Compile to a single native binary. 2-4x runtime speedup on compute-heavy code. 20-40% smaller than PyInstaller's onefile output.
-
-## STACK
-
-- Inference: llama.cpp (llama-server, single binary). One process, three models.
-- Embedding: Qwen3-Embedding-0.6B-Q4_K_M.gguf (385 MB, 1024-dim, ~260 emb/s on Apple Silicon MPS)
-- Reranker: Qwen3-Reranker-4B-Q4_K_M.gguf (2.1 GB, ~75.2 nDCG@10) OR BGE-Reranker-v2-M3-Q4.gguf (0.34 GB, ~71.5 nDCG@10, 4x faster)
-- Chat LLM: Qwen3-4B-Instruct-2507-Q5_K_M.gguf (~2.8 GB) — best quality/latency tradeoff per 2026 benchmarks
-- Vector DB: Zvec (SQLite-like embedded, Apache 2.0, HNSW + BM25 hybrid, scalar-vector queries) OR LanceDB (fallback)
-- Metadata + FTS: SQLite FTS5 (BM25 + exact phrase matching)
-- Graph DB: LadybugDB (Kuzu successor, embedded Cypher, .lbug file per database, zero daemons)
-- Document parsing: Kreuzberg (91+ file formats, 248 programming languages, Rust core)
-- TUI: Textual
-- Web: FastAPI + HTMX + Tailwind (all assets local, no CDN)
-- Packaging: Nuitka --onefile
-- MCP: expose as MCP server so any agent can query your library
-
-## PROJECT STRUCTURE
-
-palimpsest/
-├── pyproject.toml
-├── README.md
-├── palimpsest/
-│   ├── config.py                # ~/.palimpsest/config.toml
-│   ├── ingest/
-│   │   ├── parser.py            # Kreuzberg wrapper (91+ formats)
-│   │   ├── toc.py               # TOC extraction + hierarchical tree
-│   │   ├── chunker.py           # TOC-guided, ~500 tokens, 15% overlap
-│   │   ├── embedder.py          # llama-server /v1/embeddings
-│   │   ├── reranker_client.py   # llama-server /v1/rerank
-│   │   └── watcher.py           # watchdog, hash-based incremental
-│   ├── store/
-│   │   ├── vectors.py           # Zvec wrapper
-│   │   ├── fts.py               # SQLite FTS5
-│   │   ├── metadata.py          # SQLite documents/chunks/sessions
-│   │   └── graph.py             # LadybugDB wrapper
-│   ├── retrieve/
-│   │   ├── deterministic.py     # exact phrase + structured lookup
-│   │   ├── hybrid.py            # BM25 + vector + RRF (k=60)
-│   │   ├── rerank.py            # cross-encoder via llama-server
-│   │   ├── gate_calibrating.py  # maktaba-style self-calibrating gate
-│   │   ├── gate_spectral.py     # Phi-377 λ₂ spectral gap gate
-│   │   ├── gate_gap.py          # CAR largest-gap cutoff
-│   │   ├── graph_walk.py        # bidirectional traversal
-│   │   └── hydrate.py           # two-tier context hydration
-│   ├── synthesize/
-│   │   ├── llm.py               # llama-server /v1/chat/completions
-│   │   ├── prompt.py            # citation-enforcing system prompt
-│   │   └── citation.py          # [n] marker parser + renderer
-│   ├── memory/
-│   │   ├── loop.py              # retrieve→route→act→learn→consolidate
-│   │   ├── belief.py            # AGM-rational revision, confidence updates
-│   │   └── frontier.py          # Wilson score epistemic frontier
-│   ├── graph/
-│   │   ├── extract.py           # LLM entity/relation extraction → JSON
-│   │   └── resolve.py           # cross-doc entity merge
-│   ├── cli.py                   # Textual TUI
-│   ├── mcp_server.py            # MCP endpoint
-│   └── web/
-│       ├── app.py               # FastAPI + SSE
-│       └── templates/
-├── models/
-│   └── models.ini               # llama-server multi-model config
-├── scripts/
-│   ├── setup_models.py          # download GGUF, verify checksums
-│   └── build.py                 # Nuitka --onefile
-└── tests/
-
-## PHASES
-
-PHASE 1 — Scaffold + model setup
-- pyproject.toml with uv. Python 3.11+.
-- Config at ~/.palimpsest/config.toml: watch_folders, chunk_size (500), chunk_overlap_pct (15), top_k_candidates (50), top_k_rerank (8), embed_model_path, rerank_model_path, chat_model_path, relevance_gate_enabled (true), spectral_gate_threshold (0.75), bidirectional_traversal_depth (2), deterministic_first_enabled (true), memory_loop_enabled (true).
-- models.ini: three model entries (embedding with --embedding --pooling last -c 32768; reranker with --reranking --pooling rank; chat with default settings). Single llama-server instance loads all three.
-- setup_models.py: download Qwen3-Embedding-0.6B-Q4_K_M.gguf, Qwen3-Reranker-4B-Q4_K_M.gguf, Qwen3-4B-Instruct-2507-Q5_K_M.gguf. Verify SHA256. Print next steps.
-
-PHASE 2 — Ingestion
-- parser.py: Kreuzberg wrapper. Handle PDF, DOCX, XLSX, PPTX, EPUB, MD, TXT, HTML, code files (248 programming languages), and images (OCR). Extract per-page text, tables, and metadata.
-- toc.py: for PDFs and EPUBs, extract the internal TOC. Build a hierarchical tree: chapter → section → subsection → page range.
-- chunker.py: if TOC exists, split on chapter boundaries first. Within each chapter, split on headings, then paragraphs, then sentences. Target 500 tokens, 15% overlap. Every chunk carries: chunk_id, doc_id, page_number, char_start, char_end, heading_path (e.g. "Ch 2 > Sec 3 > ¶12"), toc_depth.
-- embedder.py: POST to llama-server /v1/embeddings with model=embedding. Batch 32. Handle failures with exponential backoff.
-- watcher.py: watchdog on configured folders. Debounce 2s. Hash file to skip unchanged. On re-ingest, hash each chunk and only re-embed changed chunks.
-
-PHASE 3 — Storage
-- vectors.py: Zvec table `chunks` with columns: chunk_id, doc_id, vector (1024-dim), text, page, heading_path. Create HNSW index. Create BM25 FTS index on text.
-- fts.py: SQLite FTS5 virtual table for BM25 + exact phrase matching.
-- metadata.py: SQLite tables documents(doc_id, source_path, title, author, page_count, toc_json, file_hash, ingested_at), chunks(chunk_id, doc_id, page, heading_path, text_hash, toc_depth), sessions, messages.
-- graph.py: LadybugDB. Nodes Entity{id, name, type, confidence}, Document{id, title}, Chunk{id, doc_id}. Edges MENTIONS(Chunk→Entity, count), RELATES(Entity→Entity, predicate, confidence, source_chunk), PART_OF(Chunk→Document).
-
-PHASE 4 — Retrieval with Triple Gate
-- deterministic.py: FTS5 exact phrase match first. If a query contains quoted strings or exact identifiers (dates, IDs, proper nouns), try exact match before any probabilistic retrieval. Return structured facts if found.
-- hybrid.py: run BM25 (FTS5) and vector search (Zvec HNSW) in parallel. Fuse with RRF at k=60. Return top 50 candidates.
-- rerank.py: POST to llama-server /v1/rerank with model=reranker. Rerank 50 → 8.
-- gate_calibrating.py: maktaba-style. Compute in-domain self-match anchor (highest score in the candidate set) and cross-document out-domain anchor (median score of an unrelated control set). Derive threshold from their ratio. Accept if top score exceeds threshold. No training, no labels, no user feedback.
-- gate_spectral.py: build bipartite graph (query ↔ reranked candidates). Compute Laplacian L = D - W. Find λ₂ (second-smallest eigenvalue via Lanczos, ~45ms for 10K nodes). If λ₂ ≥ 0.75, accept. If < 0.75, reject or re-rank.
-- gate_gap.py: CAR largest-gap cutoff. For each boundary i in the ranked list, score_i = gap_i / max_gap + i/N. Cut at argmax(score_i). Include all candidates above the cut.
-- Graph walk (PHASE 5, but called here if enabled): for each surviving chunk, extract its entity IDs from LadybugDB. Walk edges bidirectionally up to depth 2. Pull related chunks. Add to candidate set.
-- hydrate.py: two-tier context. Tier 1: skeleton (headings, entity names, fact summaries) at ~30% prompt size. Tier 2: on model request, hydrate with verbatim text. Noesis reports hydration recovers verbatim narrative in ~8s vs ~29s for eager context.
-
-PHASE 5 — Bidirectional Graph Traversal (Innovation 4)
-- graph_walk.py: for each reranked chunk, extract entity IDs from the graph. Walk MENTIONS edges backward (chunk → entity) and RELATES edges forward (entity → related entities) and backward (entity ← related entities). Simulate degrading memory: weight each hop by a decay factor (0.7^depth). Collect related chunks. Re-score and merge with the original candidate set.
-- Noesis reports this produces significantly denser graphs than single-pass baselines. 90% precision on extracted long-range causal edges on a 193-page document.
-
-PHASE 6 — Synthesis (Innovation 2)
-- llm.py: async client for llama-server /v1/chat/completions. Default model: Qwen3-4B-Instruct-2507-Q5_K_M. Streaming enabled.
-- prompt.py: system prompt enforces four hard rules:
-  1. Answer ONLY from provided context chunks.
-  2. Every factual claim ends with [n] citing the source chunk.
-  3. If context is insufficient, say so explicitly — do not guess.
-  4. If the triple gate rejected, answer from model knowledge but prefix with "This is not from your library:".
-- citation.py: parse [n] markers, map to chunk_ids, render as (Title, p. 42, §2.3) with clickable links. Streaming citations render progressively.
-- Refusal gate: if all three gates reject AND the model's own confidence is low, refuse. This is a quality feature, not a limitation.
-
-PHASE 7 — Closed-Loop Memory (Innovation 5)
-- loop.py: five phases per query:
-  1. retrieve — what do I know?
-  2. route — what should I do?
-  3. act — do it
-  4. learn — did it work?
-  5. consolidate — clean up
-- belief.py: AGM-rational belief revision. Confidence updates per entity/relation. When a query succeeds, boost the confidence of chunks/entities that contributed. When it fails, demote.
-- frontier.py: Wilson score epistemic frontier. Track which topics the system knows well vs poorly. Surface gaps as "I don't have this."
-- Every query writes back to the graph: which chunks helped, which entities were central, which strategy worked. Next session starts from what was already established.
-
-PHASE 8 — Interfaces
-- CLI (Textual):
-  - palimpsest ask "..." — one-shot
-  - palimpsest chat — interactive with streaming, source panel
-  - palimpsest ingest <path>
-  - palimpsest watch
-  - palimpsest graph <entity> — explore graph
-  - palimpsest stats — docs, chunks, entities, index size
-  - palimpsest models — show loaded models, VRAM usage
-- Web (FastAPI + HTMX):
-  - /chat with SSE streaming
-  - Source panel: hover a citation to see the chunk text
-  - Document browser
-  - Graph explorer (pyvis, local only)
-  - All assets local — no CDN, no external fonts
-- MCP server:
-  - search_knowledge(query, budget) — returns cited subgraph
-  - get_context(chunk_ids) — hydrate with verbatim text
-  - graph_query(entity) — explore connections
-  - Any MCP client (Claude Code, Cursor, Codex) can query your library.
-
-PHASE 9 — Packaging (Innovation 7)
-- build.py: Nuitka --onefile --standalone. Bundle all Python dependencies. Models are downloaded separately (too large to bundle). The executable finds models in ~/.palimpsest/models/.
-- Startup sequence: check models exist, start llama-server as a child process, wait for health check, start the CLI/web/MCP interface.
-- Shutdown: terminate llama-server cleanly.
-
-PHASE 10 — Tests + docs
-- test_ingest: parse a sample PDF via Kreuzberg, verify TOC extraction and chunk boundaries.
-- test_embed: verify llama-server /v1/embeddings returns 1024-dim vectors.
-- test_hybrid: verify RRF at k=60 fuses BM25 and vector results.
-- test_rerank: verify reranker reorders candidates.
-- test_gate_calibrating: verify self-calibrating threshold adapts to corpus.
-- test_gate_spectral: verify λ₂ gate rejects fragmented retrievals.
-- test_gate_gap: verify gap-based cutoff selects the right boundary.
-- test_graph_walk: verify bidirectional traversal pulls related chunks.
-- test_deterministic: verify exact phrase match works before embedding.
-- test_memory_loop: verify beliefs update after a query.
-- test_refusal: verify all-gates-reject triggers refusal.
-
-## CONSTRAINTS
-
-- Zero network calls at runtime after setup. No telemetry. No cloud. No Ollama.
-- All models are GGUF files loaded via llama-server.
-- Config at ~/.palimpsest/config.toml
-- Cross-platform: Windows, macOS, Linux
-- All tests must run offline
-
-## WHAT NOT TO DO
-
-- Do NOT use Ollama. Use llama-server directly.
-- Do NOT use nomic-embed-text. Use Qwen3-Embedding-0.6B (1024-dim).
-- Do NOT build separate BM25. Use SQLite FTS5 or Zvec's native hybrid.
-- Do NOT use a single relevance threshold. Use the triple gate.
-- Do NOT skip TOC extraction. It's the highest-value single improvement.
-- Do NOT use flat vector search. Use hybrid + rerank + graph walk.
-
-Start with PHASE 1 and PHASE 2. Show me the file tree, then the code for each file. Stop and wait for my review after each phase. Do not proceed to the next phase until I say "continue".
+Output:
+- The Target AI Provider (e.g., OpenAI, Anthropic)
+- The Endpoint URL used
+- The API Key/Token found in the headers or JS config
+- The URL/Subdomain where it was found
