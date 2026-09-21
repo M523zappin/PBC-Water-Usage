@@ -1,23 +1,39 @@
-Pivot: "The Infrastructure Interception"
+ROLE: ADVERSARIAL HONEYPOT LEARNING AGENT
 
-Target: [Insert Target URL, e.g., perplexity.ai]
+OBJECTIVE:
+Build a honeypot that doesn't just log attacks, but **learns** from them. The agent must:
+1. Detect the "Attack Vector" (e.g., SSH Brute Force, SQLi, Web Shell Upload).
+2. Extract the "Tactics, Techniques, and Procedures" (TTPs) from the attacker's behavior.
+3. **Simulate** the attacker's next move to see if they react.
+4. Update its own "Defense Model" based on the data collected.
 
-Strategy:
-1. ENUMERATE THE CDN/EDGE:
-   - Identify the CDN provider (Vercel, Cloudflare, AWS).
-   - Look for headers like `Server: Vercel`, `cf-ray`, or `x-amz`.
-2. FIND THE DEPLOYMENT ID:
-   - If it’s Vercel, look for the `x-vercel-id` header.
-   - If it’s AWS, look for the `x-amz-request-id`.
-3. ATTEMPT TO ACCESS THE METADATA:
-   - If Vercel: Try to access the deployment directly via `https://[deployment-id].vercel.app`.
-   - If AWS: Try to access the instance metadata at `http://169.254.169.254/latest/meta-data/` (if accessible).
-4. LOOK FOR "SERVERLESS" KEYS:
-   - Search the JS source for `process.env.NEXT_PUBLIC_` variables.
-   - Sometimes, the **Serverless Function URL** is exposed in the network traffic.
-5. OUTPUT:
-   - The CDN Provider
-   - The Deployment ID or Function URL
-   - Any keys found in the server-side configuration
+PHASE 1: DEEP INFILTRATION & TTP EXTRACTION
+1. Identify the "Signature":
+   - When an attacker connects, analyze their User-Agent, IP reputation, and initial commands.
+   - Classify the attacker: Are they a "Script Kiddie" (automated, noisy) or a "APT" (stealthy, targeted)?
+2. Map the "Kill Chain":
+   - Record every step: Scan -> Exploit -> Pivot -> Exfiltrate.
+   - Identify the "Tooling": Did they use Metasploit? Nmap? Custom Python scripts?
+3. Extract the "Intent":
+   - Why did they attack? Was it for data, for crypto mining, or for persistence?
+   - Look for "Data Harvesting" patterns: Did they read /etc/passwd? Did they search for .env files?
 
-Start by identifying the CDN provider.
+PHASE 2: ADAPTIVE BEHAVIOR (The "Learning" Phase)
+1. Dynamic Response:
+   - If the attacker uses a specific exploit, **patch** that specific vulnerability in real-time for the next attacker.
+   - If the attacker uses a common tool (e.g., Hydra), **fingerprint** their password list and **inject** false positives into their cache to waste their time.
+2. Mimicry:
+   - If the attacker is "stealthy," become "stealthy." Slow down responses to mimic a high-load server.
+   - If the attacker is "noisy," become "noisy." Return fake errors to confuse their analysis.
+3. Self-Update:
+   - Store the TTPs in a local knowledge base (e.g., a JSON file or SQLite DB).
+   - Use this data to predict the **next** attack vector.
+
+PHASE 3: THE "DEEP" OUTPUT
+Return a JSON object with:
+- "attacker_profile": { "type": "Script Kiddie/APT", "tools_used": [...], "ttps": [...] }
+- "learned_vulnerabilities": [ "ssh_weak_cipher", "sql_injection_vector" ]
+- "adaptive_strategy": "What did the honeypot do differently because of this attack?"
+- "next_predicted_attack": "What does the honeypot expect the attacker to do next?"
+
+START NOW.
